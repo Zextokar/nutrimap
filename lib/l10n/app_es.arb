@@ -1,0 +1,272 @@
+{
+    "@@locale": "es",
+    "sectionWhatIs": "Qué es NutriMap",
+    "@sectionWhatIs": {
+        "description": "Título de la sección 'Qué es NutriMap'"
+    },
+    "sectionWhatIsDesc": "NutriMap te ayuda a seguir tus comidas, nutrición y hábitos saludables.",
+    "@sectionWhatIsDesc": {
+        "description": "Descripción de la sección 'Qué es NutriMap'"
+    },
+    "sectionHelps": "Qué te ayudará a hacer",
+    "@sectionHelps": {
+        "description": "Título de la sección 'Qué te ayudará a hacer'"
+    },
+    "sectionHelpsDesc": "Planificar comidas, contar calorías, controlar nutrientes y mejorar tu dieta.",
+    "@sectionHelpsDesc": {
+        "description": "Descripción de la sección 'Qué te ayudará a hacer'"
+    },
+    "sectionWhoWeAre": "Quiénes somos",
+    "@sectionWhoWeAre": {
+        "description": "Título de la sección 'Quiénes somos'"
+    },
+    "sectionWhoWeAreDesc": "Somos un equipo apasionado por la nutrición y la tecnología.",
+    "@sectionWhoWeAreDesc": {
+        "description": "Descripción de la sección 'Quiénes somos'"
+    },
+    "sectionBenefits": "Beneficios",
+    "@sectionBenefits": {
+        "description": "Título de la sección 'Beneficios'"
+    },
+    "sectionBenefitsDesc": "Mantente saludable, come mejor y alcanza tus metas fácilmente.",
+    "@sectionBenefitsDesc": {
+        "description": "Descripción de la sección 'Beneficios'"
+    },
+    "loginTitle": "Iniciar sesión",
+    "@loginTitle": {
+        "description": "Título de la pantalla de login"
+    },
+    "email": "Correo electrónico",
+    "@email": {
+        "description": "Etiqueta del campo de email en el login"
+    },
+    "password": "Contraseña",
+    "@password": {
+        "description": "Etiqueta del campo de contraseña en el login"
+    },
+    "loginButton": "Ingresar",
+    "@loginButton": {
+        "description": "Texto del botón para iniciar sesión"
+    },
+    "nextButton": "Siguiente",
+    "@nextButton": {
+        "description": "Texto del botón siguiente en el onboarding"
+    },
+    "home": "Home",
+    "@home": {
+        "description": "Label for the Home tab in BottomNavigationBar"
+    },
+    "map": "Mapa",
+    "@map": {
+        "description": "Label for the Map tab in BottomNavigationBar"
+    },
+    "benefits": "Beneficios",
+    "@benefits": {
+        "description": "Label for the Benefits tab in BottomNavigationBar"
+    },
+    "recipes": "Recetas",
+    "@recipes": {
+        "description": "Label for the Recipes tab in BottomNavigationBar"
+    },
+    "settings": "Configuración",
+    "@settings": {
+        "description": "Label for the Settings tab in BottomNavigationBar"
+    },
+    "welcomeBack": "Bienvenido de nuevo",
+    "@welcomeBack": {
+        "description": "Texto de bienvenida debajo del título en la pantalla de login"
+    },
+    "emailRequired": "Por favor ingresa tu correo electrónico",
+    "@emailRequired": {
+        "description": "Mensaje de validación cuando el email está vacío"
+    },
+    "invalidEmail": "Ingresa un correo electrónico válido",
+    "@invalidEmail": {
+        "description": "Mensaje de validación cuando el email no tiene formato válido"
+    },
+    "passwordRequired": "Por favor ingresa tu contraseña",
+    "@passwordRequired": {
+        "description": "Mensaje de validación cuando la contraseña está vacía"
+    },
+    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+    "@passwordTooShort": {
+        "description": "Mensaje de validación cuando la contraseña tiene menos de 6 caracteres"
+    },
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "@forgotPassword": {
+        "description": "Botón para recuperar la contraseña"
+    },
+    "orContinueWith": "O continúa con",
+    "@orContinueWith": {
+        "description": "Texto separador para inicio de sesión con redes sociales"
+    },
+    "noAccount": "¿No tienes una cuenta?",
+    "@noAccount": {
+        "description": "Texto que pregunta si el usuario tiene una cuenta"
+    },
+    "register": "Regístrate",
+    "@register": {
+        "description": "Texto del botón/enlace para registrarse"
+    },
+    "loginError": "Error al iniciar sesión",
+    "@loginError": {
+        "description": "Mensaje genérico de error al iniciar sesión"
+    },
+    "userNotFound": "Usuario no encontrado",
+    "@userNotFound": {
+        "description": "Mensaje de error cuando el usuario no existe"
+    },
+    "wrongPassword": "Contraseña incorrecta",
+    "@wrongPassword": {
+        "description": "Mensaje de error cuando la contraseña es incorrecta"
+    },
+    "invalidEmailError": "Formato de correo inválido",
+    "@invalidEmailError": {
+        "description": "Mensaje de error cuando el correo ingresado no es válido"
+    },
+    "enterEmail": "Ingrese email",
+    "@enterEmail": {
+        "description": "Ingrese email"
+    },
+    "enterPassword": "Por favor ingresa tu contraseña",
+    "@enterPassword": {
+        "description": "Mensaje de validación cuando el campo de contraseña está vacío"
+    },
+    "shortPassword": "La contraseña debe tener al menos 6 caracteres",
+    "@shortPassword": {
+        "description": "Mensaje de validación cuando la contraseña es demasiado corta"
+    },
+    "settingsUser": "Configuraciones de {email}",
+    "@settingsUser": {
+        "description": "Texto que muestra las configuraciones del usuario actual",
+        "placeholders": {
+            "email": {}
+        }
+    },
+    "logout": "Cerrar Sesión",
+    "@logout": {
+        "description": "Texto del botón para cerrar sesión del usuario"
+    },
+    "user": "Usuario",
+    "@user": {
+        "description": "Nombre o correo por defecto si no hay email"
+    },
+    "benefitsUser": "Beneficios disponibles para {email}",
+    "@benefitsUser": {
+        "description": "Texto que muestra los beneficios disponibles para el usuario",
+        "placeholders": {
+            "email": {}
+        }
+    },
+    "registerTitle": "Registro",
+    "@registerTitle": {
+        "description": "Título de la pantalla de registro"
+    },
+    "registerStep1Title": "Datos Personales",
+    "@registerStep1Title": {
+        "description": "Título del paso 1 en el registro"
+    },
+    "registerStep2Title": "Email y Contraseña",
+    "@registerStep2Title": {
+        "description": "Título del paso 2 en el registro"
+    },
+    "registerStep3Title": "Institución y Preferencias",
+    "@registerStep3Title": {
+        "description": "Título del paso 3 en el registro"
+    },
+    "summaryTitle": "Resumen",
+    "@summaryTitle": {
+        "description": "Título de la pantalla de resumen antes de crear la cuenta"
+    },
+    "firstName": "Nombre",
+    "@firstName": {
+        "description": "Etiqueta para el campo de nombre"
+    },
+    "lastName": "Apellido",
+    "@lastName": {
+        "description": "Etiqueta para el campo de apellido"
+    },
+    "institution": "Institución",
+    "@institution": {
+        "description": "Etiqueta para seleccionar la institución del usuario"
+    },
+    "dietas": "Dietas Preferidas",
+    "@dietas": {
+        "description": "Etiqueta para seleccionar las dietas preferidas"
+    },
+    "chooseDiet": "Elige tus dietas",
+    "@chooseDiet": {
+        "description": "Texto de ayuda para elegir dietas"
+    },
+    "enterName": "Por favor ingresa tu nombre",
+    "@enterName": {
+        "description": "Validación cuando el nombre está vacío"
+    },
+    "enterLastName": "Por favor ingresa tu apellido",
+    "@enterLastName": {
+        "description": "Validación cuando el apellido está vacío"
+    },
+    "back": "Atrás",
+    "@back": {
+        "description": "Botón para ir al paso anterior"
+    },
+    "next": "Siguiente",
+    "@next": {
+        "description": "Botón para ir al siguiente paso"
+    },
+    "confirmButton": "Confirmar",
+    "@confirmButton": {
+        "description": "Botón para confirmar y crear la cuenta"
+    },
+    "registerError": "Error al registrar el usuario",
+    "@registerError": {
+        "description": "Mensaje de error cuando falla el registro"
+    },
+    "summaryUser": "Revisa tus datos: {email}",
+    "@summaryUser": {
+        "description": "Muestra un resumen de la información del usuario antes de crear la cuenta",
+        "placeholders": {
+            "email": {}
+        }
+    },
+    "selectInstitution": "Selecciona tu institución",
+    "@selectInstitution": {
+        "description": "Etiqueta que indica al usuario que debe seleccionar su institución"
+    },
+    "personalData": "Datos Personales",
+    "@personalData": {
+        "description": "Título del paso de datos personales"
+    },
+    "enterFirstName": "Por favor ingrese su nombre",
+    "@enterFirstName": {
+        "description": "Mensaje de validación cuando el nombre está vacío"
+    },
+    "diets": "Dietas",
+    "@diets": {
+        "description": "Paso para seleccionar dietas preferidas"
+    },
+    "confirmRegistration": "Confirme su registro",
+    "@confirmRegistration": {
+        "description": "Título del diálogo de confirmación antes de crear la cuenta"
+    },
+    "cancel": "Cancelar",
+    "@cancel": {
+        "description": "Botón para cancelar la confirmación"
+    },
+    "createAccount": "Crear cuenta",
+    "@createAccount": {
+        "description": "Botón para crear la cuenta después de la confirmación"
+    },
+    "registrationError": "Error al registrar usuario",
+    "@registrationError": {
+        "description": "Mensaje general de error al crear la cuenta"
+    },
+    "emailInUse": "El correo ya está en uso",
+    "@emailInUse": {
+        "description": "Mensaje cuando el correo ya está registrado"
+    },
+    "enterPhone": "Please enter your phone number",
+    "@enterPhone": {
+        "description": "Validation message for phone number input"
+    }
+}

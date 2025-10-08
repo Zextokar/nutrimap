@@ -1,0 +1,272 @@
+{
+    "@@locale": "en",
+    "sectionWhatIs": "What is NutriMap?",
+    "@sectionWhatIs": {
+        "description": "Title for the 'What is NutriMap' section on onboarding"
+    },
+    "sectionWhatIsDesc": "NutriMap helps you track your meals, nutrition, and healthy habits.",
+    "@sectionWhatIsDesc": {
+        "description": "Description for the 'What is NutriMap' section"
+    },
+    "sectionHelps": "What it will help you do",
+    "@sectionHelps": {
+        "description": "Title for the 'What it will help you do' section"
+    },
+    "sectionHelpsDesc": "Plan meals, track calories, monitor nutrients, and improve your diet.",
+    "@sectionHelpsDesc": {
+        "description": "Description for the 'What it will help you do' section"
+    },
+    "sectionWhoWeAre": "Who we are",
+    "@sectionWhoWeAre": {
+        "description": "Title for the 'Who we are' section"
+    },
+    "sectionWhoWeAreDesc": "We are a team passionate about nutrition and technology.",
+    "@sectionWhoWeAreDesc": {
+        "description": "Description for the 'Who we are' section"
+    },
+    "sectionBenefits": "Benefits",
+    "@sectionBenefits": {
+        "description": "Title for the 'Benefits' section"
+    },
+    "sectionBenefitsDesc": "Stay healthy, eat better, and reach your goals easily.",
+    "@sectionBenefitsDesc": {
+        "description": "Description for the 'Benefits' section"
+    },
+    "loginTitle": "Login",
+    "@loginTitle": {
+        "description": "Title for the login screen"
+    },
+    "email": "Email",
+    "@email": {
+        "description": "Label for email input field in login screen"
+    },
+    "password": "Password",
+    "@password": {
+        "description": "Label for password input field in login screen"
+    },
+    "loginButton": "Login",
+    "@loginButton": {
+        "description": "Text for the login button"
+    },
+    "nextButton": "Next",
+    "@nextButton": {
+        "description": "Text for the next button"
+    },
+    "home": "Home",
+    "@home": {
+        "description": "Label for the Home tab in BottomNavigationBar"
+    },
+    "map": "Map",
+    "@map": {
+        "description": "Label for the Map tab in BottomNavigationBar"
+    },
+    "benefits": "Benefits",
+    "@benefits": {
+        "description": "Label for the Benefits tab in BottomNavigationBar"
+    },
+    "recipes": "Recipes",
+    "@recipes": {
+        "description": "Label for the Recipes tab in BottomNavigationBar"
+    },
+    "settings": "Settings",
+    "@settings": {
+        "description": "Label for the Settings tab in BottomNavigationBar"
+    },
+    "welcomeBack": "Welcome back",
+    "@welcomeBack": {
+        "description": "Welcome text below the title on the login screen"
+    },
+    "emailRequired": "Please enter your email",
+    "@emailRequired": {
+        "description": "Validation message when the email is empty"
+    },
+    "invalidEmail": "Enter a valid email address",
+    "@invalidEmail": {
+        "description": "Validation message when the email is not in a valid format"
+    },
+    "passwordRequired": "Please enter your password",
+    "@passwordRequired": {
+        "description": "Validation message when the password is empty"
+    },
+    "passwordTooShort": "Password must be at least 6 characters",
+    "@passwordTooShort": {
+        "description": "Validation message when the password has fewer than 6 characters"
+    },
+    "forgotPassword": "Forgot your password?",
+    "@forgotPassword": {
+        "description": "Button to recover the password"
+    },
+    "orContinueWith": "Or continue with",
+    "@orContinueWith": {
+        "description": "Separator text for social login options"
+    },
+    "noAccount": "Don't have an account?",
+    "@noAccount": {
+        "description": "Text asking if the user doesn't have an account"
+    },
+    "register": "Sign up",
+    "@register": {
+        "description": "Text of the register button/link"
+    },
+    "loginError": "Login error",
+    "@loginError": {
+        "description": "Generic error message when login fails"
+    },
+    "userNotFound": "User not found",
+    "@userNotFound": {
+        "description": "Error message when the user does not exist"
+    },
+    "wrongPassword": "Wrong password",
+    "@wrongPassword": {
+        "description": "Error message when the password is incorrect"
+    },
+    "invalidEmailError": "Invalid email format",
+    "@invalidEmailError": {
+        "description": "Error message when the entered email is not valid"
+    },
+    "enterEmail": "Enter email",
+    "@enterEmail": {
+        "description": "Enter email"
+    },
+    "enterPassword": "Please enter your password",
+    "@enterPassword": {
+        "description": "Validation message shown when password field is empty"
+    },
+    "shortPassword": "Password must be at least 6 characters",
+    "@shortPassword": {
+        "description": "Validation message shown when password is too short"
+    },
+    "settingsUser": "Settings for {email}",
+    "@settingsUser": {
+        "description": "Text showing which user's settings are being displayed",
+        "placeholders": {
+            "email": {}
+        }
+    },
+    "logout": "Log Out",
+    "@logout": {
+        "description": "Button text to log out the current user"
+    },
+    "user": "User",
+    "@user": {
+        "description": "Default placeholder for user's name or email"
+    },
+    "benefitsUser": "Benefits available for {email}",
+    "@benefitsUser": {
+        "description": "Text showing available benefits for the user",
+        "placeholders": {
+            "email": {}
+        }
+    },
+    "registerTitle": "Register",
+    "@registerTitle": {
+        "description": "Title of the registration screen"
+    },
+    "registerStep1Title": "Personal Information",
+    "@registerStep1Title": {
+        "description": "Step 1 title in registration"
+    },
+    "registerStep2Title": "Email and Password",
+    "@registerStep2Title": {
+        "description": "Step 2 title in registration"
+    },
+    "registerStep3Title": "Institution and Preferences",
+    "@registerStep3Title": {
+        "description": "Step 3 title in registration"
+    },
+    "summaryTitle": "Summary",
+    "@summaryTitle": {
+        "description": "Title of the summary screen before creating account"
+    },
+    "firstName": "First Name",
+    "@firstName": {
+        "description": "Label for first name field"
+    },
+    "lastName": "Last Name",
+    "@lastName": {
+        "description": "Label for last name field"
+    },
+    "institution": "Institution",
+    "@institution": {
+        "description": "Label for selecting the user's institution"
+    },
+    "dietas": "Preferred Diets",
+    "@dietas": {
+        "description": "Label for selecting preferred diets"
+    },
+    "chooseDiet": "Choose your diets",
+    "@chooseDiet": {
+        "description": "Helper text for selecting diets"
+    },
+    "enterName": "Please enter your first name",
+    "@enterName": {
+        "description": "Validation when name is empty"
+    },
+    "enterLastName": "Please enter your last name",
+    "@enterLastName": {
+        "description": "Validation when last name is empty"
+    },
+    "back": "Back",
+    "@back": {
+        "description": "Button to go to previous step"
+    },
+    "next": "Next",
+    "@next": {
+        "description": "Button to go to next step"
+    },
+    "confirmButton": "Confirm",
+    "@confirmButton": {
+        "description": "Button to confirm and create account"
+    },
+    "registerError": "Error registering user",
+    "@registerError": {
+        "description": "Error message when registration fails"
+    },
+    "summaryUser": "Review your information: {email}",
+    "@summaryUser": {
+        "description": "Shows a summary of user information before creating the account",
+        "placeholders": {
+            "email": {}
+        }
+    },
+    "selectInstitution": "Select your institution",
+    "@selectInstitution": {
+        "description": "Label prompting the user to select their institution"
+    },
+    "personalData": "Personal Data",
+    "@personalData": {
+        "description": "Title of the personal data step"
+    },
+    "diets": "Preferred Diets",
+    "@diets": {
+        "description": "Step to select preferred diets"
+    },
+    "confirmRegistration": "Confirm Registration",
+    "@confirmRegistration": {
+        "description": "Title of the confirmation dialog before creating the account"
+    },
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "Button to cancel the confirmation"
+    },
+    "createAccount": "Create Account",
+    "@createAccount": {
+        "description": "Button to create the account after confirmation"
+    },
+    "registrationError": "Error registering user",
+    "@registrationError": {
+        "description": "General error message when account creation fails"
+    },
+    "emailInUse": "Email is already in use",
+    "@emailInUse": {
+        "description": "Message when the email is already registered"
+    },
+    "enterFirstName": "Please enter your first name",
+    "@enterFirstName": {
+        "description": "Validation message for first name input"
+    },
+    "phone": "Phone number",
+    "@phone": {
+        "description": "Label for the user's phone number in settings screen"
+    }
+}
