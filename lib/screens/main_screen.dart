@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrimap/screens/screens/benefits_screen.dart';
+import 'package:nutrimap/screens/screens/commerce_screen.dart';
 import 'package:nutrimap/screens/screens/home_screen.dart';
 import 'package:nutrimap/screens/screens/map_screen.dart';
-import 'package:nutrimap/screens/screens/recipes_screen.dart';
 import 'package:nutrimap/screens/screens/settings_screen.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
 
@@ -27,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
       HomeScreen(user: widget.user),
       MapScreen(user: widget.user),
       BenefitsScreen(user: widget.user),
-      RecipesScreen(user: widget.user),
+      CommerceScreen(user: widget.user),
       SettingsScreen(user: widget.user),
     ];
   }

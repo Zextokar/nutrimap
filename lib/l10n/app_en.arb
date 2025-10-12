@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "sectionWhatIs": "What is NutriMap?",
+    "sectionWhatIs": "What Is NutriMap?",
     "@sectionWhatIs": {
         "description": "Title for the 'What is NutriMap' section on onboarding"
     },
@@ -8,21 +8,21 @@
     "@sectionWhatIsDesc": {
         "description": "Description for the 'What is NutriMap' section"
     },
-    "sectionHelps": "What it will help you do",
+    "sectionHelps": "How It Helps You?",
     "@sectionHelps": {
-        "description": "Title for the 'What it will help you do' section"
+        "description": "Title for the 'How It Helps You' section"
     },
-    "sectionHelpsDesc": "Plan meals, track calories, monitor nutrients, and improve your diet.",
+    "sectionHelpsDesc": "Plan meals, count calories, monitor nutrients, and improve your diet.",
     "@sectionHelpsDesc": {
-        "description": "Description for the 'What it will help you do' section"
+        "description": "Description for the 'How It Helps You' section"
     },
-    "sectionWhoWeAre": "Who we are",
+    "sectionWhoWeAre": "Who We Are?",
     "@sectionWhoWeAre": {
-        "description": "Title for the 'Who we are' section"
+        "description": "Title for the 'Who We Are' section"
     },
     "sectionWhoWeAreDesc": "We are a team passionate about nutrition and technology.",
     "@sectionWhoWeAreDesc": {
-        "description": "Description for the 'Who we are' section"
+        "description": "Description for the 'Who We Are' section"
     },
     "sectionBenefits": "Benefits",
     "@sectionBenefits": {
@@ -32,109 +32,109 @@
     "@sectionBenefitsDesc": {
         "description": "Description for the 'Benefits' section"
     },
-    "loginTitle": "Login",
+    "loginTitle": "Log In",
     "@loginTitle": {
         "description": "Title for the login screen"
     },
     "email": "Email",
     "@email": {
-        "description": "Label for email input field in login screen"
+        "description": "Label for the email input field on the login screen"
     },
     "password": "Password",
     "@password": {
-        "description": "Label for password input field in login screen"
+        "description": "Label for the password input field on the login screen"
     },
-    "loginButton": "Login",
+    "loginButton": "Log In",
     "@loginButton": {
         "description": "Text for the login button"
     },
     "nextButton": "Next",
     "@nextButton": {
-        "description": "Text for the next button"
+        "description": "Text for the next button in multi-step flows"
     },
     "home": "Home",
     "@home": {
-        "description": "Label for the Home tab in BottomNavigationBar"
+        "description": "Label for the Home tab in the BottomNavigationBar"
     },
     "map": "Map",
     "@map": {
-        "description": "Label for the Map tab in BottomNavigationBar"
+        "description": "Label for the Map tab in the BottomNavigationBar"
     },
     "benefits": "Benefits",
     "@benefits": {
-        "description": "Label for the Benefits tab in BottomNavigationBar"
+        "description": "Label for the Benefits tab in the BottomNavigationBar"
     },
-    "recipes": "Recipes",
+    "recipes": "Commerce",
     "@recipes": {
-        "description": "Label for the Recipes tab in BottomNavigationBar"
+        "description": "Label for the Commerce tab in the BottomNavigationBar"
     },
     "settings": "Settings",
     "@settings": {
-        "description": "Label for the Settings tab in BottomNavigationBar"
+        "description": "Label for the Settings tab in the BottomNavigationBar"
     },
-    "welcomeBack": "Welcome back",
+    "welcomeBack": "Welcome Back",
     "@welcomeBack": {
         "description": "Welcome text below the title on the login screen"
     },
-    "emailRequired": "Please enter your email",
+    "emailRequired": "Please enter your email.",
     "@emailRequired": {
-        "description": "Validation message when the email is empty"
+        "description": "Validation message when the email field is empty"
     },
-    "invalidEmail": "Enter a valid email address",
+    "invalidEmail": "Please enter a valid email address.",
     "@invalidEmail": {
-        "description": "Validation message when the email is not in a valid format"
+        "description": "Validation message when the email format is invalid"
     },
-    "passwordRequired": "Please enter your password",
+    "passwordRequired": "Please enter your password.",
     "@passwordRequired": {
-        "description": "Validation message when the password is empty"
+        "description": "Validation message when the password field is empty"
     },
-    "passwordTooShort": "Password must be at least 6 characters",
+    "passwordTooShort": "Password must be at least 6 characters long.",
     "@passwordTooShort": {
-        "description": "Validation message when the password has fewer than 6 characters"
+        "description": "Validation message when the password is shorter than 6 characters"
     },
-    "forgotPassword": "Forgot your password?",
+    "forgotPassword": "Forgot Password?",
     "@forgotPassword": {
-        "description": "Button to recover the password"
+        "description": "Link/button to recover a forgotten password"
     },
     "orContinueWith": "Or continue with",
     "@orContinueWith": {
-        "description": "Separator text for social login options"
+        "description": "Separator text for social media login options"
     },
     "noAccount": "Don't have an account?",
     "@noAccount": {
-        "description": "Text asking if the user doesn't have an account"
+        "description": "Text prompting users to sign up"
     },
-    "register": "Sign up",
+    "register": "Sign Up",
     "@register": {
-        "description": "Text of the register button/link"
+        "description": "Text for the registration button/link"
     },
-    "loginError": "Login error",
+    "loginError": "Login Failed",
     "@loginError": {
         "description": "Generic error message when login fails"
     },
-    "userNotFound": "User not found",
+    "userNotFound": "User not found.",
     "@userNotFound": {
         "description": "Error message when the user does not exist"
     },
-    "wrongPassword": "Wrong password",
+    "wrongPassword": "Incorrect password.",
     "@wrongPassword": {
         "description": "Error message when the password is incorrect"
     },
-    "invalidEmailError": "Invalid email format",
+    "invalidEmailError": "Invalid email format.",
     "@invalidEmailError": {
         "description": "Error message when the entered email is not valid"
     },
-    "enterEmail": "Enter email",
+    "enterEmail": "Enter your email",
     "@enterEmail": {
-        "description": "Enter email"
+        "description": "Placeholder text for an email field"
     },
-    "enterPassword": "Please enter your password",
+    "enterPassword": "Please enter your password.",
     "@enterPassword": {
-        "description": "Validation message shown when password field is empty"
+        "description": "Validation message when the password field is empty"
     },
-    "shortPassword": "Password must be at least 6 characters",
+    "shortPassword": "Password must be at least 6 characters long.",
     "@shortPassword": {
-        "description": "Validation message shown when password is too short"
+        "description": "Validation message when the password is too short"
     },
     "settingsUser": "Settings for {email}",
     "@settingsUser": {
@@ -149,42 +149,42 @@
     },
     "user": "User",
     "@user": {
-        "description": "Default placeholder for user's name or email"
+        "description": "Default placeholder for a user's name or email"
     },
     "benefitsUser": "Benefits available for {email}",
     "@benefitsUser": {
-        "description": "Text showing available benefits for the user",
+        "description": "Text showing available benefits for the current user",
         "placeholders": {
             "email": {}
         }
     },
-    "registerTitle": "Register",
+    "registerTitle": "Create Account",
     "@registerTitle": {
         "description": "Title of the registration screen"
     },
     "registerStep1Title": "Personal Information",
     "@registerStep1Title": {
-        "description": "Step 1 title in registration"
+        "description": "Title for Step 1 of registration"
     },
-    "registerStep2Title": "Email and Password",
+    "registerStep2Title": "Account Credentials",
     "@registerStep2Title": {
-        "description": "Step 2 title in registration"
+        "description": "Title for Step 2 of registration (Email and Password)"
     },
     "registerStep3Title": "Institution and Preferences",
     "@registerStep3Title": {
-        "description": "Step 3 title in registration"
+        "description": "Title for Step 3 of registration"
     },
     "summaryTitle": "Summary",
     "@summaryTitle": {
-        "description": "Title of the summary screen before creating account"
+        "description": "Title of the summary screen before creating an account"
     },
     "firstName": "First Name",
     "@firstName": {
-        "description": "Label for first name field"
+        "description": "Label for the first name field"
     },
     "lastName": "Last Name",
     "@lastName": {
-        "description": "Label for last name field"
+        "description": "Label for the last name field"
     },
     "institution": "Institution",
     "@institution": {
@@ -196,31 +196,31 @@
     },
     "chooseDiet": "Choose your diets",
     "@chooseDiet": {
-        "description": "Helper text for selecting diets"
+        "description": "Helper text for the diet selection"
     },
-    "enterName": "Please enter your first name",
+    "enterName": "Please enter your first name.",
     "@enterName": {
-        "description": "Validation when name is empty"
+        "description": "Validation message when the first name is empty"
     },
-    "enterLastName": "Please enter your last name",
+    "enterLastName": "Please enter your last name.",
     "@enterLastName": {
-        "description": "Validation when last name is empty"
+        "description": "Validation message when the last name is empty"
     },
     "back": "Back",
     "@back": {
-        "description": "Button to go to previous step"
+        "description": "Button to go to the previous step"
     },
     "next": "Next",
     "@next": {
-        "description": "Button to go to next step"
+        "description": "Button to go to the next step"
     },
     "confirmButton": "Confirm",
     "@confirmButton": {
-        "description": "Button to confirm and create account"
+        "description": "Button to confirm and create the account"
     },
-    "registerError": "Error registering user",
+    "registerError": "Could not register user.",
     "@registerError": {
-        "description": "Error message when registration fails"
+        "description": "Error message when user registration fails"
     },
     "summaryUser": "Review your information: {email}",
     "@summaryUser": {
@@ -233,9 +233,9 @@
     "@selectInstitution": {
         "description": "Label prompting the user to select their institution"
     },
-    "personalData": "Personal Data",
+    "personalData": "Personal Information",
     "@personalData": {
-        "description": "Title of the personal data step"
+        "description": "Title of the personal information step"
     },
     "diets": "Preferred Diets",
     "@diets": {
@@ -253,20 +253,56 @@
     "@createAccount": {
         "description": "Button to create the account after confirmation"
     },
-    "registrationError": "Error registering user",
+    "registrationError": "Registration failed.",
     "@registrationError": {
         "description": "General error message when account creation fails"
     },
-    "emailInUse": "Email is already in use",
+    "emailInUse": "This email is already in use.",
     "@emailInUse": {
-        "description": "Message when the email is already registered"
+        "description": "Message shown when the email is already registered"
     },
-    "enterFirstName": "Please enter your first name",
+    "enterFirstName": "Please enter your first name.",
     "@enterFirstName": {
-        "description": "Validation message for first name input"
+        "description": "Validation message for the first name input"
     },
-    "phone": "Phone number",
+    "phone": "Phone Number",
     "@phone": {
-        "description": "Label for the user's phone number in settings screen"
+        "description": "Label for the user's phone number"
+    },
+    "otherSettings": "Other Settings",
+    "@otherSettings": {
+        "description": "Title for a section with other settings"
+    },
+    "profile": "Profile",
+    "@profile": {
+        "description": "Title for the user profile screen"
+    },
+    "surname": "Last Name",
+    "@surname": {
+        "description": "User's last name"
+    },
+    "rut": "National ID",
+    "@rut": {
+        "description": "User's national identification number"
+    },
+    "region": "Region",
+    "@region": {
+        "description": "User's region or state"
+    },
+    "commune": "City / Municipality",
+    "@commune": {
+        "description": "User's city, town, or local administrative district"
+    },
+    "diet": "Diet Type",
+    "@diet": {
+        "description": "User's selected diet type"
+    },
+    "userProfile": "User Profile",
+    "@userProfile": {
+        "description": "Title of the user profile screen"
+    },
+    "homeTitle": "Home",
+    "@homeTitle": {
+        "description": "Title of the main/home screen"
     }
 }

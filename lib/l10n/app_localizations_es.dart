@@ -9,21 +9,21 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get sectionWhatIs => 'Qué es NutriMap';
+  String get sectionWhatIs => '¿Qué es NutriMap?';
 
   @override
   String get sectionWhatIsDesc =>
       'NutriMap te ayuda a seguir tus comidas, nutrición y hábitos saludables.';
 
   @override
-  String get sectionHelps => 'Qué te ayudará a hacer';
+  String get sectionHelps => '¿Qué te ayudará a hacer?';
 
   @override
   String get sectionHelpsDesc =>
       'Planificar comidas, contar calorías, controlar nutrientes y mejorar tu dieta.';
 
   @override
-  String get sectionWhoWeAre => 'Quiénes somos';
+  String get sectionWhoWeAre => '¿Quiénes somos?';
 
   @override
   String get sectionWhoWeAreDesc =>
@@ -52,7 +52,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nextButton => 'Siguiente';
 
   @override
-  String get home => 'Home';
+  String get home => 'Inicio';
 
   @override
   String get map => 'Mapa';
@@ -61,7 +61,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get benefits => 'Beneficios';
 
   @override
-  String get recipes => 'Recetas';
+  String get recipes => 'Comercio';
 
   @override
   String get settings => 'Configuración';
@@ -70,17 +70,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get welcomeBack => 'Bienvenido de nuevo';
 
   @override
-  String get emailRequired => 'Por favor ingresa tu correo electrónico';
+  String get emailRequired => 'Por favor, ingresa tu correo electrónico.';
 
   @override
-  String get invalidEmail => 'Ingresa un correo electrónico válido';
+  String get invalidEmail => 'Ingresa un correo electrónico válido.';
 
   @override
-  String get passwordRequired => 'Por favor ingresa tu contraseña';
+  String get passwordRequired => 'Por favor, ingresa tu contraseña.';
 
   @override
   String get passwordTooShort =>
-      'La contraseña debe tener al menos 6 caracteres';
+      'La contraseña debe tener al menos 6 caracteres.';
 
   @override
   String get forgotPassword => '¿Olvidaste tu contraseña?';
@@ -95,25 +95,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get register => 'Regístrate';
 
   @override
-  String get loginError => 'Error al iniciar sesión';
+  String get loginError => 'Error al iniciar sesión.';
 
   @override
-  String get userNotFound => 'Usuario no encontrado';
+  String get userNotFound => 'Usuario no encontrado.';
 
   @override
-  String get wrongPassword => 'Contraseña incorrecta';
+  String get wrongPassword => 'Contraseña incorrecta.';
 
   @override
-  String get invalidEmailError => 'Formato de correo inválido';
+  String get invalidEmailError => 'Formato de correo inválido.';
 
   @override
-  String get enterEmail => 'Ingrese email';
+  String get enterEmail => 'Ingresa tu email.';
 
   @override
-  String get enterPassword => 'Por favor ingresa tu contraseña';
+  String get enterPassword => 'Por favor, ingresa tu contraseña.';
 
   @override
-  String get shortPassword => 'La contraseña debe tener al menos 6 caracteres';
+  String get shortPassword => 'La contraseña debe tener al menos 6 caracteres.';
 
   @override
   String settingsUser(Object email) {
@@ -162,10 +162,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get chooseDiet => 'Elige tus dietas';
 
   @override
-  String get enterName => 'Por favor ingresa tu nombre';
+  String get enterName => 'Por favor, ingresa tu nombre.';
 
   @override
-  String get enterLastName => 'Por favor ingresa tu apellido';
+  String get enterLastName => 'Por favor, ingresa tu apellido.';
 
   @override
   String get back => 'Atrás';
@@ -177,7 +177,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get confirmButton => 'Confirmar';
 
   @override
-  String get registerError => 'Error al registrar el usuario';
+  String get registerError => 'Error al registrar el usuario.';
 
   @override
   String summaryUser(Object email) {
@@ -203,14 +203,41 @@ class AppLocalizationsEs extends AppLocalizations {
   String get createAccount => 'Crear cuenta';
 
   @override
-  String get registrationError => 'Error al registrar usuario';
+  String get registrationError => 'Error al registrar usuario.';
 
   @override
-  String get emailInUse => 'El correo ya está en uso';
+  String get emailInUse => 'El correo ya está en uso.';
 
   @override
-  String get enterFirstName => 'Por favor ingrese su nombre';
+  String get enterFirstName => 'Por favor, ingrese su nombre.';
 
   @override
-  String get phone => 'Phone number';
+  String get phone => 'Teléfono';
+
+  @override
+  String get otherSettings => 'Otros ajustes';
+
+  @override
+  String get profile => 'Perfil';
+
+  @override
+  String get surname => 'Apellido';
+
+  @override
+  String get rut => 'RUT';
+
+  @override
+  String get region => 'Región';
+
+  @override
+  String get commune => 'Comuna';
+
+  @override
+  String get diet => 'Tipo de dieta';
+
+  @override
+  String get userProfile => 'Perfil del usuario';
+
+  @override
+  String get homeTitle => 'Inicio';
 }

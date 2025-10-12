@@ -1,6 +1,6 @@
 {
     "@@locale": "es",
-    "sectionWhatIs": "Qué es NutriMap",
+    "sectionWhatIs": "¿Qué es NutriMap?",
     "@sectionWhatIs": {
         "description": "Título de la sección 'Qué es NutriMap'"
     },
@@ -8,7 +8,7 @@
     "@sectionWhatIsDesc": {
         "description": "Descripción de la sección 'Qué es NutriMap'"
     },
-    "sectionHelps": "Qué te ayudará a hacer",
+    "sectionHelps": "¿Qué te ayudará a hacer?",
     "@sectionHelps": {
         "description": "Título de la sección 'Qué te ayudará a hacer'"
     },
@@ -16,7 +16,7 @@
     "@sectionHelpsDesc": {
         "description": "Descripción de la sección 'Qué te ayudará a hacer'"
     },
-    "sectionWhoWeAre": "Quiénes somos",
+    "sectionWhoWeAre": "¿Quiénes somos?",
     "@sectionWhoWeAre": {
         "description": "Título de la sección 'Quiénes somos'"
     },
@@ -52,7 +52,7 @@
     "@nextButton": {
         "description": "Texto del botón siguiente en el onboarding"
     },
-    "home": "Home",
+    "home": "Inicio",
     "@home": {
         "description": "Label for the Home tab in BottomNavigationBar"
     },
@@ -64,7 +64,7 @@
     "@benefits": {
         "description": "Label for the Benefits tab in BottomNavigationBar"
     },
-    "recipes": "Recetas",
+    "recipes": "Comercio",
     "@recipes": {
         "description": "Label for the Recipes tab in BottomNavigationBar"
     },
@@ -76,19 +76,19 @@
     "@welcomeBack": {
         "description": "Texto de bienvenida debajo del título en la pantalla de login"
     },
-    "emailRequired": "Por favor ingresa tu correo electrónico",
+    "emailRequired": "Por favor, ingresa tu correo electrónico.",
     "@emailRequired": {
         "description": "Mensaje de validación cuando el email está vacío"
     },
-    "invalidEmail": "Ingresa un correo electrónico válido",
+    "invalidEmail": "Ingresa un correo electrónico válido.",
     "@invalidEmail": {
         "description": "Mensaje de validación cuando el email no tiene formato válido"
     },
-    "passwordRequired": "Por favor ingresa tu contraseña",
+    "passwordRequired": "Por favor, ingresa tu contraseña.",
     "@passwordRequired": {
         "description": "Mensaje de validación cuando la contraseña está vacía"
     },
-    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres.",
     "@passwordTooShort": {
         "description": "Mensaje de validación cuando la contraseña tiene menos de 6 caracteres"
     },
@@ -108,31 +108,31 @@
     "@register": {
         "description": "Texto del botón/enlace para registrarse"
     },
-    "loginError": "Error al iniciar sesión",
+    "loginError": "Error al iniciar sesión.",
     "@loginError": {
         "description": "Mensaje genérico de error al iniciar sesión"
     },
-    "userNotFound": "Usuario no encontrado",
+    "userNotFound": "Usuario no encontrado.",
     "@userNotFound": {
         "description": "Mensaje de error cuando el usuario no existe"
     },
-    "wrongPassword": "Contraseña incorrecta",
+    "wrongPassword": "Contraseña incorrecta.",
     "@wrongPassword": {
         "description": "Mensaje de error cuando la contraseña es incorrecta"
     },
-    "invalidEmailError": "Formato de correo inválido",
+    "invalidEmailError": "Formato de correo inválido.",
     "@invalidEmailError": {
         "description": "Mensaje de error cuando el correo ingresado no es válido"
     },
-    "enterEmail": "Ingrese email",
+    "enterEmail": "Ingresa tu email.",
     "@enterEmail": {
-        "description": "Ingrese email"
+        "description": "Ingresa tu email"
     },
-    "enterPassword": "Por favor ingresa tu contraseña",
+    "enterPassword": "Por favor, ingresa tu contraseña.",
     "@enterPassword": {
         "description": "Mensaje de validación cuando el campo de contraseña está vacío"
     },
-    "shortPassword": "La contraseña debe tener al menos 6 caracteres",
+    "shortPassword": "La contraseña debe tener al menos 6 caracteres.",
     "@shortPassword": {
         "description": "Mensaje de validación cuando la contraseña es demasiado corta"
     },
@@ -198,11 +198,11 @@
     "@chooseDiet": {
         "description": "Texto de ayuda para elegir dietas"
     },
-    "enterName": "Por favor ingresa tu nombre",
+    "enterName": "Por favor, ingresa tu nombre.",
     "@enterName": {
         "description": "Validación cuando el nombre está vacío"
     },
-    "enterLastName": "Por favor ingresa tu apellido",
+    "enterLastName": "Por favor, ingresa tu apellido.",
     "@enterLastName": {
         "description": "Validación cuando el apellido está vacío"
     },
@@ -218,7 +218,7 @@
     "@confirmButton": {
         "description": "Botón para confirmar y crear la cuenta"
     },
-    "registerError": "Error al registrar el usuario",
+    "registerError": "Error al registrar el usuario.",
     "@registerError": {
         "description": "Mensaje de error cuando falla el registro"
     },
@@ -237,7 +237,7 @@
     "@personalData": {
         "description": "Título del paso de datos personales"
     },
-    "enterFirstName": "Por favor ingrese su nombre",
+    "enterFirstName": "Por favor, ingrese su nombre.",
     "@enterFirstName": {
         "description": "Mensaje de validación cuando el nombre está vacío"
     },
@@ -257,16 +257,56 @@
     "@createAccount": {
         "description": "Botón para crear la cuenta después de la confirmación"
     },
-    "registrationError": "Error al registrar usuario",
+    "registrationError": "Error al registrar usuario.",
     "@registrationError": {
         "description": "Mensaje general de error al crear la cuenta"
     },
-    "emailInUse": "El correo ya está en uso",
+    "emailInUse": "El correo ya está en uso.",
     "@emailInUse": {
         "description": "Mensaje cuando el correo ya está registrado"
     },
-    "enterPhone": "Please enter your phone number",
+    "enterPhone": "Por favor, ingresa tu número de teléfono.",
     "@enterPhone": {
-        "description": "Validation message for phone number input"
+        "description": "Mensaje de validación para el campo de teléfono"
+    },
+    "otherSettings": "Otros ajustes",
+    "@otherSettings": {
+        "description": "Otros ajustes para configuraciones"
+    },
+    "profile": "Perfil",
+    "@profile": {
+        "description": "Título para la pantalla del perfil de usuario"
+    },
+    "surname": "Apellido",
+    "@surname": {
+        "description": "El apellido del usuario"
+    },
+    "phone": "Teléfono",
+    "@phone": {
+        "description": "El número de teléfono del usuario"
+    },
+    "rut": "RUT",
+    "@rut": {
+        "description": "El RUT (identificación nacional) del usuario"
+    },
+    "region": "Región",
+    "@region": {
+        "description": "La región del usuario"
+    },
+    "commune": "Comuna",
+    "@commune": {
+        "description": "La comuna del usuario"
+    },
+    "diet": "Tipo de dieta",
+    "@diet": {
+        "description": "El tipo de dieta del usuario"
+    },
+    "userProfile": "Perfil del usuario",
+    "@userProfile": {
+        "description": "Título de la pantalla de perfil de usuario"
+    },
+    "homeTitle": "Inicio",
+    "@homeTitle": {
+        "description": "Título de la pantalla principal/Home"
     }
 }
