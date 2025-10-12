@@ -541,6 +541,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Home'**
   String get homeTitle;
+
+  /// Title of the main Commerce
+  ///
+  /// In en, this message translates to:
+  /// **'Commerce'**
+  String get commerce;
+
+  /// Error message when the user is disabled in Firebase
+  ///
+  /// In en, this message translates to:
+  /// **'User disabled'**
+  String get userDisabled;
+
+  /// Error message when the login attempt limit is exceeded in Firebase
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts, try again later'**
+  String get tooManyRequests;
+
+  /// Error message when the network connection fails during login
+  ///
+  /// In en, this message translates to:
+  /// **'Network error, check your connection'**
+  String get networkError;
 }
 
 class _AppLocalizationsDelegate

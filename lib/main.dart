@@ -29,8 +29,8 @@ class _MyAppState extends State<MyApp> {
   bool _isFirstRun = true;
   bool _loading = true;
 
-  // 🔹 Modo desarrollo: fuerza que InfoScreen se muestre siempre
-  final bool _isDevMode = true; // Cambia a false en producción
+  // Cambia esto a false en producción
+  final bool _isDevMode = false;
 
   @override
   void initState() {
@@ -43,7 +43,6 @@ class _MyAppState extends State<MyApp> {
     final seenInfo = prefs.getBool('seenInfo') ?? false;
 
     setState(() {
-      // En modo desarrollo, siempre mostramos InfoScreen
       _isFirstRun = _isDevMode ? true : !seenInfo;
       _loading = false;
     });
@@ -75,10 +74,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: 'NutriMap',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
-      debugShowCheckedModeBanner: false,
       locale: _locale,
       supportedLocales: const [Locale('es'), Locale('en')],
       localizationsDelegates: const [
@@ -103,6 +102,7 @@ class _MyAppState extends State<MyApp> {
                 return const LoginScreen();
               },
             ),
+
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterPage(),

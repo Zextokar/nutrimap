@@ -240,4 +240,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeTitle => 'Inicio';
+
+  @override
+  String get commerce => 'Comercio';
+
+  @override
+  String get userDisabled => 'Usuario deshabilitado';
+
+  @override
+  String get tooManyRequests => 'Demasiados intentos, inténtalo más tarde';
+
+  @override
+  String get networkError => 'Error de red, revisa tu conexión';
 }

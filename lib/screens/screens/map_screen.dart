@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -8,19 +9,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-// TODO: PASO 1 - Obtener Clave de API de Google Maps
-// 1. Ve a la Google Cloud Console (https://console.cloud.google.com/).
-// 2. Habilita las APIs: Maps SDK for Android, Maps SDK for iOS, y Directions API.
-// 3. Crea una clave de API y agrégala en:
-//    - Android: `android/app/src/main/AndroidManifest.xml`
-//      <meta-data android:name="com.google.android.geo.API_KEY" android:value="TU_API_KEY_AQUI"/>
-//    - iOS: `ios/Runner/AppDelegate.swift`
-//      GMSServices.provideAPIKey("TU_API_KEY_AQUI")
-
-// Clave de API de Google Maps (para la API de Direcciones).
-// ¡IMPORTANTE! Es una mala práctica almacenar claves de API directamente en el código.
-// Usa variables de entorno o un servicio de secretos para producción.
-const String GOOGLE_MAPS_API_KEY = "AIzaSyAaqSFpbIpmmrjm8tyweYhw-rayaC0O9lA";
+const String googleMapsApiKey = "AIzaSyAaqSFpbIpmmrjm8tyweYhw-rayaC0O9lA";
 
 class MapScreen extends StatefulWidget {
   final User user;
@@ -31,32 +20,26 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  // Colores del tema dark blue (de tu archivo original)
+  // Colores del tema dark blue
   static const Color _primaryDark = Color(0xFF0D1B2A);
   static const Color _secondaryDark = Color(0xFF1B263B);
   static const Color _accentBlue = Color(0xFF415A77);
   static const Color _lightBlue = Color(0xFF778DA9);
   static const Color _textPrimary = Color(0xFFE0E1DD);
 
-  // Controlador para el mapa de Google.
   GoogleMapController? _mapController;
-  // Ubicación inicial de la cámara del mapa.
   static const CameraPosition _initialCameraPosition = CameraPosition(
     target: LatLng(-33.4489, -70.6693), // Santiago de Chile
     zoom: 12,
   );
 
-  // Gestión de la ubicación del usuario.
   final Location _locationService = Location();
   LocationData? _currentUserLocation;
   StreamSubscription<LocationData>? _locationSubscription;
 
-  // Marcadores en el mapa (destinos y ubicación del usuario).
   final Set<Marker> _markers = {};
-  // Polilíneas para dibujar la ruta.
   final Set<Polyline> _polylines = {};
 
-  // Modo de viaje seleccionado.
   TravelMode _selectedTravelMode = TravelMode.walking;
 
   @override
@@ -65,13 +48,11 @@ class _MapScreenState extends State<MapScreen> {
     _initLocationAndMarkers();
   }
 
-  // Inicializa la obtención de la ubicación y la carga de marcadores.
   Future<void> _initLocationAndMarkers() async {
     await _getUserLocation();
     await _fetchLocationsFromFirestore();
   }
 
-  // Obtiene la ubicación del usuario en tiempo real.
   Future<void> _getUserLocation() async {
     bool serviceEnabled;
     PermissionStatus permissionGranted;
@@ -91,7 +72,7 @@ class _MapScreenState extends State<MapScreen> {
     }
 
     _locationSubscription = _locationService.onLocationChanged.listen((
-      LocationData locationData,
+      locationData,
     ) {
       if (mounted) {
         setState(() {
@@ -102,7 +83,6 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  // Actualiza el marcador de la ubicación del usuario en el mapa.
   void _updateUserLocationMarker() {
     if (_currentUserLocation != null) {
       final userLatLng = LatLng(
@@ -122,7 +102,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  // Carga los marcadores de ubicaciones desde Firebase Firestore.
   Future<void> _fetchLocationsFromFirestore() async {
     final firestore = FirebaseFirestore.instance;
     final querySnapshot = await firestore.collection('locations').get();
@@ -151,7 +130,6 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  // Crea la ruta entre la ubicación del usuario y el destino.
   Future<void> _createRoute(LatLng destination) async {
     if (_currentUserLocation == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -173,19 +151,17 @@ class _MapScreenState extends State<MapScreen> {
     await _getPolyline(origin, destination, _selectedTravelMode);
   }
 
-  // Obtiene los puntos de la polilínea desde la API de Direcciones de Google.
   Future<void> _getPolyline(
     LatLng origin,
     LatLng destination,
     TravelMode travelMode,
   ) async {
     List<LatLng> polylineCoordinates = [];
-    PolylinePoints polylinePoints = PolylinePoints();
 
     String travelModeStr = travelMode.toString().split('.').last;
 
     final uri = Uri.parse(
-      'https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&mode=$travelModeStr&key=$GOOGLE_MAPS_API_KEY',
+      'https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&mode=$travelModeStr&key=$googleMapsApiKey',
     );
 
     try {
@@ -194,7 +170,7 @@ class _MapScreenState extends State<MapScreen> {
         final data = json.decode(response.body);
         if (data['routes'].isNotEmpty) {
           final points = data['routes'][0]['overview_polyline']['points'];
-          final result = await polylinePoints.decodePolyline(points);
+          final result = PolylinePoints.decodePolyline(points);
 
           if (result.isNotEmpty) {
             polylineCoordinates.addAll(
@@ -224,13 +200,14 @@ class _MapScreenState extends State<MapScreen> {
         );
       }
     } catch (e) {
-      print('Excepción al llamar a la API de Direcciones: $e');
+      if (kDebugMode) {
+        debugPrint('Excepción al llamar a la API de Direcciones: $e');
+      }
     }
 
     _addPolylineToMap(polylineCoordinates);
   }
 
-  // Dibuja la polilínea en el mapa.
   void _addPolylineToMap(List<LatLng> polylineCoordinates) {
     PolylineId id = const PolylineId("route");
     Polyline polyline = Polyline(
@@ -283,7 +260,6 @@ class _MapScreenState extends State<MapScreen> {
           GoogleMap(
             onMapCreated: (GoogleMapController controller) {
               _mapController = controller;
-              // Aplica el estilo oscuro del mapa una vez creado
               controller.setMapStyle(json.encode(_mapStyle));
             },
             initialCameraPosition: _initialCameraPosition,
@@ -304,7 +280,6 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  // Widget para seleccionar el modo de viaje, adaptado a tu tema.
   Widget _buildTravelModeSelector() {
     return Container(
       padding: const EdgeInsets.all(8),
@@ -378,7 +353,6 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  // Estilo JSON para el mapa de Google en modo oscuro.
   final List<Map<String, dynamic>> _mapStyle = [
     {
       "elementType": "geometry",

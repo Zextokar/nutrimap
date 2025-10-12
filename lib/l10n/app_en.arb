@@ -304,5 +304,21 @@
     "homeTitle": "Home",
     "@homeTitle": {
         "description": "Title of the main/home screen"
+    },
+    "commerce": "Commerce",
+    "@commerce": {
+        "description": "Title of the main Commerce"
+    },
+    "userDisabled": "User disabled",
+    "@userDisabled": {
+        "description": "Error message when the user is disabled in Firebase"
+    },
+    "tooManyRequests": "Too many attempts, try again later",
+    "@tooManyRequests": {
+        "description": "Error message when the login attempt limit is exceeded in Firebase"
+    },
+    "networkError": "Network error, check your connection",
+    "@networkError": {
+        "description": "Error message when the network connection fails during login"
     }
 }

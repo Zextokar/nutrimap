@@ -9,7 +9,6 @@ class SettingsScreen extends StatelessWidget {
   static const Color _primaryDark = Color(0xFF0D1B2A);
   static const Color _secondaryDark = Color(0xFF1B263B);
   static const Color _accentBlue = Color(0xFF415A77);
-  static const Color _lightBlue = Color(0xFF778DA9);
   static const Color _accentGreen = Color(0xFF2D9D78);
   static const Color _textPrimary = Color(0xFFE0E1DD);
   static const Color _textSecondary = Color(0xFF9DB2BF);

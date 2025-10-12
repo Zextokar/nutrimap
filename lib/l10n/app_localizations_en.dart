@@ -239,4 +239,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeTitle => 'Home';
+
+  @override
+  String get commerce => 'Commerce';
+
+  @override
+  String get userDisabled => 'User disabled';
+
+  @override
+  String get tooManyRequests => 'Too many attempts, try again later';
+
+  @override
+  String get networkError => 'Network error, check your connection';
 }

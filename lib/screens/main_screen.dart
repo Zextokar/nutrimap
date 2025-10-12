@@ -8,7 +8,7 @@ import 'package:nutrimap/screens/screens/settings_screen.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
 
 class MainScreen extends StatefulWidget {
-  final User user; // ✅ Ahora es el User de Firebase
+  final User user; // ✅ Usuario autenticado, no puede ser null
   const MainScreen({super.key, required this.user});
 
   @override
@@ -23,6 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    // ✅ Aseguramos que el usuario se pase correctamente a cada pantalla
     _screens = [
       HomeScreen(user: widget.user),
       MapScreen(user: widget.user),
@@ -51,18 +52,24 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: Colors.deepOrange,
         unselectedItemColor: Colors.grey,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: local.home),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: local.map),
           BottomNavigationBarItem(
-            icon: Icon(Icons.health_and_safety),
+            icon: const Icon(Icons.home),
+            label: local.home,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.map),
+            label: local.map,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.health_and_safety),
             label: local.benefits,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.restaurant_menu),
+            icon: const Icon(Icons.restaurant_menu),
             label: local.recipes,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             label: local.settings,
           ),
         ],

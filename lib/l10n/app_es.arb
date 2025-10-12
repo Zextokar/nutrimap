@@ -308,5 +308,21 @@
     "homeTitle": "Inicio",
     "@homeTitle": {
         "description": "Título de la pantalla principal/Home"
+    },
+    "commerce": "Comercio",
+    "@commerce": {
+        "description": "Título de la pantalla comercio"
+    },
+    "userDisabled": "Usuario deshabilitado",
+    "@userDisabled": {
+        "description": "Mensaje de error cuando el usuario está deshabilitado en Firebase"
+    },
+    "tooManyRequests": "Demasiados intentos, inténtalo más tarde",
+    "@tooManyRequests": {
+        "description": "Mensaje de error cuando se excede el límite de intentos de login en Firebase"
+    },
+    "networkError": "Error de red, revisa tu conexión",
+    "@networkError": {
+        "description": "Mensaje de error cuando falla la conexión de red al intentar login"
     }
 }
