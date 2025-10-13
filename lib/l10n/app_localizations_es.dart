@@ -252,4 +252,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get networkError => 'Error de red, revisa tu conexión';
+
+  @override
+  String get forgotPasswordTitle => 'Olvidaste tu contraseña';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña';
+
+  @override
+  String get sendResetLink => 'Enviar enlace de recuperación';
+
+  @override
+  String get resetEmailSent =>
+      'Se ha enviado un correo para restablecer tu contraseña';
+
+  @override
+  String get resetEmailFailed => 'Error al enviar el correo de recuperación';
+
+  @override
+  String get registerDescription => 'Crea tu cuenta ingresando tus datos';
+
+  @override
+  String get name => 'Nombre';
+
+  @override
+  String get registerButton => 'Registrarse';
 }

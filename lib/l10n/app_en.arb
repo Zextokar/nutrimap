@@ -320,5 +320,37 @@
     "networkError": "Network error, check your connection",
     "@networkError": {
         "description": "Error message when the network connection fails during login"
+    },
+    "forgotPasswordTitle": "Forgot Password",
+    "@forgotPasswordTitle": {
+        "description": "Title of the password recovery screen"
+    },
+    "forgotPasswordDescription": "Enter your email and we will send you a link to reset your password",
+    "@forgotPasswordDescription": {
+        "description": "Explanatory message on the password recovery screen"
+    },
+    "sendResetLink": "Send Reset Link",
+    "@sendResetLink": {
+        "description": "Button text to send password reset link"
+    },
+    "resetEmailSent": "Password reset email has been sent",
+    "@resetEmailSent": {
+        "description": "Confirmation message when the reset email has been sent"
+    },
+    "resetEmailFailed": "Failed to send reset email",
+    "@resetEmailFailed": {
+        "description": "Error message when the reset email could not be sent"
+    },
+    "registerDescription": "Create your account by entering your details",
+    "@registerDescription": {
+        "description": "Explanatory message on the registration screen"
+    },
+    "name": "Name",
+    "@name": {
+        "description": "Label for the user's name input field"
+    },
+    "registerButton": "Register",
+    "@registerButton": {
+        "description": "Button text to complete registration"
     }
 }

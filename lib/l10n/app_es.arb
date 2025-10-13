@@ -324,5 +324,37 @@
     "networkError": "Error de red, revisa tu conexión",
     "@networkError": {
         "description": "Mensaje de error cuando falla la conexión de red al intentar login"
+    },
+    "forgotPasswordTitle": "Olvidaste tu contraseña",
+    "@forgotPasswordTitle": {
+        "description": "Título de la pantalla de recuperación de contraseña"
+    },
+    "forgotPasswordDescription": "Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña",
+    "@forgotPasswordDescription": {
+        "description": "Mensaje explicativo en la pantalla de recuperación de contraseña"
+    },
+    "sendResetLink": "Enviar enlace de recuperación",
+    "@sendResetLink": {
+        "description": "Texto del botón para enviar el enlace de recuperación de contraseña"
+    },
+    "resetEmailSent": "Se ha enviado un correo para restablecer tu contraseña",
+    "@resetEmailSent": {
+        "description": "Mensaje de confirmación cuando el correo de recuperación ha sido enviado"
+    },
+    "resetEmailFailed": "Error al enviar el correo de recuperación",
+    "@resetEmailFailed": {
+        "description": "Mensaje de error cuando no se puede enviar el correo de recuperación"
+    },
+    "registerDescription": "Crea tu cuenta ingresando tus datos",
+    "@registerDescription": {
+        "description": "Mensaje explicativo en la pantalla de registro"
+    },
+    "name": "Nombre",
+    "@name": {
+        "description": "Etiqueta para el campo de nombre del usuario"
+    },
+    "registerButton": "Registrarse",
+    "@registerButton": {
+        "description": "Texto del botón para completar el registro"
     }
 }

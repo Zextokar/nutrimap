@@ -251,4 +251,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get networkError => 'Network error, check your connection';
+
+  @override
+  String get forgotPasswordTitle => 'Forgot Password';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Enter your email and we will send you a link to reset your password';
+
+  @override
+  String get sendResetLink => 'Send Reset Link';
+
+  @override
+  String get resetEmailSent => 'Password reset email has been sent';
+
+  @override
+  String get resetEmailFailed => 'Failed to send reset email';
+
+  @override
+  String get registerDescription =>
+      'Create your account by entering your details';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get registerButton => 'Register';
 }

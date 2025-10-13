@@ -565,6 +565,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Network error, check your connection'**
   String get networkError;
+
+  /// Title of the password recovery screen
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password'**
+  String get forgotPasswordTitle;
+
+  /// Explanatory message on the password recovery screen
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email and we will send you a link to reset your password'**
+  String get forgotPasswordDescription;
+
+  /// Button text to send password reset link
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reset Link'**
+  String get sendResetLink;
+
+  /// Confirmation message when the reset email has been sent
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset email has been sent'**
+  String get resetEmailSent;
+
+  /// Error message when the reset email could not be sent
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send reset email'**
+  String get resetEmailFailed;
+
+  /// Explanatory message on the registration screen
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account by entering your details'**
+  String get registerDescription;
+
+  /// Label for the user's name input field
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// Button text to complete registration
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get registerButton;
 }
 
 class _AppLocalizationsDelegate
