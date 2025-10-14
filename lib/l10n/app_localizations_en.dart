@@ -277,4 +277,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get registerButton => 'Register';
+
+  @override
+  String get logoutConfirmationTitle => 'Log out?';
+
+  @override
+  String get logoutConfirmationMessage =>
+      'Your session will be closed in the app.';
+
+  @override
+  String get logoutError => 'Error logging out';
 }

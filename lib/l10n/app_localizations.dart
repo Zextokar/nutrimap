@@ -613,6 +613,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Register'**
   String get registerButton;
+
+  /// Title of the confirmation dialog before logging out
+  ///
+  /// In en, this message translates to:
+  /// **'Log out?'**
+  String get logoutConfirmationTitle;
+
+  /// Dialog message indicating that the session will be logged out
+  ///
+  /// In en, this message translates to:
+  /// **'Your session will be closed in the app.'**
+  String get logoutConfirmationMessage;
+
+  /// Message shown when an error occurs while trying to log out
+  ///
+  /// In en, this message translates to:
+  /// **'Error logging out'**
+  String get logoutError;
 }
 
 class _AppLocalizationsDelegate

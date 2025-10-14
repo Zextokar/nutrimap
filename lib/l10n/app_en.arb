@@ -352,5 +352,17 @@
     "registerButton": "Register",
     "@registerButton": {
         "description": "Button text to complete registration"
+    },
+    "logoutConfirmationTitle": "Log out?",
+    "@logoutConfirmationTitle": {
+        "description": "Title of the confirmation dialog before logging out"
+    },
+    "logoutConfirmationMessage": "Your session will be closed in the app.",
+    "@logoutConfirmationMessage": {
+        "description": "Dialog message indicating that the session will be logged out"
+    },
+    "logoutError": "Error logging out",
+    "@logoutError": {
+        "description": "Message shown when an error occurs while trying to log out"
     }
 }

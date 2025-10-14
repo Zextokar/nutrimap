@@ -356,5 +356,17 @@
     "registerButton": "Registrarse",
     "@registerButton": {
         "description": "Texto del botón para completar el registro"
+    },
+    "logoutConfirmationTitle": "¿Cerrar sesión?",
+    "@logoutConfirmationTitle": {
+        "description": "Título del diálogo de confirmación antes de cerrar sesión"
+    },
+    "logoutConfirmationMessage": "Se cerrará tu sesión en la aplicación.",
+    "@logoutConfirmationMessage": {
+        "description": "Mensaje del diálogo que indica que la sesión se cerrará"
+    },
+    "logoutError": "Error al cerrar sesión",
+    "@logoutError": {
+        "description": "Mensaje mostrado cuando ocurre un error al intentar cerrar sesión"
     }
 }

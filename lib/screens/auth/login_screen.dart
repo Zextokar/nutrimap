@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
+import 'package:nutrimap/screens/main_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -33,11 +34,20 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
+      // Intentar login
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // MainScreen se abrirá automáticamente vía StreamBuilder en main.dart
+
+      // Navegar automáticamente al MainScreen después del login
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MainScreen(user: FirebaseAuth.instance.currentUser!),
+        ),
+      );
     } on FirebaseAuthException catch (e) {
       String message;
 
