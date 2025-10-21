@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -15,6 +16,23 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
+  // Datos cargados
+  late String _userName = "";
+  Map<int, double> _kmPerDay = {};
+  bool _isLoading = true;
+
+  // Día seleccionado en el calendario
+  DateTime _selectedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now();
+
+  // Colores
+  static const Color _primaryDark = Color(0xFF0D1B2A);
+  static const Color _secondaryDark = Color(0xFF1B263B);
+  static const Color _accentGreen = Color(0xFF06A77D);
+  static const Color _accentBlue = Color(0xFF415A77);
+  static const Color _textPrimary = Color(0xFFE0E1DD);
+  static const Color _errorColor = Color(0xFFD90429);
+
   @override
   void initState() {
     super.initState();
@@ -22,21 +40,15 @@ class _HomeScreenState extends State<HomeScreen>
       duration: const Duration(milliseconds: 800),
       vsync: this,
     )..forward();
+    _loadData();
   }
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
+  Future<void> _loadData() async {
+    setState(() => _isLoading = true);
+    _userName = await _getUserName();
+    _kmPerDay = await _getKmPerDay();
+    setState(() => _isLoading = false);
   }
-
-  // Colores del tema
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentGreen = Color(0xFF06A77D);
-  static const Color _accentBlue = Color(0xFF415A77);
-  static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _errorColor = Color(0xFFD90429);
 
   Future<String> _getUserName() async {
     try {
@@ -45,9 +57,7 @@ class _HomeScreenState extends State<HomeScreen>
           .where('uid_auth', isEqualTo: widget.user.uid)
           .limit(1)
           .get();
-
       if (query.docs.isEmpty) return "Usuario";
-
       final data = query.docs.first.data();
       return "${data['nombre'] ?? ''} ${data['apellido'] ?? ''}".trim();
     } catch (e) {
@@ -66,18 +76,16 @@ class _HomeScreenState extends State<HomeScreen>
           .where('uid_auth', isEqualTo: widget.user.uid)
           .limit(1)
           .get();
-
       if (userQuery.docs.isEmpty) return {};
 
       final userDoc = userQuery.docs.first;
-
       final addDataQuery = await userDoc.reference
           .collection('add_data')
           .where('fecha', isGreaterThanOrEqualTo: startOfMonth)
           .where('fecha', isLessThanOrEqualTo: endOfMonth)
           .get();
 
-      final Map<int, double> kmPerDay = {};
+      Map<int, double> kmPerDay = {};
       for (int i = 1; i <= endOfMonth.day; i++) {
         kmPerDay[i] = 0;
       }
@@ -97,7 +105,21 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final totalKm = _kmPerDay.values.fold<double>(0, (a, b) => a + b);
+    final daysWithData = _kmPerDay.values.where((km) => km > 0).length;
+    final averageKm = daysWithData == 0 ? 0.0 : totalKm / daysWithData;
+    final maxKm = _kmPerDay.values.isEmpty
+        ? 0.0
+        : _kmPerDay.values.reduce((a, b) => a > b ? a : b);
+
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: _primaryDark,
@@ -123,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen>
               padding: const EdgeInsets.only(right: 16),
               child: Center(
                 child: Text(
-                  DateFormat('MMM yyyy', 'es_ES').format(DateTime.now()),
+                  DateFormat('MMM yyyy', 'es_ES').format(now),
                   style: const TextStyle(
                     color: _accentGreen,
                     fontSize: 14,
@@ -134,85 +156,39 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ],
         ),
-        body: FutureBuilder(
-          future: Future.wait([_getUserName(), _getKmPerDay()]),
-          builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(
-                      color: _accentGreen,
-                      strokeWidth: 3,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Cargando datos...',
-                      style: TextStyle(color: _textPrimary.withOpacity(0.6)),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            if (snapshot.hasError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error_outline, color: _errorColor, size: 48),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Error al cargar datos',
-                      style: TextStyle(color: _textPrimary, fontSize: 16),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            final name = snapshot.data?[0] ?? "Usuario";
-            final kmPerDay = snapshot.data?[1] as Map<int, double>? ?? {};
-            final totalKm = kmPerDay.values.fold<double>(0, (a, b) => a + b);
-            final daysWithData = kmPerDay.values.where((km) => km > 0).length;
-            final averageKm = daysWithData == 0 ? 0.0 : totalKm / daysWithData;
-            final maxKm = kmPerDay.values.isEmpty
-                ? 0.0
-                : kmPerDay.values.reduce((a, b) => a > b ? a : b);
-
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Tarjeta de bienvenida
-                  _buildWelcomeCard(name),
-                  const SizedBox(height: 28),
-
-                  // Tarjetas de estadísticas principales
-                  _buildMainStatsGrid(totalKm, daysWithData, averageKm, maxKm),
-                  const SizedBox(height: 28),
-
-                  // Gráfico de barras mensuales
-                  _buildMonthlyChart(kmPerDay, maxKm),
-                  const SizedBox(height: 28),
-
-                  // Registro diario
-                  _buildDailyRecordsHeader(),
-                  const SizedBox(height: 12),
-                  ...kmPerDay.entries.toList().reversed.map(
-                    (e) => _buildDayCard(e.key, e.value, maxKm),
+        body: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: _accentGreen),
+              )
+            : RefreshIndicator(
+                onRefresh: _loadData,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildWelcomeCard(_userName),
+                      const SizedBox(height: 28),
+                      _buildCalendar(),
+                      const SizedBox(height: 28),
+                      _buildMainStatsGrid(
+                        totalKm,
+                        daysWithData,
+                        averageKm,
+                        maxKm,
+                      ),
+                      const SizedBox(height: 28),
+                      _buildDailyInfo(_selectedDay),
+                    ],
                   ),
-                ],
+                ),
               ),
-            );
-          },
-        ),
       ),
     );
   }
 
+  // ---------------- Widget Bienvenida ----------------
   Widget _buildWelcomeCard(String name) {
     return FadeTransition(
       opacity: _animationController,
@@ -270,7 +246,6 @@ class _HomeScreenState extends State<HomeScreen>
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.85),
                     fontSize: 13,
-                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
@@ -281,6 +256,35 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
+  // ---------------- Calendario ----------------
+  Widget _buildCalendar() {
+    return TableCalendar(
+      firstDay: DateTime(DateTime.now().year, DateTime.now().month, 1),
+      lastDay: DateTime(DateTime.now().year, DateTime.now().month + 1, 0),
+      focusedDay: _focusedDay,
+      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+      calendarStyle: CalendarStyle(
+        todayDecoration: BoxDecoration(
+          color: _accentGreen,
+          shape: BoxShape.circle,
+        ),
+        selectedDecoration: BoxDecoration(
+          color: _accentBlue,
+          shape: BoxShape.circle,
+        ),
+        defaultTextStyle: TextStyle(color: _textPrimary),
+        weekendTextStyle: TextStyle(color: _textPrimary.withOpacity(0.7)),
+      ),
+      onDaySelected: (selectedDay, focusedDay) {
+        setState(() {
+          _selectedDay = selectedDay;
+          _focusedDay = focusedDay;
+        });
+      },
+    );
+  }
+
+  // ---------------- Estadísticas Principales ----------------
   Widget _buildMainStatsGrid(
     double totalKm,
     int daysWithData,
@@ -311,13 +315,13 @@ class _HomeScreenState extends State<HomeScreen>
           icon: Icons.trending_up,
           label: "Promedio",
           value: averageKm.toStringAsFixed(1),
-          color: Color(0xFF06A77D).withOpacity(0.8),
+          color: _accentGreen.withOpacity(0.8),
         ),
         _buildStatCard(
           icon: Icons.flash_on,
           label: "Máximo",
           value: maxKm.toStringAsFixed(1),
-          color: Color(0xFFF4B942),
+          color: const Color(0xFFF4B942),
         ),
       ],
     );
@@ -385,238 +389,45 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _buildMonthlyChart(Map<int, double> kmPerDay, double maxKm) {
-    if (kmPerDay.isEmpty) {
-      return Container(
-        decoration: BoxDecoration(
-          color: _secondaryDark,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: _accentBlue.withOpacity(0.2), width: 1),
-        ),
-        padding: const EdgeInsets.all(20),
-        child: Center(
-          child: Text(
-            'Sin datos para mostrar',
-            style: TextStyle(color: _textPrimary.withOpacity(0.6)),
-          ),
-        ),
-      );
-    }
-
-    final normalizedMax = maxKm > 0 ? maxKm : 1.0;
-
+  // ---------------- Info Diario ----------------
+  Widget _buildDailyInfo(DateTime day) {
+    final km = _kmPerDay[day.day] ?? 0.0;
+    final hasData = km > 0;
     return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: _secondaryDark,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _accentBlue.withOpacity(0.2), width: 1),
-      ),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Actividad Mensual',
-            style: TextStyle(
-              color: _textPrimary,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 150,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: kmPerDay.length,
-              itemBuilder: (context, index) {
-                final entry = kmPerDay.entries.toList()[index];
-                final day = entry.key;
-                final km = entry.value;
-                final height = (km / normalizedMax) * 100;
-
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        width: 24,
-                        height: height + 10,
-                        decoration: BoxDecoration(
-                          color: km > 0
-                              ? _accentGreen.withOpacity(
-                                  0.8 * (km / normalizedMax),
-                                )
-                              : _accentBlue.withOpacity(0.2),
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(6),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        day.toString(),
-                        style: TextStyle(
-                          color: _textPrimary.withOpacity(0.6),
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDailyRecordsHeader() {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: _accentGreen.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Icon(Icons.today, color: _accentGreen, size: 20),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          'Registro Diario',
-          style: TextStyle(
-            color: _textPrimary,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDayCard(int day, double km, double maxKm) {
-    final hasData = km > 0;
-    final percentage = maxKm > 0 ? (km / maxKm) * 100 : 0.0;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: _secondaryDark,
-        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: hasData
               ? _accentGreen.withOpacity(0.3)
               : _accentBlue.withOpacity(0.2),
           width: 1.5,
         ),
-        boxShadow: hasData
-            ? [
-                BoxShadow(
-                  color: _accentGreen.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ]
-            : [],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(14),
-        child: Stack(
-          children: [
-            // Fondo de progreso
-            if (hasData)
-              Positioned(
-                left: 0,
-                top: 0,
-                bottom: 0,
-                child: Container(
-                  width:
-                      MediaQuery.of(context).size.width *
-                      (percentage / 100) *
-                      0.85,
-                  decoration: BoxDecoration(
-                    color: _accentGreen.withOpacity(0.1)
-                  ),
-                ),
-              ),
-            // Contenido
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Día ${day.toString().padLeft(2, '0')}',
-                        style: TextStyle(
-                          color: _textPrimary,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Icon(
-                            hasData
-                                ? Icons.check_circle
-                                : Icons.radio_button_unchecked,
-                            color: hasData
-                                ? _accentGreen
-                                : _textPrimary.withOpacity(0.4),
-                            size: 14,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            hasData ? 'Registrado' : 'Sin datos',
-                            style: TextStyle(
-                              color: hasData
-                                  ? _accentGreen
-                                  : _textPrimary.withOpacity(0.5),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${km.toStringAsFixed(1)} km',
-                        style: TextStyle(
-                          color: hasData
-                              ? _accentGreen
-                              : _textPrimary.withOpacity(0.5),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (hasData)
-                        Text(
-                          '${percentage.toStringAsFixed(0)}% del máx',
-                          style: TextStyle(
-                            color: _textPrimary.withOpacity(0.5),
-                            fontSize: 11,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Día ${day.day.toString().padLeft(2, '0')}',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            hasData
+                ? 'Distancia recorrida: ${km.toStringAsFixed(1)} km'
+                : 'Sin datos para este día',
+            style: TextStyle(
+              color: _textPrimary.withOpacity(0.8),
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }
