@@ -61,7 +61,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get benefits => 'Benefits';
 
   @override
-  String get recipes => 'Commerce';
+  String get recipes => 'Commerces';
 
   @override
   String get settings => 'Settings';
@@ -287,4 +287,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logoutError => 'Error logging out';
+
+  @override
+  String get resetPasswordError => 'Error sending reset email.';
+
+  @override
+  String get sendResetLinkButton => 'Send link';
+
+  @override
+  String get backToLogin => 'Back to Login';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
+import 'package:nutrimap/screens/auth/forgot_pass.dart';
 import 'package:nutrimap/screens/main_screen.dart';
 import 'register_screen.dart';
 
@@ -283,14 +284,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                local.forgotPassword,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        const ForgotPasswordScreen(),
+                                  ),
+                                );
+                              },
+                              child: Text(local.forgotPassword),
                             ),
                           ],
                         ),

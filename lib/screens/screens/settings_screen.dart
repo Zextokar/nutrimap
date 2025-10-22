@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
+import 'package:nutrimap/screens/screens/screens/terms_condi.dart';
 import 'profile_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -243,11 +244,10 @@ class SettingsScreen extends StatelessWidget {
                 title: 'Términos y Condiciones',
                 subtitle: 'Lee nuestros términos',
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Funcionalidad próximamente'),
-                      backgroundColor: _accentBlue,
-                      duration: Duration(seconds: 2),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TermsAndConditionsScreen(),
                     ),
                   );
                 },

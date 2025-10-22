@@ -121,6 +121,7 @@ class _HomeScreenState extends State<HomeScreen>
         : _kmPerDay.values.reduce((a, b) => a > b ? a : b);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: _primaryDark,
         appBarTheme: const AppBarTheme(

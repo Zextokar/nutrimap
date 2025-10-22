@@ -197,7 +197,7 @@ abstract class AppLocalizations {
   /// Label for the Commerce tab in the BottomNavigationBar
   ///
   /// In en, this message translates to:
-  /// **'Commerce'**
+  /// **'Commerces'**
   String get recipes;
 
   /// Label for the Settings tab in the BottomNavigationBar
@@ -631,6 +631,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error logging out'**
   String get logoutError;
+
+  /// Message shown when an error occurs while sending the reset email
+  ///
+  /// In en, this message translates to:
+  /// **'Error sending reset email.'**
+  String get resetPasswordError;
+
+  /// Text of the button that sends the password reset link
+  ///
+  /// In en, this message translates to:
+  /// **'Send link'**
+  String get sendResetLinkButton;
+
+  /// Text of the button that returns to the login screen
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get backToLogin;
 }
 
 class _AppLocalizationsDelegate

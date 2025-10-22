@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,10 +39,10 @@ class _RegisterPageState extends State<RegisterPage> {
         password: password,
       );
 
-      // Crear documento del usuario con su RUT como ID
+      // Crear documento del usuario
       await FirebaseFirestore.instance.collection('usuarios').doc(rut).set({
         'rut': rut,
-        'uid_auth': cred.user!.uid, // vínculo con FirebaseAuth
+        'uid_auth': cred.user!.uid,
         'email': email,
         'nombre': nombre,
         'apellido': apellido,
@@ -70,7 +69,6 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       });
     } catch (e) {
-      if (kDebugMode) print("Error: $e");
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Error al registrar: $e")));
@@ -153,7 +151,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
 
               // === Género ===
@@ -179,7 +176,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   );
                 },
               ),
-
               const SizedBox(height: 20),
 
               // === Región ===
@@ -211,7 +207,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   );
                 },
               ),
-
               const SizedBox(height: 20),
 
               // === Comuna (filtrada por región) ===
@@ -231,15 +226,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     if (comunas.isEmpty)
                       return const Text("No hay comunas disponibles");
                     return DropdownButtonFormField<String>(
-                      key: ValueKey(
-                        regionId,
-                      ), // Reconstruye dropdown al cambiar región
+                      key: ValueKey(regionId),
                       value: comunaId,
                       hint: const Text("Selecciona una comuna"),
                       onChanged: (val) {
                         setState(() {
                           comunaId = val;
-                          institucionId = null;
                         });
                       },
                       items: comunas.map((doc) {
@@ -251,32 +243,30 @@ class _RegisterPageState extends State<RegisterPage> {
                     );
                   },
                 ),
-
               const SizedBox(height: 20),
 
-              // === Institución (filtrada por región y comuna) ===
+              // === Institución (filtrada solo por región) ===
               const Text("Selecciona institución"),
-              if (regionId == null || comunaId == null)
-                const Text("Selecciona región y comuna primero")
+              if (regionId == null)
+                const Text("Selecciona primero una región")
               else
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('instituciones')
                       .where('regionId', isEqualTo: regionId)
-                      .where('comunaId', isEqualTo: comunaId)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData)
                       return const CircularProgressIndicator();
                     final instituciones = snapshot.data!.docs;
                     if (instituciones.isEmpty)
-                      return const Text("No hay instituciones disponibles");
+                      return const Text(
+                        "No hay instituciones disponibles para esta región",
+                      );
                     return DropdownButtonFormField<String>(
-                      key: ValueKey(
-                        comunaId,
-                      ), // Reconstruye dropdown al cambiar comuna
+                      key: ValueKey(regionId),
                       value: institucionId,
-                      hint: const Text("Selecciona institución"),
+                      hint: const Text("Selecciona una institución"),
                       onChanged: (val) => setState(() => institucionId = val),
                       items: instituciones.map((doc) {
                         return DropdownMenuItem(
@@ -312,7 +302,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   );
                 },
               ),
-
               const SizedBox(height: 30),
 
               Center(

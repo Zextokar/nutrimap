@@ -61,7 +61,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get benefits => 'Beneficios';
 
   @override
-  String get recipes => 'Comercio';
+  String get recipes => 'Comercios';
 
   @override
   String get settings => 'Configuración';
@@ -288,4 +288,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get logoutError => 'Error al cerrar sesión';
+
+  @override
+  String get resetPasswordError => 'Error al enviar el correo de recuperación.';
+
+  @override
+  String get sendResetLinkButton => 'Enviar enlace';
+
+  @override
+  String get backToLogin => 'Volver al Login';
 }

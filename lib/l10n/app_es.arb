@@ -64,7 +64,7 @@
     "@benefits": {
         "description": "Label for the Benefits tab in BottomNavigationBar"
     },
-    "recipes": "Comercio",
+    "recipes": "Comercios",
     "@recipes": {
         "description": "Label for the Recipes tab in BottomNavigationBar"
     },
@@ -368,5 +368,17 @@
     "logoutError": "Error al cerrar sesión",
     "@logoutError": {
         "description": "Mensaje mostrado cuando ocurre un error al intentar cerrar sesión"
+    },
+    "resetPasswordError": "Error al enviar el correo de recuperación.",
+    "@resetPasswordError": {
+        "description": "Mensaje mostrado cuando ocurre un error al intentar enviar el correo de recuperación"
+    },
+    "sendResetLinkButton": "Enviar enlace",
+    "@sendResetLinkButton": {
+        "description": "Texto del botón que envía el enlace de restablecimiento de contraseña"
+    },
+    "backToLogin": "Volver al Login",
+    "@backToLogin": {
+        "description": "Texto del botón para volver a la pantalla de inicio de sesión"
     }
 }

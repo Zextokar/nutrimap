@@ -64,7 +64,7 @@
     "@benefits": {
         "description": "Label for the Benefits tab in the BottomNavigationBar"
     },
-    "recipes": "Commerce",
+    "recipes": "Commerces",
     "@recipes": {
         "description": "Label for the Commerce tab in the BottomNavigationBar"
     },
@@ -364,5 +364,17 @@
     "logoutError": "Error logging out",
     "@logoutError": {
         "description": "Message shown when an error occurs while trying to log out"
+    },
+    "resetPasswordError": "Error sending reset email.",
+    "@resetPasswordError": {
+        "description": "Message shown when an error occurs while sending the reset email"
+    },
+    "sendResetLinkButton": "Send link",
+    "@sendResetLinkButton": {
+        "description": "Text of the button that sends the password reset link"
+    },
+    "backToLogin": "Back to Login",
+    "@backToLogin": {
+        "description": "Text of the button that returns to the login screen"
     }
 }
