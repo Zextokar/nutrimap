@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen>
   static const Color _accentGreen = Color(0xFF06A77D);
   static const Color _accentBlue = Color(0xFF415A77);
   static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _errorColor = Color(0xFFD90429);
 
   @override
   void initState() {

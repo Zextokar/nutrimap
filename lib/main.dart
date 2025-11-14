@@ -7,13 +7,16 @@ import 'package:nutrimap/screens/info_screen.dart';
 import 'package:nutrimap/screens/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nutrimap/screens/screens/screens/subscription_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  MobileAds.instance.initialize();
   runApp(const MyApp());
 }
 
@@ -106,6 +109,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterPage(),
+        '/subscription': (context) => const VerificarCodigoPage(),
       },
     );
   }

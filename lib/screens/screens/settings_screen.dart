@@ -210,6 +210,27 @@ class SettingsScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 20),
+              // Sección de Suscripción
+              Text(
+                'Suscripción',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: _textSecondary,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildSettingsTile(
+                context: context,
+                icon: Icons.workspace_premium_rounded,
+                title: 'Nutrimap Premium',
+                subtitle: 'Elimina anuncios y desbloquea beneficios',
+                onTap: () {
+                  Navigator.pushNamed(context, '/subscription');
+                },
+              ),
+              const SizedBox(height: 20),
 
               // Sección de Información
               Text(
