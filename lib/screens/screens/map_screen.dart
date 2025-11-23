@@ -12,8 +12,10 @@ import 'package:html_unescape/html_unescape.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
-const String googleMapsApiKey = "TU_API_KEY_AQUI";
+// RECUERDA: Reemplaza esto con tu clave API real
+const String googleMapsApiKey = "AIzaSyAaqSFpbIpmmrjm8tyweYhw-rayaC0O9lA";
 
+// --- ENUMS Y CLASES DE DATOS ---
 enum TravelMode { walking, bicycling, driving }
 
 class RouteInfo {
@@ -44,6 +46,7 @@ class RouteStep {
   });
 }
 
+// --- CLASE PRINCIPAL ---
 class MapScreen extends StatefulWidget {
   final User user;
   const MapScreen({super.key, required this.user});
@@ -53,7 +56,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  // Colores del tema oscuro
+  // --- COLORES DEL TEMA OSCURO ---
   static const Color _primaryDark = Color(0xFF0D1B2A);
   static const Color _secondaryDark = Color(0xFF1B263B);
   static const Color _accentBlue = Color(0xFF415A77);
@@ -62,37 +65,58 @@ class _MapScreenState extends State<MapScreen> {
   static const Color _textPrimary = Color(0xFFE0E1DD);
   static const Color _errorColor = Color(0xFFD90429);
 
-  // Controladores y servicios
+  // --- CONTROLADORES Y SERVICIOS ---
   GoogleMapController? _mapController;
   final Location _locationService = Location();
   StreamSubscription<LocationData>? _locationSubscription;
   final FlutterTts _flutterTts = FlutterTts();
   final HtmlUnescape _unescape = HtmlUnescape();
 
-  // Estado de ubicación
+  // Solución al error de PolylinePoints: Se usa la API Key en el constructor
+  final PolylinePoints _polylinePoints = PolylinePoints(
+    apiKey: googleMapsApiKey,
+  );
+
+  // --- ESTADO DE MAPA Y UBICACIÓN ---
   LocationData? _currentUserLocation;
   final Set<Marker> _markers = {};
   final Set<Polyline> _polylines = {};
+  // Almacena todos los puntos de la polilínea para la navegación.
+  List<LatLng> _allRoutePoints = [];
 
-  // Estado de navegación
+  // --- ESTADO DE NAVEGACIÓN ---
   bool _isCalculatingRoute = false;
   TravelMode _selectedTravelMode = TravelMode.walking;
   String _locationStatus = "Iniciando...";
   List<RouteStep> _routeSteps = [];
   int _currentStepIndex = 0;
+  // Índice que ayuda a saber qué tan lejos hemos avanzado en los puntos de la polilínea.
+  int _currentPolylineIndex = 0;
   bool _isNavigating = false;
   bool _routeIsPreview = false;
   RouteInfo? _currentRouteInfo;
   LatLng? _currentDestination;
   String? _currentDestinationName;
 
-  // Control de sonido
+  // --- CONTROL DE SONIDO ---
   bool _isSoundEnabled = true;
+
+  // -------------------------------------------------------------------------
+  // --- LIFECYCLE Y SETUP ---
+  // -------------------------------------------------------------------------
 
   @override
   void initState() {
     super.initState();
     _initServices();
+  }
+
+  @override
+  void dispose() {
+    _locationSubscription?.cancel();
+    _mapController?.dispose();
+    _flutterTts.stop();
+    super.dispose();
   }
 
   Future<void> _initServices() async {
@@ -141,6 +165,8 @@ class _MapScreenState extends State<MapScreen> {
         LocationData newLocation,
       ) {
         if (!mounted) return;
+
+        // Mover la cámara inicial si es la primera vez
         if (_currentUserLocation == null && _mapController != null) {
           _mapController!.animateCamera(
             CameraUpdate.newLatLngZoom(
@@ -149,13 +175,16 @@ class _MapScreenState extends State<MapScreen> {
             ),
           );
         }
+
         setState(() {
           _currentUserLocation = newLocation;
           _updateUserLocationMarker();
         });
+
         if (_isNavigating) {
           _updateCameraForNavigation(newLocation);
-          _checkStepCompletion(newLocation);
+          // Función de navegación mejorada
+          _updateNavigation(newLocation);
         }
       });
     } catch (e) {
@@ -163,6 +192,10 @@ class _MapScreenState extends State<MapScreen> {
       if (mounted) setState(() => _locationStatus = "Error de ubicación");
     }
   }
+
+  // -------------------------------------------------------------------------
+  // --- LÓGICA DE RUTA (DIRECTIONS API) ---
+  // -------------------------------------------------------------------------
 
   Future<void> _createRoute(
     LatLng destination, {
@@ -189,10 +222,6 @@ class _MapScreenState extends State<MapScreen> {
         _currentUserLocation!.latitude!,
         _currentUserLocation!.longitude!,
       );
-      if (kDebugMode)
-        print(
-          "Calculando ruta: ${_selectedTravelMode.toString().split('.').last}",
-        );
       await _getRouteData(origin, destination, _selectedTravelMode);
     } finally {
       if (mounted) setState(() => _isCalculatingRoute = false);
@@ -216,7 +245,10 @@ class _MapScreenState extends State<MapScreen> {
         if (data['status'] == 'OK' && data['routes'].isNotEmpty) {
           final route = data['routes'][0];
           final points = route['overview_polyline']['points'] as String;
+
           final decodedPoints = PolylinePoints.decodePolyline(points);
+
+          // LÍNEA CORREGIDA (antes línea 251): mapea la lista de PointLatLng a LatLng
           final polylineCoordinates = decodedPoints
               .map((p) => LatLng(p.latitude, p.longitude))
               .toList();
@@ -251,7 +283,10 @@ class _MapScreenState extends State<MapScreen> {
             estimatedTimeMinutes: durationSeconds / 60,
           );
 
-          _previewRoute(polylineCoordinates, newRouteSteps, routeInfo);
+          // Guardar todos los puntos para la navegación.
+          _allRoutePoints = polylineCoordinates;
+          _currentPolylineIndex = 0; // Reiniciar el índice de la polilínea
+          _previewRoute(_allRoutePoints, newRouteSteps, routeInfo);
         } else {
           _showSnackBar('Error de Google: ${data['status']}', isError: true);
         }
@@ -259,6 +294,7 @@ class _MapScreenState extends State<MapScreen> {
         _showSnackBar('Error de red (${response.statusCode})', isError: true);
       }
     } catch (e) {
+      if (kDebugMode) print("Error al procesar la ruta: $e");
       _showSnackBar('Error al procesar la ruta', isError: true);
     }
   }
@@ -271,6 +307,7 @@ class _MapScreenState extends State<MapScreen> {
     if (!mounted || polylineCoordinates.isEmpty || newRouteSteps.isEmpty)
       return;
 
+    _polylines.clear(); // Limpiar polilíneas anteriores
     Polyline routePolyline = Polyline(
       polylineId: const PolylineId("route"),
       color: _accentGreen,
@@ -285,6 +322,7 @@ class _MapScreenState extends State<MapScreen> {
       _currentRouteInfo = routeInfo;
       _routeIsPreview = true;
       _currentStepIndex = 0;
+      _currentPolylineIndex = 0;
     });
 
     _mapController?.animateCamera(
@@ -298,7 +336,12 @@ class _MapScreenState extends State<MapScreen> {
       _isNavigating = true;
       _routeIsPreview = false;
     });
+    // Habla la primera instrucción al iniciar
     _speakCurrentInstruction();
+    // Mover la cámara al modo de navegación inmediatamente
+    if (_currentUserLocation != null) {
+      _updateCameraForNavigation(_currentUserLocation!);
+    }
   }
 
   void _stopNavigation({bool clearRoute = true}) {
@@ -309,12 +352,151 @@ class _MapScreenState extends State<MapScreen> {
       if (clearRoute) {
         _polylines.clear();
         _routeSteps.clear();
+        _allRoutePoints.clear(); // Limpiar también todos los puntos
         _currentRouteInfo = null;
         _currentStepIndex = 0;
+        _currentPolylineIndex = 0;
         _currentDestination = null;
         _currentDestinationName = null;
+        // Quitar solo el marcador de destino al finalizar/cancelar la ruta
+        _markers.removeWhere((m) => m.markerId.value == 'destination');
       }
     });
+    _flutterTts.stop();
+  }
+
+  // -------------------------------------------------------------------------
+  // --- LÓGICA DE NAVEGACIÓN Y GPS (Actualizaciones en tiempo real) ---
+  // -------------------------------------------------------------------------
+
+  void _updateNavigation(LocationData currentLocation) {
+    if (_routeSteps.isEmpty) return;
+
+    // 1. Verificar finalización de la ruta
+    if (_currentDestination != null) {
+      final distanceToFinalDestination = _calculateDistance(
+        currentLocation.latitude!,
+        currentLocation.longitude!,
+        _currentDestination!.latitude,
+        _currentDestination!.longitude,
+      );
+
+      if (distanceToFinalDestination < 30) {
+        // 30 metros de tolerancia
+        if (_isSoundEnabled) _flutterTts.speak("Has llegado a tu destino.");
+        _stopNavigation();
+        _showSnackBar('¡Destino alcanzado!', isSuccess: true);
+        return;
+      }
+    }
+
+    // 2. Acortar la Polilínea (Efecto de avance)
+    _recreateRemainingPolyline(currentLocation);
+
+    // 3. Verificar si se ha completado la instrucción actual (Avance de paso)
+    _checkStepCompletion(currentLocation);
+  }
+
+  void _checkStepCompletion(LocationData currentLocation) {
+    if (_currentStepIndex >= _routeSteps.length) return;
+
+    final nextStep = _routeSteps[_currentStepIndex];
+    // Se usa la ubicación final del paso actual para determinar la finalización
+    final distanceToEndOfStep = _calculateDistance(
+      currentLocation.latitude!,
+      currentLocation.longitude!,
+      nextStep.endLocation.latitude,
+      nextStep.endLocation.longitude,
+    );
+
+    // Si estamos a menos de 20 metros del final del paso actual, avanzar al siguiente
+    if (distanceToEndOfStep < 20) {
+      if (_currentStepIndex < _routeSteps.length - 1) {
+        // Avance al siguiente paso
+        setState(() => _currentStepIndex++);
+        _speakCurrentInstruction();
+      }
+    }
+  }
+
+  void _recreateRemainingPolyline(LocationData currentLocation) {
+    if (_allRoutePoints.isEmpty) return;
+
+    final currentLatLng = LatLng(
+      currentLocation.latitude!,
+      currentLocation.longitude!,
+    );
+
+    int closestPointIndex = -1;
+    double minDistance = double.infinity;
+
+    // Buscar el punto de la polilínea más cercano al usuario
+    for (int i = _currentPolylineIndex; i < _allRoutePoints.length; i++) {
+      final point = _allRoutePoints[i];
+      final distance = _calculateDistance(
+        currentLatLng.latitude,
+        currentLatLng.longitude,
+        point.latitude,
+        point.longitude,
+      );
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestPointIndex = i;
+      }
+    }
+
+    if (closestPointIndex != -1) {
+      // Solo actualizamos el índice si realmente hemos avanzado.
+      if (closestPointIndex > _currentPolylineIndex) {
+        _currentPolylineIndex = closestPointIndex;
+      }
+
+      setState(() {
+        // Recalcular la polilínea restante
+        final remainingPoints = _allRoutePoints.sublist(_currentPolylineIndex);
+
+        // Agregamos la posición actual al inicio para que la línea empiece exactamente en el usuario
+        remainingPoints.insert(0, currentLatLng);
+
+        _polylines.clear();
+        _polylines.add(
+          Polyline(
+            polylineId: const PolylineId("route"),
+            color: _accentGreen,
+            points: remainingPoints,
+            width: 6,
+            geodesic: true,
+          ),
+        );
+      });
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // --- UTILIDADES Y AUXILIARES ---
+  // -------------------------------------------------------------------------
+
+  // FUNCIÓN PARA TRAZAR RUTA AL TOCAR EL MAPA
+  void _onMapTap(LatLng tappedPoint) {
+    if (_isNavigating || _isCalculatingRoute) {
+      _showSnackBar(
+        'Termina la navegación actual o espera el cálculo.',
+        isError: true,
+      );
+      return;
+    }
+
+    // 1. Limpiar la ruta anterior si existe una vista previa
+    if (_routeIsPreview) {
+      _stopNavigation(clearRoute: true);
+    }
+
+    // 2. Agregar un marcador de destino en el punto tocado
+    _addDestinationMarker(tappedPoint, "Punto Seleccionado");
+
+    // 3. Iniciar el cálculo de la ruta
+    _createRoute(tappedPoint, destinationName: "Punto Seleccionado");
   }
 
   void _speakCurrentInstruction() {
@@ -326,44 +508,24 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  void _checkStepCompletion(LocationData currentLocation) {
-    if (_routeSteps.isEmpty || _currentStepIndex >= _routeSteps.length) return;
-
-    final nextStep = _routeSteps[_currentStepIndex];
-    final distanceToNextStep = _calculateDistance(
-      currentLocation.latitude!,
-      currentLocation.longitude!,
-      nextStep.endLocation.latitude,
-      nextStep.endLocation.longitude,
-    );
-
-    if (distanceToNextStep < 20) {
-      if (_currentStepIndex < _routeSteps.length - 1) {
-        setState(() => _currentStepIndex++);
-        _speakCurrentInstruction();
-      } else {
-        if (_isSoundEnabled) _flutterTts.speak("Has llegado a tu destino.");
-        _stopNavigation();
-        _showSnackBar('¡Destino alcanzado!', isSuccess: true);
-      }
-    }
-  }
-
   double _calculateDistance(
     double lat1,
     double lon1,
     double lat2,
     double lon2,
   ) {
-    var p = 0.017453292519943295;
+    // Implementación de la fórmula Haversine
+    var p = 0.017453292519943295; // Math.PI / 180
     var a =
         0.5 -
         cos((lat2 - lat1) * p) / 2 +
         cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+    // 12742 es el diámetro de la Tierra en km. Multiplicar por 1000 para obtener metros.
     return 12742 * asin(sqrt(a)) * 1000;
   }
 
   LatLngBounds _createBounds(List<LatLng> positions) {
+    // Función para calcular los límites que encierran todos los puntos
     final southwest = positions.reduce(
       (v, e) => LatLng(
         v.latitude < e.latitude ? v.latitude : e.latitude,
@@ -379,6 +541,31 @@ class _MapScreenState extends State<MapScreen> {
     return LatLngBounds(southwest: southwest, northeast: northeast);
   }
 
+  void _addDestinationMarker(LatLng destination, String? destinationName) {
+    // Usamos 'destination' como ID fijo para que solo pueda haber uno a la vez
+    _markers.removeWhere((m) => m.markerId.value == 'destination');
+
+    setState(() {
+      _markers.add(
+        Marker(
+          markerId: const MarkerId('destination'),
+          position: destination,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          infoWindow: InfoWindow(
+            title: destinationName ?? 'Destino',
+            snippet: 'Toca "Iniciar" para navegar',
+          ),
+          onTap: () {
+            if (!_routeIsPreview) {
+              // Si el usuario toca un marcador y no hay ruta activa, se recalcula.
+              _createRoute(destination, destinationName: destinationName);
+            }
+          },
+        ),
+      );
+    });
+  }
+
   void _updateUserLocationMarker() {
     if (_currentUserLocation == null) return;
     final userLatLng = LatLng(
@@ -390,10 +577,11 @@ class _MapScreenState extends State<MapScreen> {
       Marker(
         markerId: const MarkerId('userLocation'),
         position: userLatLng,
+        // Usamos azul para la ubicación actual
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
         anchor: const Offset(0.5, 0.5),
         rotation: _currentUserLocation!.heading ?? 0,
-        flat: true,
+        flat: true, // Importante para la rotación del marcador
         infoWindow: const InfoWindow(title: 'Tu ubicación'),
       ),
     );
@@ -401,13 +589,14 @@ class _MapScreenState extends State<MapScreen> {
 
   void _updateCameraForNavigation(LocationData locationData) {
     if (_mapController == null) return;
+    // Configuración de cámara para navegación (zoom cercano, inclinación y rotación)
     _mapController!.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(locationData.latitude!, locationData.longitude!),
           zoom: 18.5,
           tilt: 50.0,
-          bearing: locationData.heading ?? 0,
+          bearing: locationData.heading ?? 0, // El mapa gira con el usuario
         ),
       ),
     );
@@ -419,20 +608,25 @@ class _MapScreenState extends State<MapScreen> {
       final querySnapshot = await firestore.collection('locations').get();
       final fetchedMarkers = querySnapshot.docs.map((doc) {
         final data = doc.data();
+        // Se asume que 'position' es un GeoPoint de Firestore
         final destinationLatLng = LatLng(
-          data['position'].latitude,
-          data['position'].longitude,
+          (data['position'] as GeoPoint).latitude,
+          (data['position'] as GeoPoint).longitude,
         );
+        final destinationName = data['name'] as String;
 
         return Marker(
-          markerId: MarkerId(doc.id),
+          markerId: MarkerId(doc.id), // ID único para Firestore
           position: destinationLatLng,
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
           infoWindow: InfoWindow(
-            title: data['name'],
-            snippet: 'Toca para trazar la ruta',
-            onTap: () =>
-                _createRoute(destinationLatLng, destinationName: data['name']),
+            title: destinationName,
+            snippet: 'Toca el cuadro para trazar la ruta',
+            onTap: () {
+              // Cuando se toca el INFO WINDOW, se agrega el marcador 'destination' y se crea la ruta
+              _addDestinationMarker(destinationLatLng, destinationName);
+              _createRoute(destinationLatLng, destinationName: destinationName);
+            },
           ),
         );
       }).toSet();
@@ -445,6 +639,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
+    // Aplica el estilo oscuro
     controller.setMapStyle(json.encode(_mapStyle));
   }
 
@@ -467,13 +662,9 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _locationSubscription?.cancel();
-    _mapController?.dispose();
-    _flutterTts.stop();
-    super.dispose();
-  }
+  // -------------------------------------------------------------------------
+  // --- WIDGETS DE UI ---
+  // -------------------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -522,6 +713,8 @@ class _MapScreenState extends State<MapScreen> {
         children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
+            // Implementación del toque en el mapa para establecer destino
+            onTap: _onMapTap,
             initialCameraPosition: const CameraPosition(
               target: LatLng(-33.4489, -70.6693),
               zoom: 12,
@@ -533,6 +726,7 @@ class _MapScreenState extends State<MapScreen> {
             zoomControlsEnabled: false,
             compassEnabled: false,
           ),
+          // Banner de Instrucción
           if (_isNavigating && _routeSteps.isNotEmpty)
             Positioned(
               top: 0,
@@ -540,6 +734,7 @@ class _MapScreenState extends State<MapScreen> {
               right: 0,
               child: _buildInstructionBanner(),
             ),
+          // Vista Previa de Ruta
           if (_routeIsPreview)
             Positioned(
               top: 0,
@@ -547,6 +742,7 @@ class _MapScreenState extends State<MapScreen> {
               right: 0,
               child: _buildRoutePreviewInfo(),
             ),
+          // Selector de Modo de Viaje
           if (!_isNavigating && !_routeIsPreview)
             Positioned(
               bottom: 20,
@@ -554,6 +750,7 @@ class _MapScreenState extends State<MapScreen> {
               right: 20,
               child: _buildTravelModeSelector(),
             ),
+          // Indicador de Carga
           if (_isCalculatingRoute)
             Container(
               color: _primaryDark.withOpacity(0.7),
@@ -564,6 +761,7 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
             ),
+          // Estado de Ubicación (top central)
           Positioned(
             top: 10,
             left: 0,
@@ -606,6 +804,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
         ],
       ),
+      // Botón de Iniciar Navegación
       floatingActionButton: _routeIsPreview
           ? FloatingActionButton.extended(
               onPressed: _startNavigation,
@@ -682,7 +881,10 @@ class _MapScreenState extends State<MapScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: LinearProgressIndicator(
-              value: (_currentStepIndex + 1) / _routeSteps.length,
+              // Usar el índice de la polilínea para el progreso es más preciso
+              value:
+                  (_currentPolylineIndex /
+                  (_allRoutePoints.isEmpty ? 1 : _allRoutePoints.length)),
               backgroundColor: _accentBlue.withOpacity(0.3),
               valueColor: AlwaysStoppedAnimation<Color>(_accentGreen),
               minHeight: 4,
@@ -790,6 +992,7 @@ class _MapScreenState extends State<MapScreen> {
       onTap: () {
         if (!_isNavigating) {
           setState(() => _selectedTravelMode = mode);
+          // Si hay un destino, recalcula la ruta con el nuevo modo de viaje
           if (_currentDestination != null)
             _createRoute(
               _currentDestination!,
@@ -826,6 +1029,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  // --- ESTILO DE MAPA OSCURO ---
   final List<Map<String, dynamic>> _mapStyle = [
     {
       "elementType": "geometry",
