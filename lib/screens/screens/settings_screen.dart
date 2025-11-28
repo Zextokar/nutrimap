@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
+import 'package:nutrimap/providers/locale_provider.dart';
 import 'package:nutrimap/screens/screens/profile_screen.dart';
 import 'package:nutrimap/screens/screens/screens/terms_condi.dart';
-import 'package:nutrimap/widgets/settings_tile.dart'; // Importamos el widget nuevo
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   final User user;
@@ -14,46 +16,212 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // Colores definidos centralmente
+  // Tema
   static const Color _primaryDark = Color(0xFF0D1B2A);
   static const Color _secondaryDark = Color(0xFF1B263B);
   static const Color _accentGreen = Color(0xFF2D9D78);
   static const Color _textPrimary = Color(0xFFE0E1DD);
   static const Color _textSecondary = Color(0xFF9DB2BF);
+  static const Color _errorRed = Color(0xFFEF476F);
 
-  // ---------------- LOGICA DE NEGOCIO ----------------
+  bool _notificationsEnabled = true;
+  String? _userRut; // Para almacenar el RUT del usuario
 
-  /// Lógica para cerrar sesión
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  // --------------------------
+  // Carga de preferencias y RUT
+  // --------------------------
+  Future<void> _loadUserData() async {
+    try {
+      final query = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .where('uid_auth', isEqualTo: widget.user.uid)
+          .limit(1)
+          .get();
+
+      if (query.docs.isNotEmpty && mounted) {
+        final data = query.docs.first.data();
+        setState(() {
+          _notificationsEnabled = data['recibir_notificaciones'] ?? true;
+          _userRut = query.docs.first.id; // ID es el RUT
+        });
+      }
+    } catch (e) {
+      debugPrint("Error cargando preferencias: $e");
+    }
+  }
+
+  // --------------------------
+  // Toggle notificaciones
+  // --------------------------
+  Future<void> _toggleNotifications(bool value) async {
+    setState(() => _notificationsEnabled = value);
+
+    if (_userRut == null) return; // Si no hay rut, no hacemos nada
+
+    try {
+      await FirebaseFirestore.instance.collection('usuarios').doc(_userRut).set(
+        {'recibir_notificaciones': value},
+        SetOptions(merge: true),
+      );
+    } catch (e) {
+      if (mounted) setState(() => _notificationsEnabled = !value);
+      debugPrint("Error actualizando notificaciones: $e");
+    }
+  }
+
+  // --------------------------
+  // Selector de idioma
+  // --------------------------
+  void _showLanguageSelector() {
+    final provider = Provider.of<LocaleProvider>(context, listen: false);
+    final currentLocale = provider.locale;
+    final local = AppLocalizations.of(context)!;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: _secondaryDark,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      builder: (ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 24,
+            right: 24,
+            top: 24,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                local.language,
+                style: const TextStyle(
+                  color: _textPrimary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 24),
+              _buildLanguageOption(
+                label: local.spanish,
+                code: 'es',
+                isSelected: currentLocale.languageCode == 'es',
+                onTap: () {
+                  provider.setLocale(const Locale('es'));
+                  Navigator.of(ctx).pop();
+                },
+              ),
+              const SizedBox(height: 12),
+              _buildLanguageOption(
+                label: local.english,
+                code: 'en',
+                isSelected: currentLocale.languageCode == 'en',
+                onTap: () {
+                  provider.setLocale(const Locale('en'));
+                  Navigator.of(ctx).pop();
+                },
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageOption({
+    required String label,
+    required String code,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? _accentGreen.withOpacity(0.1) : _primaryDark,
+          borderRadius: BorderRadius.circular(16),
+          border: isSelected ? Border.all(color: _accentGreen) : null,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Text(
+                  code.toUpperCase(),
+                  style: const TextStyle(
+                    color: _textSecondary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontWeight: isSelected
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    color: isSelected ? _accentGreen : _textPrimary,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            if (isSelected)
+              const Icon(Icons.check_circle_rounded, color: _accentGreen),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // --------------------------
+  // Logout
+  // --------------------------
   Future<void> _logout() async {
+    final local = AppLocalizations.of(context)!;
+
     final shouldLogout = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: _secondaryDark,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          '¿Cerrar sesión?',
-          style: TextStyle(color: _textPrimary),
-        ),
-        content: const Text(
-          'Se cerrará tu sesión en la aplicación.',
-          style: TextStyle(color: _textSecondary),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: Text(local.logout, style: const TextStyle(color: _textPrimary)),
+        content: Text(
+          local.logoutBody,
+          style: const TextStyle(color: _textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text(
-              'Cancelar',
-              style: TextStyle(color: _textSecondary),
+            child: Text(
+              local.cancel,
+              style: const TextStyle(color: _textSecondary),
             ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red.shade700,
+              backgroundColor: _errorRed,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text(
-              'Cerrar sesión',
-              style: TextStyle(color: Colors.white),
+            child: Text(
+              local.logout,
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         ],
@@ -61,163 +229,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
 
     if (shouldLogout == true && mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(child: CircularProgressIndicator()),
+      );
+
       try {
         await FirebaseAuth.instance.signOut();
-        if (mounted) {
-          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-        }
       } catch (e) {
-        _showSnackBar('Error al cerrar sesión: $e', isError: true);
+        debugPrint('Error al cerrar sesión: $e');
+      }
+
+      // Cerrar el indicador de carga
+      if (mounted) Navigator.of(context, rootNavigator: true).pop();
+
+      // Navegar al login
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       }
     }
   }
 
-  /// Lógica para cambio de contraseña (Firebase)
-  Future<void> _changePassword() async {
-    final email = widget.user.email;
-    if (email == null) return;
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: _secondaryDark,
-        title: const Text(
-          "Cambiar Contraseña",
-          style: TextStyle(color: _textPrimary),
-        ),
-        content: Text(
-          "Enviaremos un enlace a $email para restablecer tu contraseña.",
-          style: const TextStyle(color: _textSecondary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              "Cancelar",
-              style: TextStyle(color: _textSecondary),
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: _accentGreen),
-            onPressed: () async {
-              Navigator.pop(context);
-              try {
-                await FirebaseAuth.instance.sendPasswordResetEmail(
-                  email: email,
-                );
-                _showSnackBar("Correo enviado. Revisa tu bandeja de entrada.");
-              } catch (e) {
-                _showSnackBar("Error al enviar correo: $e", isError: true);
-              }
-            },
-            child: const Text(
-              "Enviar Correo",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Lógica visual para selector de idioma
-  void _showLanguageSelector() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: _secondaryDark,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              "Seleccionar Idioma",
-              style: TextStyle(
-                color: _textPrimary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            _buildLanguageOption("Español", true),
-            _buildLanguageOption(
-              "English",
-              false,
-            ), // Aquí conectarías tu Provider de idioma
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLanguageOption(String lang, bool isSelected) {
-    return ListTile(
-      leading: Icon(
-        Icons.language,
-        color: isSelected ? _accentGreen : _textSecondary,
-      ),
-      title: Text(
-        lang,
-        style: TextStyle(color: isSelected ? _accentGreen : _textSecondary),
-      ),
-      trailing: isSelected
-          ? const Icon(Icons.check, color: _accentGreen)
-          : null,
-      onTap: () {
-        Navigator.pop(context);
-        if (!isSelected) {
-          _showSnackBar("Cambio de idioma a $lang (Simulado)");
-          // Aquí llamarías a tu provider: context.read<LocaleProvider>().setLocale(...)
-        }
-      },
-    );
-  }
-
-  /// Diálogo de "Acerca de"
-  void _showAboutDialog() {
-    showAboutDialog(
-      context: context,
-      applicationName: "Nutrimap",
-      applicationVersion: "1.0.0",
-      applicationIcon: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: _accentGreen.withOpacity(0.2),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(Icons.map, color: _accentGreen),
-      ),
-      children: [
-        const Text(
-          "Nutrimap te ayuda a llevar un control de tu actividad física y nutrición.",
-          style: TextStyle(fontSize: 14),
-        ),
-        const SizedBox(height: 10),
-        const Text(
-          "Desarrollado con Flutter & Firebase.",
-          style: TextStyle(fontSize: 12, color: Colors.grey),
-        ),
-      ],
-    );
-  }
-
-  void _showSnackBar(String msg, {bool isError = false}) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-        backgroundColor: isError ? Colors.red.shade700 : _accentGreen,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-  }
-
-  // ---------------- INTERFAZ (BUILD) ----------------
 
   @override
   Widget build(BuildContext context) {
@@ -226,158 +259,304 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: _primaryDark,
       appBar: AppBar(
-        title: Text(
-          local.settings,
-          style: const TextStyle(
-            color: _textPrimary,
-            fontWeight: FontWeight.w600,
-            fontSize: 24,
-          ),
-        ),
+        title: Text(local.settingsTitle),
         backgroundColor: _primaryDark,
         elevation: 0,
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_rounded,
-            color: _accentGreen,
-            size: 24,
-          ),
-          onPressed: () => Navigator.pop(context),
+        titleTextStyle: const TextStyle(
+          color: _textPrimary,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
         ),
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SECCIÓN CUENTA
-            _buildSectionHeader('Cuenta'),
-            SettingsTile(
-              icon: Icons.person_rounded,
-              title: local.profile,
-              subtitle: 'Ver y editar tu perfil',
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ProfileScreen()),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // SECCIÓN SEGURIDAD
-            _buildSectionHeader('Seguridad'),
-            SettingsTile(
-              icon: Icons.lock_reset_rounded, // Icono más apropiado
-              title: 'Cambiar contraseña',
-              subtitle: 'Enviar correo de restablecimiento',
-              onTap: _changePassword, // Conectado a la lógica real
-            ),
-
-            const SizedBox(height: 24),
-
-            // SECCIÓN PREFERENCIAS
-            _buildSectionHeader('Preferencias'),
-            SettingsTile(
-              icon: Icons.notifications_active_rounded,
-              title: 'Notificaciones',
-              subtitle: 'Gestionar alertas y recordatorios',
-              onTap: () {
-                // Podrías abrir un SwitchListTile en un Dialog o navegar a una pantalla de settings
-                _showSnackBar("Configuración de notificaciones próximamente");
-              },
-            ),
-            const SizedBox(height: 12),
-            SettingsTile(
-              icon: Icons.language_rounded,
-              title: 'Idioma',
-              subtitle: 'Español (Predeterminado)',
-              onTap: _showLanguageSelector, // Conectado al selector
-            ),
-
-            const SizedBox(height: 24),
-
-            // SECCIÓN SUSCRIPCIÓN
-            _buildSectionHeader('Suscripción'),
-            SettingsTile(
-              icon: Icons.workspace_premium_rounded,
-              title: 'Nutrimap Premium',
-              subtitle: 'Elimina anuncios y desbloquea beneficios',
-              iconColor: const Color(0xFFF4B942), // Color dorado para premium
-              onTap: () => Navigator.pushNamed(context, '/subscription'),
-            ),
-
-            const SizedBox(height: 24),
-
-            // SECCIÓN INFORMACIÓN
-            _buildSectionHeader('Información'),
-            SettingsTile(
-              icon: Icons.info_outline_rounded,
-              title: 'Acerca de',
-              subtitle: 'Versión 1.0.0',
-              onTap: _showAboutDialog, // Diálogo nativo de Flutter
-            ),
-            const SizedBox(height: 12),
-            SettingsTile(
-              icon: Icons.description_rounded,
-              title: 'Términos y Condiciones',
-              subtitle: 'Lee nuestros términos legales',
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const TermsAndConditionsScreen(),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 36),
-
-            // BOTÓN LOGOUT
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade700.withOpacity(
-                    0.2,
-                  ), // Fondo suave
-                  foregroundColor: Colors.red.shade300, // Texto rojo claro
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                    side: BorderSide(
-                      color: Colors.red.shade700.withOpacity(0.5),
-                    ), // Borde rojo
+            // -------------------
+            // CUENTA
+            // -------------------
+            _SettingsSection(
+              title: local.sectionAccount,
+              children: [
+                _SettingsTile(
+                  icon: Icons.person_rounded,
+                  title: local.profile,
+                  subtitle: local.profileSubtitle,
+                  color: Colors.blueAccent,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ProfileScreen()),
                   ),
                 ),
-                icon: const Icon(Icons.logout_rounded, size: 20),
-                label: Text(
-                  local.logout,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                const Divider(
+                  height: 1,
+                  color: Colors.black12,
+                  indent: 60,
+                  endIndent: 20,
+                ),
+                _SettingsTile(
+                  icon: Icons.lock_rounded,
+                  title: local.security,
+                  subtitle: local.changePassword,
+                  color: Colors.orangeAccent,
+                  onTap: () {},
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+
+            // -------------------
+            // PREFERENCIAS
+            // -------------------
+            _SettingsSection(
+              title: local.sectionPreferences,
+              children: [
+                _SettingsTile(
+                  icon: _notificationsEnabled
+                      ? Icons.notifications_active_rounded
+                      : Icons.notifications_off_rounded,
+                  title: local.notifications,
+                  subtitle: _notificationsEnabled
+                      ? local.notificationsOn
+                      : local.notificationsOff,
+                  color: Colors.purpleAccent,
+                  trailing: Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: _notificationsEnabled,
+                      activeColor: _accentGreen,
+                      onChanged: _toggleNotifications,
+                    ),
+                  ),
+                  onTap: () {},
+                ),
+                const Divider(
+                  height: 1,
+                  color: Colors.black12,
+                  indent: 60,
+                  endIndent: 20,
+                ),
+                _SettingsTile(
+                  icon: Icons.language_rounded,
+                  title: local.language,
+                  subtitle: Localizations.localeOf(context).languageCode == 'es'
+                      ? local.spanish
+                      : local.english,
+                  color: Colors.tealAccent,
+                  onTap: _showLanguageSelector,
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+
+            // -------------------
+            // OTROS
+            // -------------------
+            _SettingsSection(
+              title: local.sectionOthers,
+              children: [
+                _SettingsTile(
+                  icon: Icons.workspace_premium_rounded,
+                  title: local.premium,
+                  color: const Color(0xFFF4B942),
+                  onTap: () => Navigator.pushNamed(context, '/subscription'),
+                ),
+                const Divider(
+                  height: 1,
+                  color: Colors.black12,
+                  indent: 60,
+                  endIndent: 20,
+                ),
+                _SettingsTile(
+                  icon: Icons.info_outline_rounded,
+                  title: local.about,
+                  color: _textSecondary,
+                  onTap: () {},
+                ),
+                const Divider(
+                  height: 1,
+                  color: Colors.black12,
+                  indent: 60,
+                  endIndent: 20,
+                ),
+                _SettingsTile(
+                  icon: Icons.description_rounded,
+                  title: local.terms,
+                  color: _textSecondary,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const TermsAndConditionsScreen(),
+                    ),
                   ),
                 ),
-                onPressed: _logout,
+              ],
+            ),
+
+            const SizedBox(height: 40),
+
+            // -------------------
+            // LOGOUT
+            // -------------------
+            TextButton(
+              onPressed: _logout,
+              style: TextButton.styleFrom(
+                foregroundColor: _errorRed,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 32,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  side: BorderSide(color: _errorRed.withOpacity(0.3), width: 1),
+                ),
+                backgroundColor: _errorRed.withOpacity(0.05),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.logout_rounded, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    local.logout,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12, left: 4),
-      child: Text(
-        title.toUpperCase(),
-        style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: _textSecondary,
-          letterSpacing: 1.0,
+// -----------------------------------------------------------------------
+// SECCIÓNES Y TILES (AUXILIARES)
+// -----------------------------------------------------------------------
+class _SettingsSection extends StatelessWidget {
+  final String title;
+  final List<Widget> children;
+
+  const _SettingsSection({required this.title, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 16, bottom: 12),
+          child: Text(
+            title,
+            style: const TextStyle(
+              color: Color(0xFF9DB2BF),
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF1B263B),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(children: children),
+        ),
+      ],
+    );
+  }
+}
+
+class _SettingsTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final Color color;
+  final VoidCallback onTap;
+  final Widget? trailing;
+
+  const _SettingsTile({
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    required this.color,
+    required this.onTap,
+    this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: color, size: 22),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Color(0xFFE0E1DD),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle!,
+                        style: TextStyle(
+                          color: const Color(0xFFE0E1DD).withOpacity(0.6),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              if (trailing != null)
+                trailing!
+              else
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: const Color(0xFF9DB2BF).withOpacity(0.5),
+                  size: 16,
+                ),
+            ],
+          ),
         ),
       ),
     );

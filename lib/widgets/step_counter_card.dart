@@ -99,12 +99,14 @@ class _StepCounterCardState extends State<StepCounterCard> {
     // Aquí podrías cambiar íconos si está caminando o parado
   }
 
+  // ignore: strict_top_level_inference
   void _onStepError(error) {
     debugPrint('Error pasos (Sensor no encontrado): $error');
     // Si el stream da error, activamos la simulación
     _startEmulatorSimulation();
   }
 
+  // ignore: strict_top_level_inference
   void _onStatusError(error) {
     debugPrint('Error estado: $error');
   }

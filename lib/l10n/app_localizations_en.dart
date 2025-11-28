@@ -9,35 +9,31 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get sectionWhatIs => 'What Is NutriMap?';
+  String get sectionWhatIs => 'What is NutriMap?';
 
   @override
-  String get sectionWhatIsDesc =>
-      'NutriMap helps you track your meals, nutrition, and healthy habits.';
+  String get sectionWhatIsDesc => 'NutriMap helps you track your meals, nutrition, and healthy habits.';
 
   @override
-  String get sectionHelps => 'How It Helps You?';
+  String get sectionHelps => 'What will it help you do?';
 
   @override
-  String get sectionHelpsDesc =>
-      'Plan meals, count calories, monitor nutrients, and improve your diet.';
+  String get sectionHelpsDesc => 'Plan meals, count calories, monitor nutrients, and improve your diet.';
 
   @override
-  String get sectionWhoWeAre => 'Who We Are?';
+  String get sectionWhoWeAre => 'Who are we?';
 
   @override
-  String get sectionWhoWeAreDesc =>
-      'We are a team passionate about nutrition and technology.';
+  String get sectionWhoWeAreDesc => 'We are a team passionate about nutrition and technology.';
 
   @override
   String get sectionBenefits => 'Benefits';
 
   @override
-  String get sectionBenefitsDesc =>
-      'Stay healthy, eat better, and reach your goals easily.';
+  String get sectionBenefitsDesc => 'Stay healthy, eat better, and achieve your goals easily.';
 
   @override
-  String get loginTitle => 'Log In';
+  String get loginTitle => 'Login';
 
   @override
   String get email => 'Email';
@@ -46,7 +42,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get password => 'Password';
 
   @override
-  String get loginButton => 'Log In';
+  String get loginButton => 'Sign In';
 
   @override
   String get nextButton => 'Next';
@@ -61,28 +57,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get benefits => 'Benefits';
 
   @override
-  String get recipes => 'Commerces';
+  String get recipes => 'Businesses';
 
   @override
   String get settings => 'Settings';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Welcome back';
 
   @override
   String get emailRequired => 'Please enter your email.';
 
   @override
-  String get invalidEmail => 'Please enter a valid email address.';
+  String get invalidEmail => 'Please enter a valid email.';
 
   @override
   String get passwordRequired => 'Please enter your password.';
 
   @override
-  String get passwordTooShort => 'Password must be at least 6 characters long.';
+  String get passwordTooShort => 'Password must be at least 6 characters.';
 
   @override
-  String get forgotPassword => 'Forgot Password?';
+  String get forgotPassword => 'Forgot your password?';
 
   @override
   String get orContinueWith => 'Or continue with';
@@ -94,25 +90,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get register => 'Sign Up';
 
   @override
-  String get loginError => 'Login Failed';
+  String get loginError => 'Error signing in.';
 
   @override
   String get userNotFound => 'User not found.';
 
   @override
-  String get wrongPassword => 'Incorrect password.';
+  String get wrongPassword => 'Wrong password.';
 
   @override
   String get invalidEmailError => 'Invalid email format.';
 
   @override
-  String get enterEmail => 'Enter your email';
+  String get enterEmail => 'Enter your email.';
 
   @override
   String get enterPassword => 'Please enter your password.';
 
   @override
-  String get shortPassword => 'Password must be at least 6 characters long.';
+  String get shortPassword => 'Password must be at least 6 characters.';
 
   @override
   String settingsUser(Object email) {
@@ -120,7 +116,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get logout => 'Log Out';
+  String get logout => 'Logout';
 
   @override
   String get user => 'User';
@@ -131,13 +127,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get registerTitle => 'Create Account';
+  String get registerTitle => 'Sign Up';
 
   @override
-  String get registerStep1Title => 'Personal Information';
+  String get registerStep1Title => 'Personal Data';
 
   @override
-  String get registerStep2Title => 'Account Credentials';
+  String get registerStep2Title => 'Email and Password';
 
   @override
   String get registerStep3Title => 'Institution and Preferences';
@@ -161,7 +157,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseDiet => 'Choose your diets';
 
   @override
-  String get enterName => 'Please enter your first name.';
+  String get enterName => 'Please enter your name.';
 
   @override
   String get enterLastName => 'Please enter your last name.';
@@ -176,24 +172,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmButton => 'Confirm';
 
   @override
-  String get registerError => 'Could not register user.';
+  String get registerError => 'Error registering user.';
 
   @override
   String summaryUser(Object email) {
-    return 'Review your information: $email';
+    return 'Review your data: $email';
   }
 
   @override
   String get selectInstitution => 'Select your institution';
 
   @override
-  String get personalData => 'Personal Information';
+  String get personalData => 'Personal Data';
 
   @override
-  String get diets => 'Preferred Diets';
+  String get enterFirstName => 'Please enter your first name.';
 
   @override
-  String get confirmRegistration => 'Confirm Registration';
+  String get diets => 'Diets';
+
+  @override
+  String get confirmRegistration => 'Confirm your registration';
 
   @override
   String get cancel => 'Cancel';
@@ -202,19 +201,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccount => 'Create Account';
 
   @override
-  String get registrationError => 'Registration failed.';
+  String get registrationError => 'Error registering user.';
 
   @override
-  String get emailInUse => 'This email is already in use.';
+  String get emailInUse => 'Email already in use.';
 
   @override
-  String get enterFirstName => 'Please enter your first name.';
+  String get enterPhone => 'Please enter your phone number.';
 
   @override
-  String get phone => 'Phone Number';
-
-  @override
-  String get otherSettings => 'Other Settings';
+  String get otherSettings => 'Other settings';
 
   @override
   String get profile => 'Profile';
@@ -223,16 +219,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get surname => 'Last Name';
 
   @override
-  String get rut => 'National ID';
+  String get phone => 'Phone';
+
+  @override
+  String get rut => 'RUT';
 
   @override
   String get region => 'Region';
 
   @override
-  String get commune => 'City / Municipality';
+  String get commune => 'Commune';
 
   @override
-  String get diet => 'Diet Type';
+  String get diet => 'Diet type';
 
   @override
   String get userProfile => 'User Profile';
@@ -241,7 +240,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTitle => 'Home';
 
   @override
-  String get commerce => 'Commerce';
+  String get commerce => 'Business';
 
   @override
   String get userDisabled => 'User disabled';
@@ -253,47 +252,257 @@ class AppLocalizationsEn extends AppLocalizations {
   String get networkError => 'Network error, check your connection';
 
   @override
-  String get forgotPasswordTitle => 'Forgot Password';
+  String get forgotPasswordTitle => 'Forgot your password';
 
   @override
-  String get forgotPasswordDescription =>
-      'Enter your email and we will send you a link to reset your password';
+  String get forgotPasswordDescription => 'Enter your email and we\'ll send you a link to reset your password';
 
   @override
-  String get sendResetLink => 'Send Reset Link';
+  String get sendResetLink => 'Send recovery link';
 
   @override
-  String get resetEmailSent => 'Password reset email has been sent';
+  String get resetEmailSent => 'A password reset email has been sent';
 
   @override
-  String get resetEmailFailed => 'Failed to send reset email';
+  String get resetEmailFailed => 'Error sending recovery email';
 
   @override
-  String get registerDescription =>
-      'Create your account by entering your details';
+  String get registerDescription => 'Create your account by entering your data';
 
   @override
   String get name => 'Name';
 
   @override
-  String get registerButton => 'Register';
+  String get registerButton => 'Sign Up';
 
   @override
-  String get logoutConfirmationTitle => 'Log out?';
+  String get logoutConfirmationTitle => 'Logout?';
 
   @override
-  String get logoutConfirmationMessage =>
-      'Your session will be closed in the app.';
+  String get logoutConfirmationMessage => 'You will be logged out of the application.';
 
   @override
   String get logoutError => 'Error logging out';
 
   @override
-  String get resetPasswordError => 'Error sending reset email.';
+  String get resetPasswordError => 'Error sending recovery email.';
 
   @override
-  String get sendResetLinkButton => 'Send link';
+  String get sendResetLinkButton => 'Send Link';
 
   @override
   String get backToLogin => 'Back to Login';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get sectionAccount => 'ACCOUNT';
+
+  @override
+  String get sectionPreferences => 'PREFERENCES';
+
+  @override
+  String get sectionOthers => 'OTHERS';
+
+  @override
+  String get profileSubtitle => 'View and edit your profile';
+
+  @override
+  String get security => 'Security';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get notificationsOn => 'Enabled';
+
+  @override
+  String get notificationsOff => 'Disabled';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get premium => 'Nutrimap Premium';
+
+  @override
+  String get about => 'About';
+
+  @override
+  String get terms => 'Terms and Conditions';
+
+  @override
+  String get settingsAppearance => 'Appearance';
+
+  @override
+  String get darkMode => 'Dark mode';
+
+  @override
+  String get darkModeDescription => 'Enable or disable the app\'s dark mode.';
+
+  @override
+  String get appTheme => 'App theme';
+
+  @override
+  String get themeSystem => 'System default';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get premiumDescription => 'Access additional features with Nutrimap Premium.';
+
+  @override
+  String get aboutDescription => 'Information about the app and team.';
+
+  @override
+  String get termsDescription => 'Read the terms and conditions of use.';
+
+  @override
+  String get spanish => 'Spanish';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get logoutBody => 'Are you sure you want to logout?';
+
+  @override
+  String editTitle(Object field) {
+    return 'Edit $field';
+  }
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get phoneHint => '9 1234 5678';
+
+  @override
+  String get personalInfo => 'PERSONAL INFORMATION';
+
+  @override
+  String get location => 'LOCATION';
+
+  @override
+  String get preferences => 'PREFERENCES';
+
+  @override
+  String get noOptions => 'No options available';
+
+  @override
+  String get selectFirstRegion => 'You must first select a Region.';
+
+  @override
+  String selectTitle(Object field) {
+    return 'Select $field';
+  }
+
+  @override
+  String get profileUpdated => 'Profile updated';
+
+  @override
+  String errorOccurred(Object error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get explore => 'Explore';
+
+  @override
+  String get navigating => 'Navigating';
+
+  @override
+  String get selectPoint => 'Select a point';
+
+  @override
+  String get startTrip => 'START TRIP';
+
+  @override
+  String get walking => 'Walking';
+
+  @override
+  String get bicycling => 'Bike';
+
+  @override
+  String get driving => 'Car';
+
+  @override
+  String get waitingGps => 'Waiting for GPS signal...';
+
+  @override
+  String get gpsOffline => 'GPS Offline';
+
+  @override
+  String get online => 'Online';
+
+  @override
+  String get arrived => 'You have arrived!';
+
+  @override
+  String distanceToTurn(Object distance) {
+    return '$distance to turn';
+  }
+
+  @override
+  String durationRemaining(Object duration) {
+    return '$duration remaining';
+  }
+
+  @override
+  String arrivalTime(Object time) {
+    return 'Arrival: $time';
+  }
+
+  @override
+  String get distance => 'Distance';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String get arrival => 'Arrival';
+
+  @override
+  String get turn => 'Turn';
+
+  @override
+  String get nextTurn => 'Next turn';
+
+  @override
+  String get meters => 'meters';
+
+  @override
+  String get kilometers => 'kilometers';
+
+  @override
+  String get minutes => 'minutes';
+
+  @override
+  String get seconds => 'seconds';
+
+  @override
+  String get errorFetchingLocations => 'Error fetching locations';
+
+  @override
+  String get yourLocation => 'Your location';
+
+  @override
+  String get noRouteFound => 'No route found';
+
+  @override
+  String get connectionError => 'Connection error';
+
+  @override
+  String get routeError => 'Route error';
 }

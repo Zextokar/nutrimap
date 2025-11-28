@@ -23,7 +23,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    // ✅ Aseguramos que el usuario se pase correctamente a cada pantalla
     _screens = [
       HomeScreen(user: widget.user),
       MapScreen(user: widget.user),

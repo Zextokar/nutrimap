@@ -20,33 +20,33 @@ class StatsGrid extends StatelessWidget {
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      mainAxisSpacing: 14,
+      crossAxisSpacing: 16, // Espaciado un poco mayor
+      mainAxisSpacing: 16,
+      childAspectRatio: 1.1, // Tarjetas ligeramente más anchas
       children: [
         _buildStatCard(
-          icon: Icons.route,
+          icon: Icons.route_rounded,
           label: "Total KM",
           value: totalKm.toStringAsFixed(1),
-          color: const Color(0xFF06A77D),
-          isPrimary: true,
+          color: const Color(0xFF2D9D78), // Verde menta
         ),
         _buildStatCard(
-          icon: Icons.calendar_today,
+          icon: Icons.calendar_today_rounded,
           label: "Días Activos",
           value: daysWithData.toString(),
-          color: const Color(0xFF415A77),
+          color: const Color(0xFF415A77), // Azul grisáceo
         ),
         _buildStatCard(
-          icon: Icons.trending_up,
+          icon: Icons.trending_up_rounded,
           label: "Promedio",
           value: averageKm.toStringAsFixed(1),
-          color: const Color(0xFF06A77D).withOpacity(0.8),
+          color: const Color(0xFF5D737E), // Gris azulado suave
         ),
         _buildStatCard(
-          icon: Icons.flash_on,
-          label: "Máximo",
+          icon: Icons.flash_on_rounded,
+          label: "Récord",
           value: maxKm.toStringAsFixed(1),
-          color: const Color(0xFFF4B942),
+          color: const Color(0xFFE29578), // Naranja suave (Terra cotta)
         ),
       ],
     );
@@ -57,60 +57,82 @@ class StatsGrid extends StatelessWidget {
     required String label,
     required String value,
     required Color color,
-    bool isPrimary = false,
   }) {
+    // Colores base del tema oscuro
     const secondaryDark = Color(0xFF1B263B);
     const textPrimary = Color(0xFFE0E1DD);
 
     return Container(
       decoration: BoxDecoration(
         color: secondaryDark,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3), width: 1.5),
-        boxShadow: isPrimary
-            ? [
-                BoxShadow(
-                  color: color.withOpacity(0.2),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : [],
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, color: color, size: 24),
+        borderRadius: BorderRadius.circular(24), // Bordes más redondeados
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Fondo decorativo (gradiente muy sutil)
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [color.withOpacity(0.15), Colors.transparent],
                 ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: TextStyle(
-                  color: textPrimary.withOpacity(0.7),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
+            ),
+          ),
+
+          // Contenido
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end, // Texto abajo
+              children: [
+                Text(
+                  value,
+                  style: TextStyle(
+                    color:
+                        color, // El número toma el color del tema de la tarjeta
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.5,
+                  ),
                 ),
+                const SizedBox(height: 4),
+                Text(
+                  label.toUpperCase(),
+                  style: TextStyle(
+                    color: textPrimary.withOpacity(0.6),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Icono flotante en la esquina
+          Positioned(
+            top: 16,
+            right: 16,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.2),
+                shape: BoxShape.circle,
               ),
-            ],
+              child: Icon(icon, color: color, size: 20),
+            ),
           ),
         ],
       ),

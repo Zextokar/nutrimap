@@ -90,23 +90,23 @@
     },
     "passwordTooShort": "La contraseña debe tener al menos 6 caracteres.",
     "@passwordTooShort": {
-        "description": "Mensaje de validación cuando la contraseña tiene menos de 6 caracteres"
+        "description": "Mensaje de validación para contraseña corta"
     },
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "@forgotPassword": {
-        "description": "Botón para recuperar la contraseña"
+        "description": "Botón para recuperar contraseña"
     },
     "orContinueWith": "O continúa con",
     "@orContinueWith": {
-        "description": "Texto separador para inicio de sesión con redes sociales"
+        "description": "Texto separador para login social"
     },
     "noAccount": "¿No tienes una cuenta?",
     "@noAccount": {
-        "description": "Texto que pregunta si el usuario tiene una cuenta"
+        "description": "Texto que pregunta si el usuario tiene cuenta"
     },
     "register": "Regístrate",
     "@register": {
-        "description": "Texto del botón/enlace para registrarse"
+        "description": "Botón/enlace para registrarse"
     },
     "loginError": "Error al iniciar sesión.",
     "@loginError": {
@@ -114,15 +114,15 @@
     },
     "userNotFound": "Usuario no encontrado.",
     "@userNotFound": {
-        "description": "Mensaje de error cuando el usuario no existe"
+        "description": "Mensaje cuando el usuario no existe"
     },
     "wrongPassword": "Contraseña incorrecta.",
     "@wrongPassword": {
-        "description": "Mensaje de error cuando la contraseña es incorrecta"
+        "description": "Mensaje cuando la contraseña es incorrecta"
     },
     "invalidEmailError": "Formato de correo inválido.",
     "@invalidEmailError": {
-        "description": "Mensaje de error cuando el correo ingresado no es válido"
+        "description": "Mensaje cuando el correo no es válido"
     },
     "enterEmail": "Ingresa tu email.",
     "@enterEmail": {
@@ -130,255 +130,541 @@
     },
     "enterPassword": "Por favor, ingresa tu contraseña.",
     "@enterPassword": {
-        "description": "Mensaje de validación cuando el campo de contraseña está vacío"
+        "description": "Mensaje cuando falta contraseña"
     },
     "shortPassword": "La contraseña debe tener al menos 6 caracteres.",
     "@shortPassword": {
-        "description": "Mensaje de validación cuando la contraseña es demasiado corta"
+        "description": "Mensaje de validación para contraseña corta"
     },
     "settingsUser": "Configuraciones de {email}",
     "@settingsUser": {
-        "description": "Texto que muestra las configuraciones del usuario actual",
+        "description": "Texto de configuraciones para el usuario",
         "placeholders": {
             "email": {}
         }
     },
     "logout": "Cerrar Sesión",
     "@logout": {
-        "description": "Texto del botón para cerrar sesión del usuario"
+        "description": "Botón para cerrar sesión"
     },
     "user": "Usuario",
     "@user": {
-        "description": "Nombre o correo por defecto si no hay email"
+        "description": "Nombre o correo por defecto"
     },
     "benefitsUser": "Beneficios disponibles para {email}",
     "@benefitsUser": {
-        "description": "Texto que muestra los beneficios disponibles para el usuario",
+        "description": "Texto que muestra beneficios del usuario",
         "placeholders": {
             "email": {}
         }
     },
     "registerTitle": "Registro",
     "@registerTitle": {
-        "description": "Título de la pantalla de registro"
+        "description": "Título del registro"
     },
     "registerStep1Title": "Datos Personales",
     "@registerStep1Title": {
-        "description": "Título del paso 1 en el registro"
+        "description": "Título del paso 1"
     },
     "registerStep2Title": "Email y Contraseña",
     "@registerStep2Title": {
-        "description": "Título del paso 2 en el registro"
+        "description": "Título del paso 2"
     },
     "registerStep3Title": "Institución y Preferencias",
     "@registerStep3Title": {
-        "description": "Título del paso 3 en el registro"
+        "description": "Título del paso 3"
     },
     "summaryTitle": "Resumen",
     "@summaryTitle": {
-        "description": "Título de la pantalla de resumen antes de crear la cuenta"
+        "description": "Título de pantalla de resumen"
     },
     "firstName": "Nombre",
     "@firstName": {
-        "description": "Etiqueta para el campo de nombre"
+        "description": "Campo nombre"
     },
     "lastName": "Apellido",
     "@lastName": {
-        "description": "Etiqueta para el campo de apellido"
+        "description": "Campo apellido"
     },
     "institution": "Institución",
     "@institution": {
-        "description": "Etiqueta para seleccionar la institución del usuario"
+        "description": "Campo institución"
     },
     "dietas": "Dietas Preferidas",
     "@dietas": {
-        "description": "Etiqueta para seleccionar las dietas preferidas"
+        "description": "Etiqueta para seleccionar dietas"
     },
     "chooseDiet": "Elige tus dietas",
     "@chooseDiet": {
-        "description": "Texto de ayuda para elegir dietas"
+        "description": "Texto de ayuda para dietas"
     },
     "enterName": "Por favor, ingresa tu nombre.",
     "@enterName": {
-        "description": "Validación cuando el nombre está vacío"
+        "description": "Validación de nombre vacío"
     },
     "enterLastName": "Por favor, ingresa tu apellido.",
     "@enterLastName": {
-        "description": "Validación cuando el apellido está vacío"
+        "description": "Validación de apellido vacío"
     },
     "back": "Atrás",
     "@back": {
-        "description": "Botón para ir al paso anterior"
+        "description": "Botón atrás"
     },
     "next": "Siguiente",
     "@next": {
-        "description": "Botón para ir al siguiente paso"
+        "description": "Botón siguiente"
     },
     "confirmButton": "Confirmar",
     "@confirmButton": {
-        "description": "Botón para confirmar y crear la cuenta"
+        "description": "Botón confirmar registro"
     },
     "registerError": "Error al registrar el usuario.",
     "@registerError": {
-        "description": "Mensaje de error cuando falla el registro"
+        "description": "Error general en registro"
     },
     "summaryUser": "Revisa tus datos: {email}",
     "@summaryUser": {
-        "description": "Muestra un resumen de la información del usuario antes de crear la cuenta",
+        "description": "Resumen de datos del usuario",
         "placeholders": {
             "email": {}
         }
     },
     "selectInstitution": "Selecciona tu institución",
     "@selectInstitution": {
-        "description": "Etiqueta que indica al usuario que debe seleccionar su institución"
+        "description": "Ayuda para institución"
     },
     "personalData": "Datos Personales",
     "@personalData": {
-        "description": "Título del paso de datos personales"
+        "description": "Paso datos personales"
     },
     "enterFirstName": "Por favor, ingrese su nombre.",
     "@enterFirstName": {
-        "description": "Mensaje de validación cuando el nombre está vacío"
+        "description": "Validación nombre vacío"
     },
     "diets": "Dietas",
     "@diets": {
-        "description": "Paso para seleccionar dietas preferidas"
+        "description": "Paso selección de dietas"
     },
     "confirmRegistration": "Confirme su registro",
     "@confirmRegistration": {
-        "description": "Título del diálogo de confirmación antes de crear la cuenta"
+        "description": "Confirmación final"
     },
     "cancel": "Cancelar",
     "@cancel": {
-        "description": "Botón para cancelar la confirmación"
+        "description": "Botón cancelar"
     },
     "createAccount": "Crear cuenta",
     "@createAccount": {
-        "description": "Botón para crear la cuenta después de la confirmación"
+        "description": "Botón final de registro"
     },
     "registrationError": "Error al registrar usuario.",
     "@registrationError": {
-        "description": "Mensaje general de error al crear la cuenta"
+        "description": "Error final al registrar"
     },
     "emailInUse": "El correo ya está en uso.",
     "@emailInUse": {
-        "description": "Mensaje cuando el correo ya está registrado"
+        "description": "Correo repetido"
     },
     "enterPhone": "Por favor, ingresa tu número de teléfono.",
     "@enterPhone": {
-        "description": "Mensaje de validación para el campo de teléfono"
+        "description": "Validación teléfono"
     },
     "otherSettings": "Otros ajustes",
     "@otherSettings": {
-        "description": "Otros ajustes para configuraciones"
+        "description": "Otras configuraciones"
     },
     "profile": "Perfil",
     "@profile": {
-        "description": "Título para la pantalla del perfil de usuario"
+        "description": "Título perfil usuario"
     },
     "surname": "Apellido",
     "@surname": {
-        "description": "El apellido del usuario"
+        "description": "Apellido del usuario"
     },
     "phone": "Teléfono",
     "@phone": {
-        "description": "El número de teléfono del usuario"
+        "description": "Número telefónico"
     },
     "rut": "RUT",
     "@rut": {
-        "description": "El RUT (identificación nacional) del usuario"
+        "description": "RUT del usuario"
     },
     "region": "Región",
     "@region": {
-        "description": "La región del usuario"
+        "description": "Región del usuario"
     },
     "commune": "Comuna",
     "@commune": {
-        "description": "La comuna del usuario"
+        "description": "Comuna del usuario"
     },
     "diet": "Tipo de dieta",
     "@diet": {
-        "description": "El tipo de dieta del usuario"
+        "description": "Tipo de dieta del usuario"
     },
     "userProfile": "Perfil del usuario",
     "@userProfile": {
-        "description": "Título de la pantalla de perfil de usuario"
+        "description": "Pantalla del perfil"
     },
     "homeTitle": "Inicio",
     "@homeTitle": {
-        "description": "Título de la pantalla principal/Home"
+        "description": "Título pantalla principal"
     },
     "commerce": "Comercio",
     "@commerce": {
-        "description": "Título de la pantalla comercio"
+        "description": "Pantalla comercio"
     },
     "userDisabled": "Usuario deshabilitado",
     "@userDisabled": {
-        "description": "Mensaje de error cuando el usuario está deshabilitado en Firebase"
+        "description": "Usuario deshabilitado en Firebase"
     },
     "tooManyRequests": "Demasiados intentos, inténtalo más tarde",
     "@tooManyRequests": {
-        "description": "Mensaje de error cuando se excede el límite de intentos de login en Firebase"
+        "description": "Límite de intentos excedido"
     },
     "networkError": "Error de red, revisa tu conexión",
     "@networkError": {
-        "description": "Mensaje de error cuando falla la conexión de red al intentar login"
+        "description": "Error de red"
     },
     "forgotPasswordTitle": "Olvidaste tu contraseña",
     "@forgotPasswordTitle": {
-        "description": "Título de la pantalla de recuperación de contraseña"
+        "description": "Título recuperación contraseña"
     },
     "forgotPasswordDescription": "Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña",
     "@forgotPasswordDescription": {
-        "description": "Mensaje explicativo en la pantalla de recuperación de contraseña"
+        "description": "Descripción recuperación"
     },
     "sendResetLink": "Enviar enlace de recuperación",
     "@sendResetLink": {
-        "description": "Texto del botón para enviar el enlace de recuperación de contraseña"
+        "description": "Botón enviar recuperación"
     },
     "resetEmailSent": "Se ha enviado un correo para restablecer tu contraseña",
     "@resetEmailSent": {
-        "description": "Mensaje de confirmación cuando el correo de recuperación ha sido enviado"
+        "description": "Correo enviado"
     },
     "resetEmailFailed": "Error al enviar el correo de recuperación",
     "@resetEmailFailed": {
-        "description": "Mensaje de error cuando no se puede enviar el correo de recuperación"
+        "description": "Error al enviar correo"
     },
     "registerDescription": "Crea tu cuenta ingresando tus datos",
     "@registerDescription": {
-        "description": "Mensaje explicativo en la pantalla de registro"
+        "description": "Texto informativo registro"
     },
     "name": "Nombre",
     "@name": {
-        "description": "Etiqueta para el campo de nombre del usuario"
+        "description": "Etiqueta campo nombre"
     },
     "registerButton": "Registrarse",
     "@registerButton": {
-        "description": "Texto del botón para completar el registro"
+        "description": "Botón registrarse"
     },
     "logoutConfirmationTitle": "¿Cerrar sesión?",
     "@logoutConfirmationTitle": {
-        "description": "Título del diálogo de confirmación antes de cerrar sesión"
+        "description": "Título diálogo cierre de sesión"
     },
     "logoutConfirmationMessage": "Se cerrará tu sesión en la aplicación.",
     "@logoutConfirmationMessage": {
-        "description": "Mensaje del diálogo que indica que la sesión se cerrará"
+        "description": "Mensaje cierre de sesión"
     },
     "logoutError": "Error al cerrar sesión",
     "@logoutError": {
-        "description": "Mensaje mostrado cuando ocurre un error al intentar cerrar sesión"
+        "description": "Error al cerrar sesión"
     },
     "resetPasswordError": "Error al enviar el correo de recuperación.",
     "@resetPasswordError": {
-        "description": "Mensaje mostrado cuando ocurre un error al intentar enviar el correo de recuperación"
+        "description": "Error enviando correo"
     },
     "sendResetLinkButton": "Enviar enlace",
     "@sendResetLinkButton": {
-        "description": "Texto del botón que envía el enlace de restablecimiento de contraseña"
+        "description": "Botón enviar enlace"
     },
     "backToLogin": "Volver al Login",
     "@backToLogin": {
-        "description": "Texto del botón para volver a la pantalla de inicio de sesión"
+        "description": "Volver al login"
+    },
+    "settingsTitle": "Configuración",
+    "@settingsTitle": {
+        "description": "Título de la pantalla de configuración"
+    },
+    "sectionAccount": "CUENTA",
+    "@sectionAccount": {
+        "description": "Sección de cuenta en configuración"
+    },
+    "sectionPreferences": "PREFERENCIAS",
+    "@sectionPreferences": {
+        "description": "Sección de preferencias"
+    },
+    "sectionOthers": "OTROS",
+    "@sectionOthers": {
+        "description": "Sección otros"
+    },
+    "profileSubtitle": "Ver y editar tu perfil",
+    "@profileSubtitle": {
+        "description": "Subtítulo perfil"
+    },
+    "security": "Seguridad",
+    "@security": {
+        "description": "Opción de seguridad"
+    },
+    "changePassword": "Cambiar contraseña",
+    "@changePassword": {
+        "description": "Opción cambiar contraseña"
+    },
+    "notifications": "Notificaciones",
+    "@notifications": {
+        "description": "Opción notificaciones"
+    },
+    "notificationsOn": "Activadas",
+    "@notificationsOn": {
+        "description": "Notificaciones activas"
+    },
+    "notificationsOff": "Desactivadas",
+    "@notificationsOff": {
+        "description": "Notificaciones desactivadas"
+    },
+    "language": "Idioma",
+    "@language": {
+        "description": "Opción de idioma"
+    },
+    "premium": "Nutrimap Premium",
+    "@premium": {
+        "description": "Opción Premium"
+    },
+    "about": "Acerca de",
+    "@about": {
+        "description": "Opción Acerca de"
+    },
+    "terms": "Términos y Condiciones",
+    "@terms": {
+        "description": "Opción términos y condiciones"
+    },
+    "settingsAppearance": "Apariencia",
+    "@settingsAppearance": {
+        "description": "Sección de apariencia dentro de Configuración"
+    },
+    "darkMode": "Modo oscuro",
+    "@darkMode": {
+        "description": "Opción para activar o desactivar modo oscuro"
+    },
+    "darkModeDescription": "Activa o desactiva el modo oscuro de la aplicación.",
+    "@darkModeDescription": {
+        "description": "Descripción de modo oscuro"
+    },
+    "appTheme": "Tema de la aplicación",
+    "@appTheme": {
+        "description": "Título para seleccionar tema"
+    },
+    "themeSystem": "Predeterminado del sistema",
+    "@themeSystem": {
+        "description": "Tema basado en el sistema"
+    },
+    "themeLight": "Claro",
+    "@themeLight": {
+        "description": "Tema claro"
+    },
+    "themeDark": "Oscuro",
+    "@themeDark": {
+        "description": "Tema oscuro"
+    },
+    "premiumDescription": "Accede a funciones adicionales con Nutrimap Premium.",
+    "@premiumDescription": {
+        "description": "Descripción para opción Premium"
+    },
+    "aboutDescription": "Información sobre la aplicación y el equipo.",
+    "@aboutDescription": {
+        "description": "Descripción sección acerca de"
+    },
+    "termsDescription": "Lee los términos y condiciones de uso.",
+    "@termsDescription": {
+        "description": "Descripción sección términos y condiciones"
+    },
+    "spanish": "Español",
+    "@spanish": {
+        "description": "Texto para idioma español"
+    },
+    "english": "Inglés",
+    "@english": {
+        "description": "Texto para idioma inglés"
+    },
+    "logoutBody": "¿Seguro que deseas cerrar sesión?",
+    "@logoutBody": {
+        "description": "Mensaje del cuerpo del diálogo de cierre de sesión"
+    },
+    "editTitle": "Editar {field}",
+    "@editTitle": {
+        "description": "Título para edición",
+        "placeholders": {
+            "field": {}
+        }
+    },
+    "save": "Guardar",
+    "@save": {
+        "description": "Botón guardar"
+    },
+    "phoneHint": "9 1234 5678",
+    "@phoneHint": {
+        "description": "Hint del teléfono"
+    },
+    "personalInfo": "INFORMACIÓN PERSONAL",
+    "@personalInfo": {
+        "description": "Sección información personal"
+    },
+    "location": "UBICACIÓN",
+    "@location": {
+        "description": "Sección ubicación"
+    },
+    "preferences": "PREFERENCIAS",
+    "@preferences": {
+        "description": "Sección preferencias"
+    },
+    "noOptions": "No hay opciones disponibles",
+    "@noOptions": {
+        "description": "Mensaje sin opciones"
+    },
+    "selectFirstRegion": "Primero debes seleccionar una Región.",
+    "@selectFirstRegion": {
+        "description": "Mensaje selección región faltante"
+    },
+    "selectTitle": "Seleccionar {field}",
+    "@selectTitle": {
+        "description": "Título seleccionar",
+        "placeholders": {
+            "field": {}
+        }
+    },
+    "profileUpdated": "Perfil actualizado",
+    "@profileUpdated": {
+        "description": "Mensaje perfil actualizado"
+    },
+    "errorOccurred": "Error: {error}",
+    "@errorOccurred": {
+        "description": "Mensaje error genérico",
+        "placeholders": {
+            "error": {}
+        }
+    },
+    "loading": "Cargando...",
+    "@loading": {
+        "description": "Mensaje de carga"
+    },
+    "explore": "Explorar",
+    "@explore": {
+        "description": "Botón o texto para explorar"
+    },
+    "navigating": "Navegando",
+    "@navigating": {
+        "description": "Estado de navegación"
+    },
+    "selectPoint": "Selecciona un punto",
+    "@selectPoint": {
+        "description": "Instrucción para seleccionar punto en mapa"
+    },
+    "startTrip": "INICIAR VIAJE",
+    "@startTrip": {
+        "description": "Botón para iniciar viaje"
+    },
+    "walking": "Pie",
+    "@walking": {
+        "description": "Modo de transporte caminando"
+    },
+    "bicycling": "Bici",
+    "@bicycling": {
+        "description": "Modo de transporte bicicleta"
+    },
+    "driving": "Auto",
+    "@driving": {
+        "description": "Modo de transporte automóvil"
+    },
+    "waitingGps": "Esperando señal GPS...",
+    "@waitingGps": {
+        "description": "Mensaje esperando GPS"
+    },
+    "gpsOffline": "GPS Offline",
+    "@gpsOffline": {
+        "description": "Estado GPS sin conexión"
+    },
+    "online": "En línea",
+    "@online": {
+        "description": "Estado en línea"
+    },
+    "arrived": "¡Has llegado!",
+    "@arrived": {
+        "description": "Mensaje de llegada al destino"
+    },
+    "distanceToTurn": "{distance} para girar",
+    "@distanceToTurn": {
+        "description": "Distancia hasta el próximo giro",
+        "placeholders": {
+            "distance": {}
+        }
+    },
+    "durationRemaining": "{duration} restante",
+    "@durationRemaining": {
+        "description": "Tiempo restante de viaje",
+        "placeholders": {
+            "duration": {}
+        }
+    },
+    "arrivalTime": "Llegada: {time}",
+    "@arrivalTime": {
+        "description": "Hora estimada de llegada",
+        "placeholders": {
+            "time": {}
+        }
+    },
+    "distance": "Distancia",
+    "@distance": {
+        "description": "Etiqueta para distancia"
+    },
+    "duration": "Duración",
+    "@duration": {
+        "description": "Etiqueta para duración"
+    },
+    "arrival": "Llegada",
+    "@arrival": {
+        "description": "Etiqueta para hora estimada de llegada"
+    },
+    "turn": "Giro",
+    "@turn": {
+        "description": "Instrucción de giro en navegación"
+    },
+    "nextTurn": "Próximo giro",
+    "@nextTurn": {
+        "description": "Indica el siguiente giro en el mapa"
+    },
+    "meters": "metros",
+    "@meters": {
+        "description": "Unidad de distancia en metros"
+    },
+    "kilometers": "kilómetros",
+    "@kilometers": {
+        "description": "Unidad de distancia en kilómetros"
+    },
+    "minutes": "minutos",
+    "@minutes": {
+        "description": "Unidad de tiempo en minutos"
+    },
+    "seconds": "segundos",
+    "@seconds": {
+        "description": "Unidad de tiempo en segundos"
+    },
+    "errorFetchingLocations": "Error al obtener las ubicaciones",
+    "@errorFetchingLocations": {
+        "description": "Mensaje cuando no se pueden obtener las ubicaciones"
+    },
+    "yourLocation": "Tu ubicación",
+    "@yourLocation": {
+        "description": "Etiqueta que indica la ubicación del usuario"
+    },
+    "noRouteFound": "Ruta no encontrada",
+    "@noRouteFound": {
+        "description": "Mensaje cuando no se encuentra la ruta"
+    },
+    "connectionError": "Error de conexión",
+    "@connectionError": {
+        "description": "Mensaje cuando hay un error de conexión"
+    },
+    "routeError": "Error en la ruta",
+    "@routeError": {
+        "description": "Mensaje cuando ocurre un error al calcular la ruta"
     }
 }

@@ -12,29 +12,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sectionWhatIs => '¿Qué es NutriMap?';
 
   @override
-  String get sectionWhatIsDesc =>
-      'NutriMap te ayuda a seguir tus comidas, nutrición y hábitos saludables.';
+  String get sectionWhatIsDesc => 'NutriMap te ayuda a seguir tus comidas, nutrición y hábitos saludables.';
 
   @override
   String get sectionHelps => '¿Qué te ayudará a hacer?';
 
   @override
-  String get sectionHelpsDesc =>
-      'Planificar comidas, contar calorías, controlar nutrientes y mejorar tu dieta.';
+  String get sectionHelpsDesc => 'Planificar comidas, contar calorías, controlar nutrientes y mejorar tu dieta.';
 
   @override
   String get sectionWhoWeAre => '¿Quiénes somos?';
 
   @override
-  String get sectionWhoWeAreDesc =>
-      'Somos un equipo apasionado por la nutrición y la tecnología.';
+  String get sectionWhoWeAreDesc => 'Somos un equipo apasionado por la nutrición y la tecnología.';
 
   @override
   String get sectionBenefits => 'Beneficios';
 
   @override
-  String get sectionBenefitsDesc =>
-      'Mantente saludable, come mejor y alcanza tus metas fácilmente.';
+  String get sectionBenefitsDesc => 'Mantente saludable, come mejor y alcanza tus metas fácilmente.';
 
   @override
   String get loginTitle => 'Iniciar sesión';
@@ -79,8 +75,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get passwordRequired => 'Por favor, ingresa tu contraseña.';
 
   @override
-  String get passwordTooShort =>
-      'La contraseña debe tener al menos 6 caracteres.';
+  String get passwordTooShort => 'La contraseña debe tener al menos 6 caracteres.';
 
   @override
   String get forgotPassword => '¿Olvidaste tu contraseña?';
@@ -191,6 +186,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get personalData => 'Datos Personales';
 
   @override
+  String get enterFirstName => 'Por favor, ingrese su nombre.';
+
+  @override
   String get diets => 'Dietas';
 
   @override
@@ -209,10 +207,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get emailInUse => 'El correo ya está en uso.';
 
   @override
-  String get enterFirstName => 'Por favor, ingrese su nombre.';
-
-  @override
-  String get phone => 'Teléfono';
+  String get enterPhone => 'Por favor, ingresa tu número de teléfono.';
 
   @override
   String get otherSettings => 'Otros ajustes';
@@ -222,6 +217,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get surname => 'Apellido';
+
+  @override
+  String get phone => 'Teléfono';
 
   @override
   String get rut => 'RUT';
@@ -257,15 +255,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get forgotPasswordTitle => 'Olvidaste tu contraseña';
 
   @override
-  String get forgotPasswordDescription =>
-      'Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña';
+  String get forgotPasswordDescription => 'Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña';
 
   @override
   String get sendResetLink => 'Enviar enlace de recuperación';
 
   @override
-  String get resetEmailSent =>
-      'Se ha enviado un correo para restablecer tu contraseña';
+  String get resetEmailSent => 'Se ha enviado un correo para restablecer tu contraseña';
 
   @override
   String get resetEmailFailed => 'Error al enviar el correo de recuperación';
@@ -283,8 +279,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get logoutConfirmationTitle => '¿Cerrar sesión?';
 
   @override
-  String get logoutConfirmationMessage =>
-      'Se cerrará tu sesión en la aplicación.';
+  String get logoutConfirmationMessage => 'Se cerrará tu sesión en la aplicación.';
 
   @override
   String get logoutError => 'Error al cerrar sesión';
@@ -297,4 +292,217 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backToLogin => 'Volver al Login';
+
+  @override
+  String get settingsTitle => 'Configuración';
+
+  @override
+  String get sectionAccount => 'CUENTA';
+
+  @override
+  String get sectionPreferences => 'PREFERENCIAS';
+
+  @override
+  String get sectionOthers => 'OTROS';
+
+  @override
+  String get profileSubtitle => 'Ver y editar tu perfil';
+
+  @override
+  String get security => 'Seguridad';
+
+  @override
+  String get changePassword => 'Cambiar contraseña';
+
+  @override
+  String get notifications => 'Notificaciones';
+
+  @override
+  String get notificationsOn => 'Activadas';
+
+  @override
+  String get notificationsOff => 'Desactivadas';
+
+  @override
+  String get language => 'Idioma';
+
+  @override
+  String get premium => 'Nutrimap Premium';
+
+  @override
+  String get about => 'Acerca de';
+
+  @override
+  String get terms => 'Términos y Condiciones';
+
+  @override
+  String get settingsAppearance => 'Apariencia';
+
+  @override
+  String get darkMode => 'Modo oscuro';
+
+  @override
+  String get darkModeDescription => 'Activa o desactiva el modo oscuro de la aplicación.';
+
+  @override
+  String get appTheme => 'Tema de la aplicación';
+
+  @override
+  String get themeSystem => 'Predeterminado del sistema';
+
+  @override
+  String get themeLight => 'Claro';
+
+  @override
+  String get themeDark => 'Oscuro';
+
+  @override
+  String get premiumDescription => 'Accede a funciones adicionales con Nutrimap Premium.';
+
+  @override
+  String get aboutDescription => 'Información sobre la aplicación y el equipo.';
+
+  @override
+  String get termsDescription => 'Lee los términos y condiciones de uso.';
+
+  @override
+  String get spanish => 'Español';
+
+  @override
+  String get english => 'Inglés';
+
+  @override
+  String get logoutBody => '¿Seguro que deseas cerrar sesión?';
+
+  @override
+  String editTitle(Object field) {
+    return 'Editar $field';
+  }
+
+  @override
+  String get save => 'Guardar';
+
+  @override
+  String get phoneHint => '9 1234 5678';
+
+  @override
+  String get personalInfo => 'INFORMACIÓN PERSONAL';
+
+  @override
+  String get location => 'UBICACIÓN';
+
+  @override
+  String get preferences => 'PREFERENCIAS';
+
+  @override
+  String get noOptions => 'No hay opciones disponibles';
+
+  @override
+  String get selectFirstRegion => 'Primero debes seleccionar una Región.';
+
+  @override
+  String selectTitle(Object field) {
+    return 'Seleccionar $field';
+  }
+
+  @override
+  String get profileUpdated => 'Perfil actualizado';
+
+  @override
+  String errorOccurred(Object error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get loading => 'Cargando...';
+
+  @override
+  String get explore => 'Explorar';
+
+  @override
+  String get navigating => 'Navegando';
+
+  @override
+  String get selectPoint => 'Selecciona un punto';
+
+  @override
+  String get startTrip => 'INICIAR VIAJE';
+
+  @override
+  String get walking => 'Pie';
+
+  @override
+  String get bicycling => 'Bici';
+
+  @override
+  String get driving => 'Auto';
+
+  @override
+  String get waitingGps => 'Esperando señal GPS...';
+
+  @override
+  String get gpsOffline => 'GPS Offline';
+
+  @override
+  String get online => 'En línea';
+
+  @override
+  String get arrived => '¡Has llegado!';
+
+  @override
+  String distanceToTurn(Object distance) {
+    return '$distance para girar';
+  }
+
+  @override
+  String durationRemaining(Object duration) {
+    return '$duration restante';
+  }
+
+  @override
+  String arrivalTime(Object time) {
+    return 'Llegada: $time';
+  }
+
+  @override
+  String get distance => 'Distancia';
+
+  @override
+  String get duration => 'Duración';
+
+  @override
+  String get arrival => 'Llegada';
+
+  @override
+  String get turn => 'Giro';
+
+  @override
+  String get nextTurn => 'Próximo giro';
+
+  @override
+  String get meters => 'metros';
+
+  @override
+  String get kilometers => 'kilómetros';
+
+  @override
+  String get minutes => 'minutos';
+
+  @override
+  String get seconds => 'segundos';
+
+  @override
+  String get errorFetchingLocations => 'Error al obtener las ubicaciones';
+
+  @override
+  String get yourLocation => 'Tu ubicación';
+
+  @override
+  String get noRouteFound => 'Ruta no encontrada';
+
+  @override
+  String get connectionError => 'Error de conexión';
+
+  @override
+  String get routeError => 'Error en la ruta';
 }

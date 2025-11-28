@@ -62,8 +62,7 @@ import 'app_localizations_es.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,575 +82,981 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('es'),
+    Locale('es')
   ];
 
-  /// Title for the 'What is NutriMap' section on onboarding
+  /// Title of the 'What is NutriMap' section
   ///
   /// In en, this message translates to:
-  /// **'What Is NutriMap?'**
+  /// **'What is NutriMap?'**
   String get sectionWhatIs;
 
-  /// Description for the 'What is NutriMap' section
+  /// Description of the 'What is NutriMap' section
   ///
   /// In en, this message translates to:
   /// **'NutriMap helps you track your meals, nutrition, and healthy habits.'**
   String get sectionWhatIsDesc;
 
-  /// Title for the 'How It Helps You' section
+  /// Title of the 'What will it help you do' section
   ///
   /// In en, this message translates to:
-  /// **'How It Helps You?'**
+  /// **'What will it help you do?'**
   String get sectionHelps;
 
-  /// Description for the 'How It Helps You' section
+  /// Description of the 'What will it help you do' section
   ///
   /// In en, this message translates to:
   /// **'Plan meals, count calories, monitor nutrients, and improve your diet.'**
   String get sectionHelpsDesc;
 
-  /// Title for the 'Who We Are' section
+  /// Title of the 'Who are we' section
   ///
   /// In en, this message translates to:
-  /// **'Who We Are?'**
+  /// **'Who are we?'**
   String get sectionWhoWeAre;
 
-  /// Description for the 'Who We Are' section
+  /// Description of the 'Who are we' section
   ///
   /// In en, this message translates to:
   /// **'We are a team passionate about nutrition and technology.'**
   String get sectionWhoWeAreDesc;
 
-  /// Title for the 'Benefits' section
+  /// Title of the 'Benefits' section
   ///
   /// In en, this message translates to:
   /// **'Benefits'**
   String get sectionBenefits;
 
-  /// Description for the 'Benefits' section
+  /// Description of the 'Benefits' section
   ///
   /// In en, this message translates to:
-  /// **'Stay healthy, eat better, and reach your goals easily.'**
+  /// **'Stay healthy, eat better, and achieve your goals easily.'**
   String get sectionBenefitsDesc;
 
-  /// Title for the login screen
+  /// Login screen title
   ///
   /// In en, this message translates to:
-  /// **'Log In'**
+  /// **'Login'**
   String get loginTitle;
 
-  /// Label for the email input field on the login screen
+  /// Email field label in login
   ///
   /// In en, this message translates to:
   /// **'Email'**
   String get email;
 
-  /// Label for the password input field on the login screen
+  /// Password field label in login
   ///
   /// In en, this message translates to:
   /// **'Password'**
   String get password;
 
-  /// Text for the login button
+  /// Login button text
   ///
   /// In en, this message translates to:
-  /// **'Log In'**
+  /// **'Sign In'**
   String get loginButton;
 
-  /// Text for the next button in multi-step flows
+  /// Next button text in onboarding
   ///
   /// In en, this message translates to:
   /// **'Next'**
   String get nextButton;
 
-  /// Label for the Home tab in the BottomNavigationBar
+  /// Label for the Home tab in BottomNavigationBar
   ///
   /// In en, this message translates to:
   /// **'Home'**
   String get home;
 
-  /// Label for the Map tab in the BottomNavigationBar
+  /// Label for the Map tab in BottomNavigationBar
   ///
   /// In en, this message translates to:
   /// **'Map'**
   String get map;
 
-  /// Label for the Benefits tab in the BottomNavigationBar
+  /// Label for the Benefits tab in BottomNavigationBar
   ///
   /// In en, this message translates to:
   /// **'Benefits'**
   String get benefits;
 
-  /// Label for the Commerce tab in the BottomNavigationBar
+  /// Label for the Recipes tab in BottomNavigationBar
   ///
   /// In en, this message translates to:
-  /// **'Commerces'**
+  /// **'Businesses'**
   String get recipes;
 
-  /// Label for the Settings tab in the BottomNavigationBar
+  /// Label for the Settings tab in BottomNavigationBar
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings;
 
-  /// Welcome text below the title on the login screen
+  /// Welcome text below title on login screen
   ///
   /// In en, this message translates to:
-  /// **'Welcome Back'**
+  /// **'Welcome back'**
   String get welcomeBack;
 
-  /// Validation message when the email field is empty
+  /// Validation message when email is empty
   ///
   /// In en, this message translates to:
   /// **'Please enter your email.'**
   String get emailRequired;
 
-  /// Validation message when the email format is invalid
+  /// Validation message when email format is invalid
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid email address.'**
+  /// **'Please enter a valid email.'**
   String get invalidEmail;
 
-  /// Validation message when the password field is empty
+  /// Validation message when password is empty
   ///
   /// In en, this message translates to:
   /// **'Please enter your password.'**
   String get passwordRequired;
 
-  /// Validation message when the password is shorter than 6 characters
+  /// Validation message for short password
   ///
   /// In en, this message translates to:
-  /// **'Password must be at least 6 characters long.'**
+  /// **'Password must be at least 6 characters.'**
   String get passwordTooShort;
 
-  /// Link/button to recover a forgotten password
+  /// Password recovery button
   ///
   /// In en, this message translates to:
-  /// **'Forgot Password?'**
+  /// **'Forgot your password?'**
   String get forgotPassword;
 
-  /// Separator text for social media login options
+  /// Separator text for social login
   ///
   /// In en, this message translates to:
   /// **'Or continue with'**
   String get orContinueWith;
 
-  /// Text prompting users to sign up
+  /// Text asking if user has an account
   ///
   /// In en, this message translates to:
   /// **'Don\'t have an account?'**
   String get noAccount;
 
-  /// Text for the registration button/link
+  /// Sign up button/link
   ///
   /// In en, this message translates to:
   /// **'Sign Up'**
   String get register;
 
-  /// Generic error message when login fails
+  /// Generic sign in error message
   ///
   /// In en, this message translates to:
-  /// **'Login Failed'**
+  /// **'Error signing in.'**
   String get loginError;
 
-  /// Error message when the user does not exist
+  /// Message when user doesn't exist
   ///
   /// In en, this message translates to:
   /// **'User not found.'**
   String get userNotFound;
 
-  /// Error message when the password is incorrect
+  /// Message when password is incorrect
   ///
   /// In en, this message translates to:
-  /// **'Incorrect password.'**
+  /// **'Wrong password.'**
   String get wrongPassword;
 
-  /// Error message when the entered email is not valid
+  /// Message when email is invalid
   ///
   /// In en, this message translates to:
   /// **'Invalid email format.'**
   String get invalidEmailError;
 
-  /// Placeholder text for an email field
+  /// Enter your email
   ///
   /// In en, this message translates to:
-  /// **'Enter your email'**
+  /// **'Enter your email.'**
   String get enterEmail;
 
-  /// Validation message when the password field is empty
+  /// Message when password is missing
   ///
   /// In en, this message translates to:
   /// **'Please enter your password.'**
   String get enterPassword;
 
-  /// Validation message when the password is too short
+  /// Validation message for short password
   ///
   /// In en, this message translates to:
-  /// **'Password must be at least 6 characters long.'**
+  /// **'Password must be at least 6 characters.'**
   String get shortPassword;
 
-  /// Text showing which user's settings are being displayed
+  /// Settings text for user
   ///
   /// In en, this message translates to:
   /// **'Settings for {email}'**
   String settingsUser(Object email);
 
-  /// Button text to log out the current user
+  /// Logout button
   ///
   /// In en, this message translates to:
-  /// **'Log Out'**
+  /// **'Logout'**
   String get logout;
 
-  /// Default placeholder for a user's name or email
+  /// Default name or email
   ///
   /// In en, this message translates to:
   /// **'User'**
   String get user;
 
-  /// Text showing available benefits for the current user
+  /// Text showing user benefits
   ///
   /// In en, this message translates to:
   /// **'Benefits available for {email}'**
   String benefitsUser(Object email);
 
-  /// Title of the registration screen
+  /// Sign up title
   ///
   /// In en, this message translates to:
-  /// **'Create Account'**
+  /// **'Sign Up'**
   String get registerTitle;
 
-  /// Title for Step 1 of registration
+  /// Step 1 title
   ///
   /// In en, this message translates to:
-  /// **'Personal Information'**
+  /// **'Personal Data'**
   String get registerStep1Title;
 
-  /// Title for Step 2 of registration (Email and Password)
+  /// Step 2 title
   ///
   /// In en, this message translates to:
-  /// **'Account Credentials'**
+  /// **'Email and Password'**
   String get registerStep2Title;
 
-  /// Title for Step 3 of registration
+  /// Step 3 title
   ///
   /// In en, this message translates to:
   /// **'Institution and Preferences'**
   String get registerStep3Title;
 
-  /// Title of the summary screen before creating an account
+  /// Summary screen title
   ///
   /// In en, this message translates to:
   /// **'Summary'**
   String get summaryTitle;
 
-  /// Label for the first name field
+  /// First name field
   ///
   /// In en, this message translates to:
   /// **'First Name'**
   String get firstName;
 
-  /// Label for the last name field
+  /// Last name field
   ///
   /// In en, this message translates to:
   /// **'Last Name'**
   String get lastName;
 
-  /// Label for selecting the user's institution
+  /// Institution field
   ///
   /// In en, this message translates to:
   /// **'Institution'**
   String get institution;
 
-  /// Label for selecting preferred diets
+  /// Label for selecting diets
   ///
   /// In en, this message translates to:
   /// **'Preferred Diets'**
   String get dietas;
 
-  /// Helper text for the diet selection
+  /// Help text for diets
   ///
   /// In en, this message translates to:
   /// **'Choose your diets'**
   String get chooseDiet;
 
-  /// Validation message when the first name is empty
+  /// Name empty validation
   ///
   /// In en, this message translates to:
-  /// **'Please enter your first name.'**
+  /// **'Please enter your name.'**
   String get enterName;
 
-  /// Validation message when the last name is empty
+  /// Last name empty validation
   ///
   /// In en, this message translates to:
   /// **'Please enter your last name.'**
   String get enterLastName;
 
-  /// Button to go to the previous step
+  /// Back button
   ///
   /// In en, this message translates to:
   /// **'Back'**
   String get back;
 
-  /// Button to go to the next step
+  /// Next button
   ///
   /// In en, this message translates to:
   /// **'Next'**
   String get next;
 
-  /// Button to confirm and create the account
+  /// Confirm registration button
   ///
   /// In en, this message translates to:
   /// **'Confirm'**
   String get confirmButton;
 
-  /// Error message when user registration fails
+  /// General registration error
   ///
   /// In en, this message translates to:
-  /// **'Could not register user.'**
+  /// **'Error registering user.'**
   String get registerError;
 
-  /// Shows a summary of user information before creating the account
+  /// User data summary
   ///
   /// In en, this message translates to:
-  /// **'Review your information: {email}'**
+  /// **'Review your data: {email}'**
   String summaryUser(Object email);
 
-  /// Label prompting the user to select their institution
+  /// Institution help text
   ///
   /// In en, this message translates to:
   /// **'Select your institution'**
   String get selectInstitution;
 
-  /// Title of the personal information step
+  /// Personal data step
   ///
   /// In en, this message translates to:
-  /// **'Personal Information'**
+  /// **'Personal Data'**
   String get personalData;
 
-  /// Step to select preferred diets
-  ///
-  /// In en, this message translates to:
-  /// **'Preferred Diets'**
-  String get diets;
-
-  /// Title of the confirmation dialog before creating the account
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm Registration'**
-  String get confirmRegistration;
-
-  /// Button to cancel the confirmation
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get cancel;
-
-  /// Button to create the account after confirmation
-  ///
-  /// In en, this message translates to:
-  /// **'Create Account'**
-  String get createAccount;
-
-  /// General error message when account creation fails
-  ///
-  /// In en, this message translates to:
-  /// **'Registration failed.'**
-  String get registrationError;
-
-  /// Message shown when the email is already registered
-  ///
-  /// In en, this message translates to:
-  /// **'This email is already in use.'**
-  String get emailInUse;
-
-  /// Validation message for the first name input
+  /// First name empty validation
   ///
   /// In en, this message translates to:
   /// **'Please enter your first name.'**
   String get enterFirstName;
 
-  /// Label for the user's phone number
+  /// Diet selection step
   ///
   /// In en, this message translates to:
-  /// **'Phone Number'**
-  String get phone;
+  /// **'Diets'**
+  String get diets;
 
-  /// Title for a section with other settings
+  /// Final confirmation
   ///
   /// In en, this message translates to:
-  /// **'Other Settings'**
+  /// **'Confirm your registration'**
+  String get confirmRegistration;
+
+  /// Cancel button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Final registration button
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// Final registration error
+  ///
+  /// In en, this message translates to:
+  /// **'Error registering user.'**
+  String get registrationError;
+
+  /// Duplicate email
+  ///
+  /// In en, this message translates to:
+  /// **'Email already in use.'**
+  String get emailInUse;
+
+  /// Phone validation
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your phone number.'**
+  String get enterPhone;
+
+  /// Other settings
+  ///
+  /// In en, this message translates to:
+  /// **'Other settings'**
   String get otherSettings;
 
-  /// Title for the user profile screen
+  /// User profile title
   ///
   /// In en, this message translates to:
   /// **'Profile'**
   String get profile;
 
-  /// User's last name
+  /// User last name
   ///
   /// In en, this message translates to:
   /// **'Last Name'**
   String get surname;
 
-  /// User's national identification number
+  /// Phone number
   ///
   /// In en, this message translates to:
-  /// **'National ID'**
+  /// **'Phone'**
+  String get phone;
+
+  /// User RUT
+  ///
+  /// In en, this message translates to:
+  /// **'RUT'**
   String get rut;
 
-  /// User's region or state
+  /// User region
   ///
   /// In en, this message translates to:
   /// **'Region'**
   String get region;
 
-  /// User's city, town, or local administrative district
+  /// User commune
   ///
   /// In en, this message translates to:
-  /// **'City / Municipality'**
+  /// **'Commune'**
   String get commune;
 
-  /// User's selected diet type
+  /// User diet type
   ///
   /// In en, this message translates to:
-  /// **'Diet Type'**
+  /// **'Diet type'**
   String get diet;
 
-  /// Title of the user profile screen
+  /// Profile screen
   ///
   /// In en, this message translates to:
   /// **'User Profile'**
   String get userProfile;
 
-  /// Title of the main/home screen
+  /// Main screen title
   ///
   /// In en, this message translates to:
   /// **'Home'**
   String get homeTitle;
 
-  /// Title of the main Commerce
+  /// Business screen
   ///
   /// In en, this message translates to:
-  /// **'Commerce'**
+  /// **'Business'**
   String get commerce;
 
-  /// Error message when the user is disabled in Firebase
+  /// User disabled in Firebase
   ///
   /// In en, this message translates to:
   /// **'User disabled'**
   String get userDisabled;
 
-  /// Error message when the login attempt limit is exceeded in Firebase
+  /// Attempt limit exceeded
   ///
   /// In en, this message translates to:
   /// **'Too many attempts, try again later'**
   String get tooManyRequests;
 
-  /// Error message when the network connection fails during login
+  /// Network error
   ///
   /// In en, this message translates to:
   /// **'Network error, check your connection'**
   String get networkError;
 
-  /// Title of the password recovery screen
+  /// Password recovery title
   ///
   /// In en, this message translates to:
-  /// **'Forgot Password'**
+  /// **'Forgot your password'**
   String get forgotPasswordTitle;
 
-  /// Explanatory message on the password recovery screen
+  /// Recovery description
   ///
   /// In en, this message translates to:
-  /// **'Enter your email and we will send you a link to reset your password'**
+  /// **'Enter your email and we\'ll send you a link to reset your password'**
   String get forgotPasswordDescription;
 
-  /// Button text to send password reset link
+  /// Send recovery button
   ///
   /// In en, this message translates to:
-  /// **'Send Reset Link'**
+  /// **'Send recovery link'**
   String get sendResetLink;
 
-  /// Confirmation message when the reset email has been sent
+  /// Email sent message
   ///
   /// In en, this message translates to:
-  /// **'Password reset email has been sent'**
+  /// **'A password reset email has been sent'**
   String get resetEmailSent;
 
-  /// Error message when the reset email could not be sent
+  /// Error sending email
   ///
   /// In en, this message translates to:
-  /// **'Failed to send reset email'**
+  /// **'Error sending recovery email'**
   String get resetEmailFailed;
 
-  /// Explanatory message on the registration screen
+  /// Informative registration text
   ///
   /// In en, this message translates to:
-  /// **'Create your account by entering your details'**
+  /// **'Create your account by entering your data'**
   String get registerDescription;
 
-  /// Label for the user's name input field
+  /// Name field label
   ///
   /// In en, this message translates to:
   /// **'Name'**
   String get name;
 
-  /// Button text to complete registration
+  /// Sign up button
   ///
   /// In en, this message translates to:
-  /// **'Register'**
+  /// **'Sign Up'**
   String get registerButton;
 
-  /// Title of the confirmation dialog before logging out
+  /// Logout dialog title
   ///
   /// In en, this message translates to:
-  /// **'Log out?'**
+  /// **'Logout?'**
   String get logoutConfirmationTitle;
 
-  /// Dialog message indicating that the session will be logged out
+  /// Logout message
   ///
   /// In en, this message translates to:
-  /// **'Your session will be closed in the app.'**
+  /// **'You will be logged out of the application.'**
   String get logoutConfirmationMessage;
 
-  /// Message shown when an error occurs while trying to log out
+  /// Logout error
   ///
   /// In en, this message translates to:
   /// **'Error logging out'**
   String get logoutError;
 
-  /// Message shown when an error occurs while sending the reset email
+  /// Error sending email
   ///
   /// In en, this message translates to:
-  /// **'Error sending reset email.'**
+  /// **'Error sending recovery email.'**
   String get resetPasswordError;
 
-  /// Text of the button that sends the password reset link
+  /// Send link button
   ///
   /// In en, this message translates to:
-  /// **'Send link'**
+  /// **'Send Link'**
   String get sendResetLinkButton;
 
-  /// Text of the button that returns to the login screen
+  /// Back to login
   ///
   /// In en, this message translates to:
   /// **'Back to Login'**
   String get backToLogin;
+
+  /// Settings screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// Account section in settings
+  ///
+  /// In en, this message translates to:
+  /// **'ACCOUNT'**
+  String get sectionAccount;
+
+  /// Preferences section
+  ///
+  /// In en, this message translates to:
+  /// **'PREFERENCES'**
+  String get sectionPreferences;
+
+  /// Others section
+  ///
+  /// In en, this message translates to:
+  /// **'OTHERS'**
+  String get sectionOthers;
+
+  /// Profile subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'View and edit your profile'**
+  String get profileSubtitle;
+
+  /// Security option
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get security;
+
+  /// Change password option
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// Notifications option
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// Notifications enabled
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get notificationsOn;
+
+  /// Notifications disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get notificationsOff;
+
+  /// Language option
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// Premium option
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrimap Premium'**
+  String get premium;
+
+  /// About option
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// Terms and conditions option
+  ///
+  /// In en, this message translates to:
+  /// **'Terms and Conditions'**
+  String get terms;
+
+  /// Appearance section within Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearance;
+
+  /// Option to enable or disable dark mode
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode'**
+  String get darkMode;
+
+  /// Dark mode description
+  ///
+  /// In en, this message translates to:
+  /// **'Enable or disable the app\'s dark mode.'**
+  String get darkModeDescription;
+
+  /// Title for selecting theme
+  ///
+  /// In en, this message translates to:
+  /// **'App theme'**
+  String get appTheme;
+
+  /// System-based theme
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get themeSystem;
+
+  /// Light theme
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// Dark theme
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// Description for Premium option
+  ///
+  /// In en, this message translates to:
+  /// **'Access additional features with Nutrimap Premium.'**
+  String get premiumDescription;
+
+  /// About section description
+  ///
+  /// In en, this message translates to:
+  /// **'Information about the app and team.'**
+  String get aboutDescription;
+
+  /// Terms and conditions section description
+  ///
+  /// In en, this message translates to:
+  /// **'Read the terms and conditions of use.'**
+  String get termsDescription;
+
+  /// Text for Spanish language
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get spanish;
+
+  /// Text for English language
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// Logout dialog body message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get logoutBody;
+
+  /// Title for editing
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {field}'**
+  String editTitle(Object field);
+
+  /// Save button
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// Phone hint
+  ///
+  /// In en, this message translates to:
+  /// **'9 1234 5678'**
+  String get phoneHint;
+
+  /// Personal information section
+  ///
+  /// In en, this message translates to:
+  /// **'PERSONAL INFORMATION'**
+  String get personalInfo;
+
+  /// Location section
+  ///
+  /// In en, this message translates to:
+  /// **'LOCATION'**
+  String get location;
+
+  /// Preferences section
+  ///
+  /// In en, this message translates to:
+  /// **'PREFERENCES'**
+  String get preferences;
+
+  /// No options message
+  ///
+  /// In en, this message translates to:
+  /// **'No options available'**
+  String get noOptions;
+
+  /// Missing region selection message
+  ///
+  /// In en, this message translates to:
+  /// **'You must first select a Region.'**
+  String get selectFirstRegion;
+
+  /// Select title
+  ///
+  /// In en, this message translates to:
+  /// **'Select {field}'**
+  String selectTitle(Object field);
+
+  /// Profile updated message
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileUpdated;
+
+  /// Generic error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String errorOccurred(Object error);
+
+  /// Loading message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// Explore button or text
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get explore;
+
+  /// Navigation state
+  ///
+  /// In en, this message translates to:
+  /// **'Navigating'**
+  String get navigating;
+
+  /// Instruction to select point on map
+  ///
+  /// In en, this message translates to:
+  /// **'Select a point'**
+  String get selectPoint;
+
+  /// Button to start trip
+  ///
+  /// In en, this message translates to:
+  /// **'START TRIP'**
+  String get startTrip;
+
+  /// Walking transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Walking'**
+  String get walking;
+
+  /// Bicycle transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Bike'**
+  String get bicycling;
+
+  /// Car transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Car'**
+  String get driving;
+
+  /// Waiting for GPS message
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for GPS signal...'**
+  String get waitingGps;
+
+  /// GPS offline status
+  ///
+  /// In en, this message translates to:
+  /// **'GPS Offline'**
+  String get gpsOffline;
+
+  /// Online status
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get online;
+
+  /// Arrival at destination message
+  ///
+  /// In en, this message translates to:
+  /// **'You have arrived!'**
+  String get arrived;
+
+  /// Distance to next turn
+  ///
+  /// In en, this message translates to:
+  /// **'{distance} to turn'**
+  String distanceToTurn(Object distance);
+
+  /// Remaining travel time
+  ///
+  /// In en, this message translates to:
+  /// **'{duration} remaining'**
+  String durationRemaining(Object duration);
+
+  /// Estimated arrival time
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival: {time}'**
+  String arrivalTime(Object time);
+
+  /// Label for distance
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get distance;
+
+  /// Label for duration
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get duration;
+
+  /// Label for estimated arrival time
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival'**
+  String get arrival;
+
+  /// Instruction for navigation turn
+  ///
+  /// In en, this message translates to:
+  /// **'Turn'**
+  String get turn;
+
+  /// Indicates the next turn on the map
+  ///
+  /// In en, this message translates to:
+  /// **'Next turn'**
+  String get nextTurn;
+
+  /// Unit of distance in meters
+  ///
+  /// In en, this message translates to:
+  /// **'meters'**
+  String get meters;
+
+  /// Unit of distance in kilometers
+  ///
+  /// In en, this message translates to:
+  /// **'kilometers'**
+  String get kilometers;
+
+  /// Unit of time in minutes
+  ///
+  /// In en, this message translates to:
+  /// **'minutes'**
+  String get minutes;
+
+  /// Unit of time in seconds
+  ///
+  /// In en, this message translates to:
+  /// **'seconds'**
+  String get seconds;
+
+  /// Message when locations cannot be fetched
+  ///
+  /// In en, this message translates to:
+  /// **'Error fetching locations'**
+  String get errorFetchingLocations;
+
+  /// Label indicating the user's location
+  ///
+  /// In en, this message translates to:
+  /// **'Your location'**
+  String get yourLocation;
+
+  /// Message when no route is found
+  ///
+  /// In en, this message translates to:
+  /// **'No route found'**
+  String get noRouteFound;
+
+  /// Message when there is a connection error
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error'**
+  String get connectionError;
+
+  /// Message when an error occurs calculating the route
+  ///
+  /// In en, this message translates to:
+  /// **'Route error'**
+  String get routeError;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -661,26 +1065,25 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'es'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return AppLocalizationsEn();
-    case 'es':
-      return AppLocalizationsEs();
+    case 'en': return AppLocalizationsEn();
+    case 'es': return AppLocalizationsEs();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
+    'that was used.'
   );
 }

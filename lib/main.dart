@@ -109,7 +109,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterPage(),
-        '/subscription': (context) => const VerificarCodigoPage(),
+        '/subscription': (context) => const SubscriptionScreen(),
       },
     );
   }

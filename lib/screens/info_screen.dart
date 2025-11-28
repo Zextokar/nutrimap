@@ -16,118 +16,24 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
+  // --- PALETA DE COLORES ---
+  static const Color _primaryDark = Color(0xFF0D1B2A);
+  static const Color _secondaryDark = Color(0xFF1B263B);
+  static const Color _accentGreen = Color(0xFF2D9D78);
+  static const Color _textPrimary = Color(0xFFE0E1DD);
+  static const Color _textSecondary = Color(0xFF9DB2BF);
+
   final PageController _pageController = PageController();
   int _currentPage = 0;
   bool _showLanguageSelection = true;
 
+  // Iconos actualizados para mejor estética
   final List<IconData> _icons = [
-    Icons.help_outline_rounded,
-    Icons.assistant_rounded,
-    Icons.group_rounded,
-    Icons.emoji_events_rounded,
+    Icons.health_and_safety_rounded, // Qué es
+    Icons.monitor_heart_rounded, // Ayuda
+    Icons.groups_3_rounded, // Quiénes somos
+    Icons.verified_rounded, // Beneficios
   ];
-
-  Widget _buildLanguageSelection() {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.indigo.shade800,
-              Colors.blue.shade600,
-              Colors.cyan.shade400,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(40),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 120,
-                  width: 120,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.language_rounded,
-                    size: 60,
-                    color: Colors.white.withOpacity(0.9),
-                  ),
-                ),
-                const SizedBox(height: 40),
-                const Text(
-                  'Choose your language\nElige tu idioma',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white,
-                    height: 1.4,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 50),
-                _buildLanguageButton(
-                  'Español',
-                  '🇪🇸',
-                  () => _selectLanguage(const Locale('es')),
-                ),
-                const SizedBox(height: 16),
-                _buildLanguageButton(
-                  'English',
-                  '🇺🇸',
-                  () => _selectLanguage(const Locale('en')),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLanguageButton(String text, String flag, VoidCallback onTap) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white.withOpacity(0.15),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: Colors.white.withOpacity(0.3), width: 1),
-          ),
-        ),
-        onPressed: onTap,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(flag, style: const TextStyle(fontSize: 24)),
-            const SizedBox(width: 12),
-            Text(
-              text,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   void _selectLanguage(Locale locale) {
     widget.onLocaleChange(locale);
@@ -136,6 +42,154 @@ class _InfoScreenState extends State<InfoScreen> {
     });
   }
 
+  // ---------------- VISTA DE SELECCIÓN DE IDIOMA ----------------
+  Widget _buildLanguageSelection() {
+    return Scaffold(
+      backgroundColor: _primaryDark,
+      body: Stack(
+        children: [
+          // Fondo Decorativo
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _accentGreen.withOpacity(0.15),
+              ),
+            ),
+          ),
+
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Icono Heroico
+                  Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      color: _secondaryDark,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: _accentGreen.withOpacity(0.3)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: _accentGreen.withOpacity(0.2),
+                          blurRadius: 30,
+                          spreadRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.language_rounded,
+                      size: 50,
+                      color: _accentGreen,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+
+                  // Títulos
+                  const Text(
+                    'Bienvenido / Welcome',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: _textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Selecciona tu idioma para continuar\nSelect your language to continue',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: _textSecondary.withOpacity(0.8),
+                      height: 1.5,
+                    ),
+                  ),
+
+                  const SizedBox(height: 60),
+
+                  // Botones de Idioma
+                  _buildLanguageOption(
+                    label: 'Español',
+                    flag: '🇪🇸',
+                    onTap: () => _selectLanguage(const Locale('es')),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildLanguageOption(
+                    label: 'English',
+                    flag: '🇺🇸',
+                    onTap: () => _selectLanguage(const Locale('en')),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLanguageOption({
+    required String label,
+    required String flag,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+          decoration: BoxDecoration(
+            color: _secondaryDark,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: _accentGreen.withOpacity(0.3)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(flag, style: const TextStyle(fontSize: 28)),
+                  const SizedBox(width: 16),
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: _textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: _accentGreen,
+                size: 18,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ---------------- VISTA DEL ONBOARDING ----------------
   @override
   Widget build(BuildContext context) {
     if (_showLanguageSelection) {
@@ -152,201 +206,234 @@ class _InfoScreenState extends State<InfoScreen> {
     ];
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.indigo.shade800,
-              Colors.blue.shade600,
-              Colors.cyan.shade400,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      backgroundColor: _primaryDark,
+      body: Stack(
+        children: [
+          // Fondo Decorativo (Animado o estático)
+          Positioned(
+            bottom: -50,
+            left: -50,
+            child: Container(
+              width: 250,
+              height: 250,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _accentGreen.withOpacity(0.1),
+              ),
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Stack(
-            children: [
-              // Language selector button in top right
-              Positioned(
-                top: 20,
-                right: 20,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: PopupMenuButton<String>(
-                    onSelected: (value) {
-                      if (value == 'es')
-                        widget.onLocaleChange(const Locale('es'));
-                      if (value == 'en')
-                        widget.onLocaleChange(const Locale('en'));
-                    },
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'es',
-                        child: Row(
-                          children: [
-                            Text('🇪🇸'),
-                            SizedBox(width: 8),
-                            Text('Español'),
-                          ],
+
+          SafeArea(
+            child: Column(
+              children: [
+                // Header (Selector de idioma pequeño)
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
                         ),
-                      ),
-                      const PopupMenuItem(
-                        value: 'en',
-                        child: Row(
-                          children: [
-                            Text('🇺🇸'),
-                            SizedBox(width: 8),
-                            Text('English'),
+                        decoration: BoxDecoration(
+                          color: _secondaryDark,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: _textSecondary.withOpacity(0.2),
+                          ),
+                        ),
+                        child: PopupMenuButton<String>(
+                          color: _secondaryDark,
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.language,
+                                color: _textSecondary,
+                                size: 18,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                Localizations.localeOf(
+                                  context,
+                                ).languageCode.toUpperCase(),
+                                style: const TextStyle(
+                                  color: _textPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          onSelected: (value) {
+                            if (value == 'es')
+                              widget.onLocaleChange(const Locale('es'));
+                            if (value == 'en')
+                              widget.onLocaleChange(const Locale('en'));
+                          },
+                          itemBuilder: (context) => [
+                            const PopupMenuItem(
+                              value: 'es',
+                              child: Text(
+                                '🇪🇸 Español',
+                                style: TextStyle(color: _textPrimary),
+                              ),
+                            ),
+                            const PopupMenuItem(
+                              value: 'en',
+                              child: Text(
+                                '🇺🇸 English',
+                                style: TextStyle(color: _textPrimary),
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ],
-                    icon: Icon(
-                      Icons.language_rounded,
-                      color: Colors.white.withOpacity(0.9),
-                    ),
                   ),
                 ),
-              ),
 
-              // Main content
-              PageView.builder(
-                controller: _pageController,
-                itemCount: sections.length,
-                onPageChanged: (index) => setState(() => _currentPage = index),
-                itemBuilder: (context, index) {
-                  final section = sections[index];
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 80, 40, 120),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 140,
-                          width: 140,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
+                // PageView Principal
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: sections.length,
+                    onPageChanged: (index) =>
+                        setState(() => _currentPage = index),
+                    itemBuilder: (context, index) {
+                      final section = sections[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Imagen / Icono de la Slide
+                            Container(
+                              height: 160,
+                              width: 160,
+                              decoration: BoxDecoration(
+                                color: _secondaryDark,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: _accentGreen.withOpacity(0.15),
+                                    blurRadius: 40,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          child: Icon(
-                            _icons[index],
-                            size: 70,
-                            color: Colors.white.withOpacity(0.9),
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                        Text(
-                          section['title']!,
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.white,
-                            letterSpacing: 0.5,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          section['desc']!,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white.withOpacity(0.85),
-                            height: 1.5,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                              child: Icon(
+                                _icons[index],
+                                size: 80,
+                                color: _accentGreen,
+                              ),
+                            ),
+                            const SizedBox(height: 48),
 
-              // Bottom controls
-              Positioned(
-                bottom: 40,
-                left: 40,
-                right: 40,
-                child: Column(
-                  children: [
-                    // Page indicators
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        sections.length,
-                        (index) => AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          margin: const EdgeInsets.symmetric(horizontal: 6),
-                          width: _currentPage == index ? 24 : 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: _currentPage == index
-                                ? Colors.white
-                                : Colors.white.withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
+                            // Título
+                            Text(
+                              section['title']!,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                                color: _textPrimary,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
 
-                    // Next/Finish button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.indigo.shade800,
-                          elevation: 8,
-                          shadowColor: Colors.black.withOpacity(0.3),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                            // Descripción
+                            Text(
+                              section['desc']!,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: _textSecondary,
+                                height: 1.6,
+                              ),
+                            ),
+                          ],
                         ),
-                        onPressed: () {
-                          if (_currentPage < sections.length - 1) {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeInOut,
-                            );
-                          } else {
-                            widget.onFinished();
-                          }
-                        },
-                        child: Text(
-                          _currentPage == sections.length - 1
-                              ? local.loginButton
-                              : local.nextButton,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+
+                // Controles Inferiores (Indicadores y Botón)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
+                  child: Column(
+                    children: [
+                      // Indicadores de Página (Worm effect)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          sections.length,
+                          (index) => AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            width: _currentPage == index ? 24 : 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: _currentPage == index
+                                  ? _accentGreen
+                                  : _secondaryDark,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+
+                      // Botón Siguiente / Empezar
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _accentGreen,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            shadowColor: _accentGreen.withOpacity(0.4),
+                          ),
+                          onPressed: () {
+                            if (_currentPage < sections.length - 1) {
+                              _pageController.nextPage(
+                                duration: const Duration(milliseconds: 400),
+                                curve: Curves.easeInOutCubic,
+                              );
+                            } else {
+                              widget.onFinished();
+                            }
+                          },
+                          child: Text(
+                            _currentPage == sections.length - 1
+                                ? local
+                                      .loginButton // O "Empezar"
+                                : local.nextButton,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

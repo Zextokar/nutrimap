@@ -73,6 +73,7 @@ class _MapScreenState extends State<MapScreen> {
   final HtmlUnescape _unescape = HtmlUnescape();
 
   // Solución al error de PolylinePoints: Se usa la API Key en el constructor
+  // ignore: unused_field
   final PolylinePoints _polylinePoints = PolylinePoints(
     apiKey: googleMapsApiKey,
   );

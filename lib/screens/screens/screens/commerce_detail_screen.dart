@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrimap/services/commerce_service.dart';
 import 'package:nutrimap/widgets/menu_card.dart';
+import 'package:nutrimap/theme/app_theme.dart';
 
 class CommerceDetailScreen extends StatefulWidget {
   final Map<String, dynamic> commerceData;
-
   const CommerceDetailScreen({super.key, required this.commerceData});
 
   @override
@@ -13,27 +14,145 @@ class CommerceDetailScreen extends StatefulWidget {
 
 class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
   final CommerceService _commerceService = CommerceService();
-
-  // Colores
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentGreen = Color(0xFF2D9D78);
-  static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _textSecondary = Color(0xFF9DB2BF);
-
   late Future<List<Map<String, dynamic>>> _futureMenus;
+  late double _currentDisplayRating;
+  static const Color _gold = Color(0xFFFFD700);
 
   @override
   void initState() {
     super.initState();
-    final commerceId = widget.commerceData['id'];
-
-    if (commerceId != null) {
-      _futureMenus = _commerceService.getMenusByCommerce(commerceId);
+    _currentDisplayRating = (widget.commerceData['rating'] ?? 0.0).toDouble();
+    if (widget.commerceData['id'] != null) {
+      _futureMenus = _commerceService.getMenusByCommerce(
+        widget.commerceData['id'],
+      );
     } else {
-      // Si por alguna razón no llega ID, retornamos lista vacía
       _futureMenus = Future.value([]);
     }
+  }
+
+  void _showRatingDialog(BuildContext context, String commerceId) {
+    int selectedStars = 5;
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              backgroundColor: AppTheme.secondaryDark,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(28),
+              ),
+              contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 10),
+              title: const Text(
+                "Calificar Experiencia",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "¿Qué tal estuvo tu visita?",
+                    style: TextStyle(color: AppTheme.textSecondary),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return GestureDetector(
+                        onTap: () =>
+                            setStateDialog(() => selectedStars = index + 1),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: Icon(
+                            index < selectedStars
+                                ? Icons.star_rounded
+                                : Icons.star_outline_rounded,
+                            color: _gold,
+                            size: 40,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    selectedStars == 5
+                        ? "¡Excelente!"
+                        : selectedStars > 3
+                        ? "Muy bien"
+                        : "Podría mejorar",
+                    style: TextStyle(
+                      color: _gold,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              actionsAlignment: MainAxisAlignment.spaceEvenly,
+              actionsPadding: const EdgeInsets.only(
+                bottom: 20,
+                left: 20,
+                right: 20,
+                top: 10,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text(
+                    "Cancelar",
+                    style: TextStyle(color: AppTheme.textSecondary),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.accentGreen,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
+                  ),
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user == null) return;
+                    Navigator.pop(context);
+                    final success = await _commerceService.rateCommerce(
+                      commerceId: commerceId,
+                      userUid: user.uid,
+                      rating: selectedStars.toDouble(),
+                    );
+                    if (mounted && success) {
+                      setState(
+                        () => _currentDisplayRating = selectedStars.toDouble(),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("¡Gracias por tu opinión!"),
+                          backgroundColor: AppTheme.accentGreen,
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text(
+                    "Enviar",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -41,134 +160,110 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
     final data = widget.commerceData;
 
     return Scaffold(
-      backgroundColor: _primaryDark,
+      backgroundColor: AppTheme.primaryDark,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
-          // 1. AppBar con efecto elástico
+          // --- APP BAR TIPO BENEFICIOS ---
           SliverAppBar(
-            expandedHeight: 200.0,
+            expandedHeight: 280,
             floating: false,
             pinned: true,
-            backgroundColor: _primaryDark,
-            leading: Container(
-              margin: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: Colors.black54,
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
+            backgroundColor: AppTheme.primaryDark,
+            centerTitle: true,
+            title: Text(
+              data['nombre'] ?? 'Comercio',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                shadows: [Shadow(color: Colors.black45, blurRadius: 8)],
               ),
             ),
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                data['nombre'] ?? 'Comercio',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  shadows: [Shadow(color: Colors.black, blurRadius: 10)],
-                ),
-              ),
-              background: Container(
-                color: _secondaryDark,
-                child: Center(
-                  child: Icon(
-                    Icons.storefront,
-                    size: 80,
-                    color: _textSecondary.withOpacity(0.3),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // 2. Información del Comercio
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              background: Stack(
+                fit: StackFit.expand,
                 children: [
-                  // Rating y Etiqueta
-                  Row(
-                    children: [
-                      if (data['rating'] != null) ...[
-                        const Icon(Icons.star, color: Colors.amber, size: 20),
-                        const SizedBox(width: 4),
-                        Text(
-                          "${data['rating']}",
-                          style: const TextStyle(
-                            color: _textPrimary,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                  Container(color: AppTheme.secondaryDark),
+                  Center(
+                    child: Icon(
+                      Icons.storefront_rounded,
+                      size: 100,
+                      color: Colors.white.withOpacity(0.05),
+                    ),
+                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          AppTheme.primaryDark.withOpacity(0.3),
+                          AppTheme.primaryDark,
+                        ],
+                        stops: const [0.5, 0.8, 1.0],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 30,
+                    left: 24,
+                    right: 24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppTheme.accentGreen,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            "RESTAURANTE",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(height: 8),
+                        Text(
+                          data['nombre'] ?? 'Comercio',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            height: 1.1,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on_rounded,
+                              color: Colors.white70,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                data['direccion'] ?? 'Ubicación no disponible',
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 14,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _accentGreen.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Text(
-                          "Aliado Nutrimap",
-                          style: TextStyle(color: _accentGreen, fontSize: 12),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // Dirección
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.location_on_outlined,
-                        color: _textSecondary,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          data['direccion'] ?? 'Sin dirección',
-                          style: const TextStyle(color: _textSecondary),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // Descripción
-                  const Text(
-                    "Sobre este lugar",
-                    style: TextStyle(
-                      color: _textPrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    data['descripcion'] ?? 'Sin descripción disponible.',
-                    style: TextStyle(
-                      color: _textPrimary.withOpacity(0.8),
-                      height: 1.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-                  const Divider(color: _textSecondary),
-                  const SizedBox(height: 16),
-
-                  const Text(
-                    "Menú Disponible",
-                    style: TextStyle(
-                      color: _textPrimary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -176,7 +271,134 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
             ),
           ),
 
-          // 3. Lista de Menús
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Tarjeta Rating tipo “Beneficios”
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppTheme.secondaryDark,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _gold.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.star_rounded,
+                                color: _gold,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                _currentDisplayRating.toStringAsFixed(1),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => data['id'] != null
+                                ? _showRatingDialog(context, data['id'])
+                                : null,
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryDark,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: AppTheme.accentGreen.withOpacity(0.3),
+                                ),
+                              ),
+                              child: const Text(
+                                "Dejar Calificación",
+                                style: TextStyle(
+                                  color: AppTheme.accentGreen,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  const Text(
+                    "Sobre el lugar",
+                    style: TextStyle(
+                      color: AppTheme.textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: AppTheme.secondaryDark,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Text(
+                      data['descripcion'] ?? 'Sin descripción disponible.',
+                      style: const TextStyle(
+                        color: AppTheme.textPrimary,
+                        fontSize: 15,
+                        height: 1.6,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  const Text(
+                    "MENÚ DISPONIBLE",
+                    style: TextStyle(
+                      color: AppTheme.textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              ),
+            ),
+          ),
+
           FutureBuilder<List<Map<String, dynamic>>>(
             future: _futureMenus,
             builder: (context, snapshot) {
@@ -185,51 +407,50 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(40),
                     child: Center(
-                      child: CircularProgressIndicator(color: _accentGreen),
-                    ),
-                  ),
-                );
-              }
-
-              if (snapshot.hasError) {
-                return const SliverToBoxAdapter(
-                  child: Center(
-                    child: Text(
-                      "Error cargando menú",
-                      style: TextStyle(color: Colors.red),
+                      child: CircularProgressIndicator(
+                        color: AppTheme.accentGreen,
+                      ),
                     ),
                   ),
                 );
               }
 
               final menus = snapshot.data ?? [];
-
-              // --- LÓGICA DE LISTA VACÍA ---
               if (menus.isEmpty) {
-                return const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                return SliverToBoxAdapter(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 10,
+                    ),
+                    padding: const EdgeInsets.all(40),
+                    decoration: BoxDecoration(
+                      color: AppTheme.secondaryDark.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Colors.white.withOpacity(0.05)),
+                    ),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.no_meals_rounded,
                           size: 60,
-                          color: _textSecondary,
+                          color: AppTheme.textSecondary.withOpacity(0.3),
                         ),
-                        SizedBox(height: 16),
-                        Text(
-                          "No hay menús disponibles",
+                        const SizedBox(height: 16),
+                        const Text(
+                          "No hay menú disponible",
                           style: TextStyle(
-                            color: _textPrimary,
-                            fontSize: 16,
+                            color: AppTheme.textPrimary,
                             fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 8),
-                        Text(
+                        const SizedBox(height: 8),
+                        const Text(
                           "Este comercio aún no ha cargado su carta digital.",
-                          style: TextStyle(color: _textSecondary, fontSize: 14),
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: AppTheme.textSecondary),
                         ),
                       ],
                     ),
@@ -237,22 +458,22 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                 );
               }
 
-              // --- LISTA DE MENÚS ---
-              return SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+              return SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: MenuCard(menuData: menus[index]),
                     ),
-                    child: MenuCard(menuData: menus[index]),
-                  );
-                }, childCount: menus.length),
+                    childCount: menus.length,
+                  ),
+                ),
               );
             },
           ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 40)),
+          const SliverToBoxAdapter(child: SizedBox(height: 50)),
         ],
       ),
     );

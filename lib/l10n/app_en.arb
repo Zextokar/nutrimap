@@ -1,380 +1,670 @@
 {
     "@@locale": "en",
-    "sectionWhatIs": "What Is NutriMap?",
+    "sectionWhatIs": "What is NutriMap?",
     "@sectionWhatIs": {
-        "description": "Title for the 'What is NutriMap' section on onboarding"
+        "description": "Title of the 'What is NutriMap' section"
     },
     "sectionWhatIsDesc": "NutriMap helps you track your meals, nutrition, and healthy habits.",
     "@sectionWhatIsDesc": {
-        "description": "Description for the 'What is NutriMap' section"
+        "description": "Description of the 'What is NutriMap' section"
     },
-    "sectionHelps": "How It Helps You?",
+    "sectionHelps": "What will it help you do?",
     "@sectionHelps": {
-        "description": "Title for the 'How It Helps You' section"
+        "description": "Title of the 'What will it help you do' section"
     },
     "sectionHelpsDesc": "Plan meals, count calories, monitor nutrients, and improve your diet.",
     "@sectionHelpsDesc": {
-        "description": "Description for the 'How It Helps You' section"
+        "description": "Description of the 'What will it help you do' section"
     },
-    "sectionWhoWeAre": "Who We Are?",
+    "sectionWhoWeAre": "Who are we?",
     "@sectionWhoWeAre": {
-        "description": "Title for the 'Who We Are' section"
+        "description": "Title of the 'Who are we' section"
     },
     "sectionWhoWeAreDesc": "We are a team passionate about nutrition and technology.",
     "@sectionWhoWeAreDesc": {
-        "description": "Description for the 'Who We Are' section"
+        "description": "Description of the 'Who are we' section"
     },
     "sectionBenefits": "Benefits",
     "@sectionBenefits": {
-        "description": "Title for the 'Benefits' section"
+        "description": "Title of the 'Benefits' section"
     },
-    "sectionBenefitsDesc": "Stay healthy, eat better, and reach your goals easily.",
+    "sectionBenefitsDesc": "Stay healthy, eat better, and achieve your goals easily.",
     "@sectionBenefitsDesc": {
-        "description": "Description for the 'Benefits' section"
+        "description": "Description of the 'Benefits' section"
     },
-    "loginTitle": "Log In",
+    "loginTitle": "Login",
     "@loginTitle": {
-        "description": "Title for the login screen"
+        "description": "Login screen title"
     },
     "email": "Email",
     "@email": {
-        "description": "Label for the email input field on the login screen"
+        "description": "Email field label in login"
     },
     "password": "Password",
     "@password": {
-        "description": "Label for the password input field on the login screen"
+        "description": "Password field label in login"
     },
-    "loginButton": "Log In",
+    "loginButton": "Sign In",
     "@loginButton": {
-        "description": "Text for the login button"
+        "description": "Login button text"
     },
     "nextButton": "Next",
     "@nextButton": {
-        "description": "Text for the next button in multi-step flows"
+        "description": "Next button text in onboarding"
     },
     "home": "Home",
     "@home": {
-        "description": "Label for the Home tab in the BottomNavigationBar"
+        "description": "Label for the Home tab in BottomNavigationBar"
     },
     "map": "Map",
     "@map": {
-        "description": "Label for the Map tab in the BottomNavigationBar"
+        "description": "Label for the Map tab in BottomNavigationBar"
     },
     "benefits": "Benefits",
     "@benefits": {
-        "description": "Label for the Benefits tab in the BottomNavigationBar"
+        "description": "Label for the Benefits tab in BottomNavigationBar"
     },
-    "recipes": "Commerces",
+    "recipes": "Businesses",
     "@recipes": {
-        "description": "Label for the Commerce tab in the BottomNavigationBar"
+        "description": "Label for the Recipes tab in BottomNavigationBar"
     },
     "settings": "Settings",
     "@settings": {
-        "description": "Label for the Settings tab in the BottomNavigationBar"
+        "description": "Label for the Settings tab in BottomNavigationBar"
     },
-    "welcomeBack": "Welcome Back",
+    "welcomeBack": "Welcome back",
     "@welcomeBack": {
-        "description": "Welcome text below the title on the login screen"
+        "description": "Welcome text below title on login screen"
     },
     "emailRequired": "Please enter your email.",
     "@emailRequired": {
-        "description": "Validation message when the email field is empty"
+        "description": "Validation message when email is empty"
     },
-    "invalidEmail": "Please enter a valid email address.",
+    "invalidEmail": "Please enter a valid email.",
     "@invalidEmail": {
-        "description": "Validation message when the email format is invalid"
+        "description": "Validation message when email format is invalid"
     },
     "passwordRequired": "Please enter your password.",
     "@passwordRequired": {
-        "description": "Validation message when the password field is empty"
+        "description": "Validation message when password is empty"
     },
-    "passwordTooShort": "Password must be at least 6 characters long.",
+    "passwordTooShort": "Password must be at least 6 characters.",
     "@passwordTooShort": {
-        "description": "Validation message when the password is shorter than 6 characters"
+        "description": "Validation message for short password"
     },
-    "forgotPassword": "Forgot Password?",
+    "forgotPassword": "Forgot your password?",
     "@forgotPassword": {
-        "description": "Link/button to recover a forgotten password"
+        "description": "Password recovery button"
     },
     "orContinueWith": "Or continue with",
     "@orContinueWith": {
-        "description": "Separator text for social media login options"
+        "description": "Separator text for social login"
     },
     "noAccount": "Don't have an account?",
     "@noAccount": {
-        "description": "Text prompting users to sign up"
+        "description": "Text asking if user has an account"
     },
     "register": "Sign Up",
     "@register": {
-        "description": "Text for the registration button/link"
+        "description": "Sign up button/link"
     },
-    "loginError": "Login Failed",
+    "loginError": "Error signing in.",
     "@loginError": {
-        "description": "Generic error message when login fails"
+        "description": "Generic sign in error message"
     },
     "userNotFound": "User not found.",
     "@userNotFound": {
-        "description": "Error message when the user does not exist"
+        "description": "Message when user doesn't exist"
     },
-    "wrongPassword": "Incorrect password.",
+    "wrongPassword": "Wrong password.",
     "@wrongPassword": {
-        "description": "Error message when the password is incorrect"
+        "description": "Message when password is incorrect"
     },
     "invalidEmailError": "Invalid email format.",
     "@invalidEmailError": {
-        "description": "Error message when the entered email is not valid"
+        "description": "Message when email is invalid"
     },
-    "enterEmail": "Enter your email",
+    "enterEmail": "Enter your email.",
     "@enterEmail": {
-        "description": "Placeholder text for an email field"
+        "description": "Enter your email"
     },
     "enterPassword": "Please enter your password.",
     "@enterPassword": {
-        "description": "Validation message when the password field is empty"
+        "description": "Message when password is missing"
     },
-    "shortPassword": "Password must be at least 6 characters long.",
+    "shortPassword": "Password must be at least 6 characters.",
     "@shortPassword": {
-        "description": "Validation message when the password is too short"
+        "description": "Validation message for short password"
     },
     "settingsUser": "Settings for {email}",
     "@settingsUser": {
-        "description": "Text showing which user's settings are being displayed",
+        "description": "Settings text for user",
         "placeholders": {
             "email": {}
         }
     },
-    "logout": "Log Out",
+    "logout": "Logout",
     "@logout": {
-        "description": "Button text to log out the current user"
+        "description": "Logout button"
     },
     "user": "User",
     "@user": {
-        "description": "Default placeholder for a user's name or email"
+        "description": "Default name or email"
     },
     "benefitsUser": "Benefits available for {email}",
     "@benefitsUser": {
-        "description": "Text showing available benefits for the current user",
+        "description": "Text showing user benefits",
         "placeholders": {
             "email": {}
         }
     },
-    "registerTitle": "Create Account",
+    "registerTitle": "Sign Up",
     "@registerTitle": {
-        "description": "Title of the registration screen"
+        "description": "Sign up title"
     },
-    "registerStep1Title": "Personal Information",
+    "registerStep1Title": "Personal Data",
     "@registerStep1Title": {
-        "description": "Title for Step 1 of registration"
+        "description": "Step 1 title"
     },
-    "registerStep2Title": "Account Credentials",
+    "registerStep2Title": "Email and Password",
     "@registerStep2Title": {
-        "description": "Title for Step 2 of registration (Email and Password)"
+        "description": "Step 2 title"
     },
     "registerStep3Title": "Institution and Preferences",
     "@registerStep3Title": {
-        "description": "Title for Step 3 of registration"
+        "description": "Step 3 title"
     },
     "summaryTitle": "Summary",
     "@summaryTitle": {
-        "description": "Title of the summary screen before creating an account"
+        "description": "Summary screen title"
     },
     "firstName": "First Name",
     "@firstName": {
-        "description": "Label for the first name field"
+        "description": "First name field"
     },
     "lastName": "Last Name",
     "@lastName": {
-        "description": "Label for the last name field"
+        "description": "Last name field"
     },
     "institution": "Institution",
     "@institution": {
-        "description": "Label for selecting the user's institution"
+        "description": "Institution field"
     },
     "dietas": "Preferred Diets",
     "@dietas": {
-        "description": "Label for selecting preferred diets"
+        "description": "Label for selecting diets"
     },
     "chooseDiet": "Choose your diets",
     "@chooseDiet": {
-        "description": "Helper text for the diet selection"
+        "description": "Help text for diets"
     },
-    "enterName": "Please enter your first name.",
+    "enterName": "Please enter your name.",
     "@enterName": {
-        "description": "Validation message when the first name is empty"
+        "description": "Name empty validation"
     },
     "enterLastName": "Please enter your last name.",
     "@enterLastName": {
-        "description": "Validation message when the last name is empty"
+        "description": "Last name empty validation"
     },
     "back": "Back",
     "@back": {
-        "description": "Button to go to the previous step"
+        "description": "Back button"
     },
     "next": "Next",
     "@next": {
-        "description": "Button to go to the next step"
+        "description": "Next button"
     },
     "confirmButton": "Confirm",
     "@confirmButton": {
-        "description": "Button to confirm and create the account"
+        "description": "Confirm registration button"
     },
-    "registerError": "Could not register user.",
+    "registerError": "Error registering user.",
     "@registerError": {
-        "description": "Error message when user registration fails"
+        "description": "General registration error"
     },
-    "summaryUser": "Review your information: {email}",
+    "summaryUser": "Review your data: {email}",
     "@summaryUser": {
-        "description": "Shows a summary of user information before creating the account",
+        "description": "User data summary",
         "placeholders": {
             "email": {}
         }
     },
     "selectInstitution": "Select your institution",
     "@selectInstitution": {
-        "description": "Label prompting the user to select their institution"
+        "description": "Institution help text"
     },
-    "personalData": "Personal Information",
+    "personalData": "Personal Data",
     "@personalData": {
-        "description": "Title of the personal information step"
-    },
-    "diets": "Preferred Diets",
-    "@diets": {
-        "description": "Step to select preferred diets"
-    },
-    "confirmRegistration": "Confirm Registration",
-    "@confirmRegistration": {
-        "description": "Title of the confirmation dialog before creating the account"
-    },
-    "cancel": "Cancel",
-    "@cancel": {
-        "description": "Button to cancel the confirmation"
-    },
-    "createAccount": "Create Account",
-    "@createAccount": {
-        "description": "Button to create the account after confirmation"
-    },
-    "registrationError": "Registration failed.",
-    "@registrationError": {
-        "description": "General error message when account creation fails"
-    },
-    "emailInUse": "This email is already in use.",
-    "@emailInUse": {
-        "description": "Message shown when the email is already registered"
+        "description": "Personal data step"
     },
     "enterFirstName": "Please enter your first name.",
     "@enterFirstName": {
-        "description": "Validation message for the first name input"
+        "description": "First name empty validation"
     },
-    "phone": "Phone Number",
-    "@phone": {
-        "description": "Label for the user's phone number"
+    "diets": "Diets",
+    "@diets": {
+        "description": "Diet selection step"
     },
-    "otherSettings": "Other Settings",
+    "confirmRegistration": "Confirm your registration",
+    "@confirmRegistration": {
+        "description": "Final confirmation"
+    },
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "Cancel button"
+    },
+    "createAccount": "Create Account",
+    "@createAccount": {
+        "description": "Final registration button"
+    },
+    "registrationError": "Error registering user.",
+    "@registrationError": {
+        "description": "Final registration error"
+    },
+    "emailInUse": "Email already in use.",
+    "@emailInUse": {
+        "description": "Duplicate email"
+    },
+    "enterPhone": "Please enter your phone number.",
+    "@enterPhone": {
+        "description": "Phone validation"
+    },
+    "otherSettings": "Other settings",
     "@otherSettings": {
-        "description": "Title for a section with other settings"
+        "description": "Other settings"
     },
     "profile": "Profile",
     "@profile": {
-        "description": "Title for the user profile screen"
+        "description": "User profile title"
     },
     "surname": "Last Name",
     "@surname": {
-        "description": "User's last name"
+        "description": "User last name"
     },
-    "rut": "National ID",
+    "phone": "Phone",
+    "@phone": {
+        "description": "Phone number"
+    },
+    "rut": "RUT",
     "@rut": {
-        "description": "User's national identification number"
+        "description": "User RUT"
     },
     "region": "Region",
     "@region": {
-        "description": "User's region or state"
+        "description": "User region"
     },
-    "commune": "City / Municipality",
+    "commune": "Commune",
     "@commune": {
-        "description": "User's city, town, or local administrative district"
+        "description": "User commune"
     },
-    "diet": "Diet Type",
+    "diet": "Diet type",
     "@diet": {
-        "description": "User's selected diet type"
+        "description": "User diet type"
     },
     "userProfile": "User Profile",
     "@userProfile": {
-        "description": "Title of the user profile screen"
+        "description": "Profile screen"
     },
     "homeTitle": "Home",
     "@homeTitle": {
-        "description": "Title of the main/home screen"
+        "description": "Main screen title"
     },
-    "commerce": "Commerce",
+    "commerce": "Business",
     "@commerce": {
-        "description": "Title of the main Commerce"
+        "description": "Business screen"
     },
     "userDisabled": "User disabled",
     "@userDisabled": {
-        "description": "Error message when the user is disabled in Firebase"
+        "description": "User disabled in Firebase"
     },
     "tooManyRequests": "Too many attempts, try again later",
     "@tooManyRequests": {
-        "description": "Error message when the login attempt limit is exceeded in Firebase"
+        "description": "Attempt limit exceeded"
     },
     "networkError": "Network error, check your connection",
     "@networkError": {
-        "description": "Error message when the network connection fails during login"
+        "description": "Network error"
     },
-    "forgotPasswordTitle": "Forgot Password",
+    "forgotPasswordTitle": "Forgot your password",
     "@forgotPasswordTitle": {
-        "description": "Title of the password recovery screen"
+        "description": "Password recovery title"
     },
-    "forgotPasswordDescription": "Enter your email and we will send you a link to reset your password",
+    "forgotPasswordDescription": "Enter your email and we'll send you a link to reset your password",
     "@forgotPasswordDescription": {
-        "description": "Explanatory message on the password recovery screen"
+        "description": "Recovery description"
     },
-    "sendResetLink": "Send Reset Link",
+    "sendResetLink": "Send recovery link",
     "@sendResetLink": {
-        "description": "Button text to send password reset link"
+        "description": "Send recovery button"
     },
-    "resetEmailSent": "Password reset email has been sent",
+    "resetEmailSent": "A password reset email has been sent",
     "@resetEmailSent": {
-        "description": "Confirmation message when the reset email has been sent"
+        "description": "Email sent message"
     },
-    "resetEmailFailed": "Failed to send reset email",
+    "resetEmailFailed": "Error sending recovery email",
     "@resetEmailFailed": {
-        "description": "Error message when the reset email could not be sent"
+        "description": "Error sending email"
     },
-    "registerDescription": "Create your account by entering your details",
+    "registerDescription": "Create your account by entering your data",
     "@registerDescription": {
-        "description": "Explanatory message on the registration screen"
+        "description": "Informative registration text"
     },
     "name": "Name",
     "@name": {
-        "description": "Label for the user's name input field"
+        "description": "Name field label"
     },
-    "registerButton": "Register",
+    "registerButton": "Sign Up",
     "@registerButton": {
-        "description": "Button text to complete registration"
+        "description": "Sign up button"
     },
-    "logoutConfirmationTitle": "Log out?",
+    "logoutConfirmationTitle": "Logout?",
     "@logoutConfirmationTitle": {
-        "description": "Title of the confirmation dialog before logging out"
+        "description": "Logout dialog title"
     },
-    "logoutConfirmationMessage": "Your session will be closed in the app.",
+    "logoutConfirmationMessage": "You will be logged out of the application.",
     "@logoutConfirmationMessage": {
-        "description": "Dialog message indicating that the session will be logged out"
+        "description": "Logout message"
     },
     "logoutError": "Error logging out",
     "@logoutError": {
-        "description": "Message shown when an error occurs while trying to log out"
+        "description": "Logout error"
     },
-    "resetPasswordError": "Error sending reset email.",
+    "resetPasswordError": "Error sending recovery email.",
     "@resetPasswordError": {
-        "description": "Message shown when an error occurs while sending the reset email"
+        "description": "Error sending email"
     },
-    "sendResetLinkButton": "Send link",
+    "sendResetLinkButton": "Send Link",
     "@sendResetLinkButton": {
-        "description": "Text of the button that sends the password reset link"
+        "description": "Send link button"
     },
     "backToLogin": "Back to Login",
     "@backToLogin": {
-        "description": "Text of the button that returns to the login screen"
+        "description": "Back to login"
+    },
+    "settingsTitle": "Settings",
+    "@settingsTitle": {
+        "description": "Settings screen title"
+    },
+    "sectionAccount": "ACCOUNT",
+    "@sectionAccount": {
+        "description": "Account section in settings"
+    },
+    "sectionPreferences": "PREFERENCES",
+    "@sectionPreferences": {
+        "description": "Preferences section"
+    },
+    "sectionOthers": "OTHERS",
+    "@sectionOthers": {
+        "description": "Others section"
+    },
+    "profileSubtitle": "View and edit your profile",
+    "@profileSubtitle": {
+        "description": "Profile subtitle"
+    },
+    "security": "Security",
+    "@security": {
+        "description": "Security option"
+    },
+    "changePassword": "Change Password",
+    "@changePassword": {
+        "description": "Change password option"
+    },
+    "notifications": "Notifications",
+    "@notifications": {
+        "description": "Notifications option"
+    },
+    "notificationsOn": "Enabled",
+    "@notificationsOn": {
+        "description": "Notifications enabled"
+    },
+    "notificationsOff": "Disabled",
+    "@notificationsOff": {
+        "description": "Notifications disabled"
+    },
+    "language": "Language",
+    "@language": {
+        "description": "Language option"
+    },
+    "premium": "Nutrimap Premium",
+    "@premium": {
+        "description": "Premium option"
+    },
+    "about": "About",
+    "@about": {
+        "description": "About option"
+    },
+    "terms": "Terms and Conditions",
+    "@terms": {
+        "description": "Terms and conditions option"
+    },
+    "settingsAppearance": "Appearance",
+    "@settingsAppearance": {
+        "description": "Appearance section within Settings"
+    },
+    "darkMode": "Dark mode",
+    "@darkMode": {
+        "description": "Option to enable or disable dark mode"
+    },
+    "darkModeDescription": "Enable or disable the app's dark mode.",
+    "@darkModeDescription": {
+        "description": "Dark mode description"
+    },
+    "appTheme": "App theme",
+    "@appTheme": {
+        "description": "Title for selecting theme"
+    },
+    "themeSystem": "System default",
+    "@themeSystem": {
+        "description": "System-based theme"
+    },
+    "themeLight": "Light",
+    "@themeLight": {
+        "description": "Light theme"
+    },
+    "themeDark": "Dark",
+    "@themeDark": {
+        "description": "Dark theme"
+    },
+    "premiumDescription": "Access additional features with Nutrimap Premium.",
+    "@premiumDescription": {
+        "description": "Description for Premium option"
+    },
+    "aboutDescription": "Information about the app and team.",
+    "@aboutDescription": {
+        "description": "About section description"
+    },
+    "termsDescription": "Read the terms and conditions of use.",
+    "@termsDescription": {
+        "description": "Terms and conditions section description"
+    },
+    "spanish": "Spanish",
+    "@spanish": {
+        "description": "Text for Spanish language"
+    },
+    "english": "English",
+    "@english": {
+        "description": "Text for English language"
+    },
+    "logoutBody": "Are you sure you want to logout?",
+    "@logoutBody": {
+        "description": "Logout dialog body message"
+    },
+    "editTitle": "Edit {field}",
+    "@editTitle": {
+        "description": "Title for editing",
+        "placeholders": {
+            "field": {}
+        }
+    },
+    "save": "Save",
+    "@save": {
+        "description": "Save button"
+    },
+    "phoneHint": "9 1234 5678",
+    "@phoneHint": {
+        "description": "Phone hint"
+    },
+    "personalInfo": "PERSONAL INFORMATION",
+    "@personalInfo": {
+        "description": "Personal information section"
+    },
+    "location": "LOCATION",
+    "@location": {
+        "description": "Location section"
+    },
+    "preferences": "PREFERENCES",
+    "@preferences": {
+        "description": "Preferences section"
+    },
+    "noOptions": "No options available",
+    "@noOptions": {
+        "description": "No options message"
+    },
+    "selectFirstRegion": "You must first select a Region.",
+    "@selectFirstRegion": {
+        "description": "Missing region selection message"
+    },
+    "selectTitle": "Select {field}",
+    "@selectTitle": {
+        "description": "Select title",
+        "placeholders": {
+            "field": {}
+        }
+    },
+    "profileUpdated": "Profile updated",
+    "@profileUpdated": {
+        "description": "Profile updated message"
+    },
+    "errorOccurred": "Error: {error}",
+    "@errorOccurred": {
+        "description": "Generic error message",
+        "placeholders": {
+            "error": {}
+        }
+    },
+    "loading": "Loading...",
+    "@loading": {
+        "description": "Loading message"
+    },
+    "explore": "Explore",
+    "@explore": {
+        "description": "Explore button or text"
+    },
+    "navigating": "Navigating",
+    "@navigating": {
+        "description": "Navigation state"
+    },
+    "selectPoint": "Select a point",
+    "@selectPoint": {
+        "description": "Instruction to select point on map"
+    },
+    "startTrip": "START TRIP",
+    "@startTrip": {
+        "description": "Button to start trip"
+    },
+    "walking": "Walking",
+    "@walking": {
+        "description": "Walking transport mode"
+    },
+    "bicycling": "Bike",
+    "@bicycling": {
+        "description": "Bicycle transport mode"
+    },
+    "driving": "Car",
+    "@driving": {
+        "description": "Car transport mode"
+    },
+    "waitingGps": "Waiting for GPS signal...",
+    "@waitingGps": {
+        "description": "Waiting for GPS message"
+    },
+    "gpsOffline": "GPS Offline",
+    "@gpsOffline": {
+        "description": "GPS offline status"
+    },
+    "online": "Online",
+    "@online": {
+        "description": "Online status"
+    },
+    "arrived": "You have arrived!",
+    "@arrived": {
+        "description": "Arrival at destination message"
+    },
+    "distanceToTurn": "{distance} to turn",
+    "@distanceToTurn": {
+        "description": "Distance to next turn",
+        "placeholders": {
+            "distance": {}
+        }
+    },
+    "durationRemaining": "{duration} remaining",
+    "@durationRemaining": {
+        "description": "Remaining travel time",
+        "placeholders": {
+            "duration": {}
+        }
+    },
+    "arrivalTime": "Arrival: {time}",
+    "@arrivalTime": {
+        "description": "Estimated arrival time",
+        "placeholders": {
+            "time": {}
+        }
+    },
+    "distance": "Distance",
+    "@distance": {
+        "description": "Label for distance"
+    },
+    "duration": "Duration",
+    "@duration": {
+        "description": "Label for duration"
+    },
+    "arrival": "Arrival",
+    "@arrival": {
+        "description": "Label for estimated arrival time"
+    },
+    "turn": "Turn",
+    "@turn": {
+        "description": "Instruction for navigation turn"
+    },
+    "nextTurn": "Next turn",
+    "@nextTurn": {
+        "description": "Indicates the next turn on the map"
+    },
+    "meters": "meters",
+    "@meters": {
+        "description": "Unit of distance in meters"
+    },
+    "kilometers": "kilometers",
+    "@kilometers": {
+        "description": "Unit of distance in kilometers"
+    },
+    "minutes": "minutes",
+    "@minutes": {
+        "description": "Unit of time in minutes"
+    },
+    "seconds": "seconds",
+    "@seconds": {
+        "description": "Unit of time in seconds"
+    },
+    "errorFetchingLocations": "Error fetching locations",
+    "@errorFetchingLocations": {
+        "description": "Message when locations cannot be fetched"
+    },
+    "yourLocation": "Your location",
+    "@yourLocation": {
+        "description": "Label indicating the user's location"
+    },
+    "noRouteFound": "No route found",
+    "@noRouteFound": {
+        "description": "Message when no route is found"
+    },
+    "connectionError": "Connection error",
+    "@connectionError": {
+        "description": "Message when there is a connection error"
+    },
+    "routeError": "Route error",
+    "@routeError": {
+        "description": "Message when an error occurs calculating the route"
     }
 }
