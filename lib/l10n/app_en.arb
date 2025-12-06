@@ -666,5 +666,37 @@
     "routeError": "Route error",
     "@routeError": {
         "description": "Message when an error occurs calculating the route"
+    },
+    "emailNotFound": "Email not found",
+    "@emailNotFound": {
+        "description": "Message when an error occurs while finding the email"
+    },
+    "resetPasswordEmailSent": "Could not send recovery email",
+    "@resetPasswordEmailSent": {
+        "description": "Message when an error occurs while sending the recovery email"
+    },
+    "passwordResetSent": "Could not send recovery email",
+    "@passwordResetSent": {
+        "description": "Message when an error occurs while sending the recovery email"
+    },
+    "error": "No se pudo enviar el correo de recuperación",
+    "@error": {
+        "description": "Mensaje cuando ocurre un error al enviar el correo de recuperación"
+    },
+    "unknownError": "An unknown error occurred",
+    "@unknownError": {
+        "description": "Message for unexpected errors"
+    },
+    "resetPassword": "Reset Password",
+    "@resetPassword": {
+        "description": "Title for password reset dialog"
+    },
+    "resetPasswordBody": "We will send a password reset link to",
+    "@resetPasswordBody": {
+        "description": "Body text for password reset confirmation"
+    },
+    "confirm": "Confirm",
+    "@confirm": {
+        "description": "Confirm button text"
     }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'package:nutrimap/screens/screens/screens/maps_free.dart';
+import 'package:provider/provider.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
 import 'package:nutrimap/providers/locale_provider.dart';
 import 'package:nutrimap/screens/screens/profile_screen.dart';
 import 'package:nutrimap/screens/screens/screens/terms_condi.dart';
-import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   final User user;
@@ -16,7 +18,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // Tema
   static const Color _primaryDark = Color(0xFF0D1B2A);
   static const Color _secondaryDark = Color(0xFF1B263B);
   static const Color _accentGreen = Color(0xFF2D9D78);
@@ -25,7 +26,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   static const Color _errorRed = Color(0xFFEF476F);
 
   bool _notificationsEnabled = true;
-  String? _userRut; // Para almacenar el RUT del usuario
+  String? _userRut;
+
+  int _secretTapCount = 0;
+  DateTime? _lastTapTime;
 
   @override
   void initState() {
@@ -33,9 +37,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _loadUserData();
   }
 
-  // --------------------------
-  // Carga de preferencias y RUT
-  // --------------------------
   Future<void> _loadUserData() async {
     try {
       final query = await FirebaseFirestore.instance
@@ -48,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         final data = query.docs.first.data();
         setState(() {
           _notificationsEnabled = data['recibir_notificaciones'] ?? true;
-          _userRut = query.docs.first.id; // ID es el RUT
+          _userRut = query.docs.first.id;
         });
       }
     } catch (e) {
@@ -56,13 +57,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  // --------------------------
-  // Toggle notificaciones
-  // --------------------------
+  void _handleSecretAccess() {
+    final now = DateTime.now();
+
+    if (_lastTapTime != null &&
+        now.difference(_lastTapTime!) > const Duration(seconds: 1)) {
+      _secretTapCount = 0;
+    }
+
+    setState(() {
+      _lastTapTime = now;
+      _secretTapCount++;
+    });
+
+    if (_secretTapCount >= 5) {
+      setState(() => _secretTapCount = 0);
+      HapticFeedback.heavyImpact();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
+      );
+    }
+  }
+
   Future<void> _toggleNotifications(bool value) async {
     setState(() => _notificationsEnabled = value);
-
-    if (_userRut == null) return; // Si no hay rut, no hacemos nada
+    if (_userRut == null) return;
 
     try {
       await FirebaseFirestore.instance.collection('usuarios').doc(_userRut).set(
@@ -75,9 +95,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  // --------------------------
-  // Selector de idioma
-  // --------------------------
+  void _showError(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: _errorRed,
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    }
+  }
+
+  String _getErrorMessage(dynamic error, AppLocalizations local) {
+    if (error is FirebaseAuthException) {
+      switch (error.code) {
+        case 'user-not-found':
+          return local.userNotFound;
+        case 'invalid-email':
+          return local.invalidEmail;
+        case 'network-request-failed':
+          return local.networkError;
+        default:
+          return error.message ?? local.unknownError;
+      }
+    }
+    return local.unknownError;
+  }
+
   void _showLanguageSelector() {
     final provider = Provider.of<LocaleProvider>(context, listen: false);
     final currentLocale = provider.locale;
@@ -187,9 +232,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  // --------------------------
-  // Logout
-  // --------------------------
+  Future<void> _resetPassword() async {
+    final local = AppLocalizations.of(context)!;
+    if (_userRut == null) return;
+
+    try {
+      if (mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => const Center(child: CircularProgressIndicator()),
+        );
+      }
+
+      final query = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(_userRut)
+          .get();
+
+      if (!query.exists) {
+        if (mounted) Navigator.pop(context);
+        _showError(local.userNotFound);
+        return;
+      }
+
+      final email = query.data()?['email'];
+      if (email == null || email.isEmpty) {
+        if (mounted) Navigator.pop(context);
+        _showError(local.emailNotFound);
+        return;
+      }
+
+      await FirebaseAuth.instance.setLanguageCode(
+        Localizations.localeOf(context).languageCode,
+      );
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+      if (mounted) Navigator.pop(context);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(local.passwordResetSent),
+            backgroundColor: _accentGreen,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) Navigator.pop(context);
+      if (mounted) {
+        _showError('${local.error}: ${_getErrorMessage(e, local)}');
+      }
+    }
+  }
+
   Future<void> _logout() async {
     final local = AppLocalizations.of(context)!;
 
@@ -237,20 +333,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       try {
         await FirebaseAuth.instance.signOut();
-      } catch (e) {
-        debugPrint('Error al cerrar sesión: $e');
-      }
+      } catch (e) {}
 
-      // Cerrar el indicador de carga
       if (mounted) Navigator.of(context, rootNavigator: true).pop();
-
-      // Navegar al login
       if (mounted) {
         Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -274,9 +364,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         child: Column(
           children: [
-            // -------------------
-            // CUENTA
-            // -------------------
             _SettingsSection(
               title: local.sectionAccount,
               children: [
@@ -301,16 +388,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: local.security,
                   subtitle: local.changePassword,
                   color: Colors.orangeAccent,
-                  onTap: () {},
+                  onTap: _resetPassword,
                 ),
               ],
             ),
-
             const SizedBox(height: 24),
-
-            // -------------------
-            // PREFERENCIAS
-            // -------------------
             _SettingsSection(
               title: local.sectionPreferences,
               children: [
@@ -350,12 +432,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 24),
-
-            // -------------------
-            // OTROS
-            // -------------------
             _SettingsSection(
               title: local.sectionOthers,
               children: [
@@ -375,7 +452,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   icon: Icons.info_outline_rounded,
                   title: local.about,
                   color: _textSecondary,
-                  onTap: () {},
+                  onTap: _handleSecretAccess,
                 ),
                 const Divider(
                   height: 1,
@@ -396,12 +473,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 40),
-
-            // -------------------
-            // LOGOUT
-            // -------------------
             TextButton(
               onPressed: _logout,
               style: TextButton.styleFrom(
@@ -440,13 +512,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-// -----------------------------------------------------------------------
-// SECCIÓNES Y TILES (AUXILIARES)
-// -----------------------------------------------------------------------
 class _SettingsSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
-
   const _SettingsSection({required this.title, required this.children});
 
   @override

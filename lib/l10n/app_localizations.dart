@@ -1054,6 +1054,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Route error'**
   String get routeError;
+
+  /// Message when an error occurs while finding the email
+  ///
+  /// In en, this message translates to:
+  /// **'Email not found'**
+  String get emailNotFound;
+
+  /// Message when an error occurs while sending the recovery email
+  ///
+  /// In en, this message translates to:
+  /// **'Could not send recovery email'**
+  String get resetPasswordEmailSent;
+
+  /// Message when an error occurs while sending the recovery email
+  ///
+  /// In en, this message translates to:
+  /// **'Could not send recovery email'**
+  String get passwordResetSent;
+
+  /// Mensaje cuando ocurre un error al enviar el correo de recuperación
+  ///
+  /// In en, this message translates to:
+  /// **'No se pudo enviar el correo de recuperación'**
+  String get error;
+
+  /// Message for unexpected errors
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred'**
+  String get unknownError;
+
+  /// Title for password reset dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get resetPassword;
+
+  /// Body text for password reset confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'We will send a password reset link to'**
+  String get resetPasswordBody;
+
+  /// Confirm button text
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

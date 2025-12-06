@@ -505,4 +505,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get routeError => 'Route error';
+
+  @override
+  String get emailNotFound => 'Email not found';
+
+  @override
+  String get resetPasswordEmailSent => 'Could not send recovery email';
+
+  @override
+  String get passwordResetSent => 'Could not send recovery email';
+
+  @override
+  String get error => 'No se pudo enviar el correo de recuperación';
+
+  @override
+  String get unknownError => 'An unknown error occurred';
+
+  @override
+  String get resetPassword => 'Reset Password';
+
+  @override
+  String get resetPasswordBody => 'We will send a password reset link to';
+
+  @override
+  String get confirm => 'Confirm';
 }

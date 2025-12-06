@@ -21,7 +21,6 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   static const Color _accentBlue = Color(0xFF415A77);
   static const Color _textPrimary = Color(0xFFE0E1DD);
   static const Color _textSecondary = Color(0xFF9DB2BF);
-  static const Color _gold = Color(0xFFFFD700);
 
   // Publicidad
   BannerAd? _bannerAd;
@@ -46,10 +45,16 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   }
 
   Future<void> _initData() async {
-    await _fetchBenefitsConfig();
-    await _checkPremiumAndLoadData();
+    setState(() => _loading = true);
+    try {
+      await Future.wait([_fetchBenefitsConfig(), _checkPremiumAndLoadData()]);
+    } catch (e) {
+      debugPrint("❌ Error inicializando datos: $e");
+    }
+    if (mounted) setState(() => _loading = false);
   }
 
+  // ---------------- FIRESTORE ----------------
   Future<void> _fetchBenefitsConfig() async {
     try {
       final query = await FirebaseFirestore.instance
@@ -61,8 +66,10 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
         setState(() {
           _milestones = query.docs.map((doc) {
             final data = doc.data();
+            final rawTarget = data['target'] ?? 0;
+            final target = (rawTarget is num) ? rawTarget.toDouble() : 0.0;
             return {
-              'target': data['target'] ?? 0,
+              'target': target,
               'title': data['title'] ?? 'Nivel',
               'reward': data['reward'] ?? 'Recompensa sorpresa',
               'icon': _getIconFromName(data['icon_name'] ?? 'star'),
@@ -104,7 +111,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
         final userDoc = query.docs.first;
         final rutUsuario = userDoc.id;
 
-        // Verificar Premium
+        // Verificar suscripción Premium
         final suscripcionDoc = await FirebaseFirestore.instance
             .collection('usuarios')
             .doc(rutUsuario)
@@ -116,7 +123,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
             suscripcionDoc.exists &&
             suscripcionDoc.data()?['suscripcion'] == true;
 
-        // Calcular KMs
+        // Calcular kms del mes
         double totalKm = await _calculateMonthlyKm(userDoc.reference);
 
         if (mounted) {
@@ -132,6 +139,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
         if (mounted) setState(() => _loading = false);
       }
     } catch (e) {
+      debugPrint("❌ Error verificando usuario: $e");
       if (mounted) setState(() => _loading = false);
     }
   }
@@ -162,111 +170,136 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
 
   void _loadBannerAd() {
     _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/6300978111', // ID de prueba Google
+      adUnitId: 'ca-app-pub-3940256099942544/6300978111',
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (_) => setState(() => _isAdLoaded = true),
-        onAdFailedToLoad: (ad, error) => ad.dispose(),
+        onAdFailedToLoad: (ad, error) {
+          debugPrint("❌ Error cargando banner: $error");
+          ad.dispose();
+        },
       ),
     )..load();
   }
 
-  // ---------------- UI PRINCIPAL ----------------
+  // ---------------- UTILIDADES ----------------
+  List<Map<String, dynamic>> _milestonesWithStatus() {
+    return _milestones.map((m) {
+      final target = (m['target'] is num)
+          ? (m['target'] as num).toDouble()
+          : 0.0;
+      final isUnlocked = (_monthlyKm + 0.0001) >= target; // margen de seguridad
+      return {...m, 'target': target, 'isUnlocked': isUnlocked};
+    }).toList();
+  }
 
+  int _nextTarget() {
+    for (var m in _milestones) {
+      final target = (m['target'] as num).toDouble();
+      if (_monthlyKm < target) return target.toInt();
+    }
+    return _milestones.isNotEmpty
+        ? (_milestones.last['target'] as num).toInt()
+        : 0;
+  }
+
+  // ---------------- UI ----------------
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
     final currentMonthName = DateFormat('MMMM', 'es_ES').format(DateTime.now());
 
-    // Encontrar el próximo objetivo
-    int nextTarget = 0;
-    for (var m in _milestones) {
-      if (m['target'] > _monthlyKm) {
-        nextTarget = m['target'];
-        break;
-      }
-    }
-    if (nextTarget == 0 && _milestones.isNotEmpty)
-      nextTarget = _milestones.last['target'];
+    final milestonesWithStatus = _milestonesWithStatus();
+    final nextTarget = _nextTarget();
 
     return Scaffold(
       backgroundColor: _primaryDark,
-      body: Stack(
-        children: [
-          _loading
-              ? const Center(
-                  child: CircularProgressIndicator(color: _accentGreen),
-                )
-              : CustomScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  slivers: [
-                    // --- APP BAR ELÁSTICA ---
-                    SliverAppBar(
-                      expandedHeight: 320.0,
-                      floating: false,
-                      pinned: true,
-                      backgroundColor: _primaryDark,
-                      elevation: 0,
-                      centerTitle: true,
-                      title: Text(
-                        local.benefits,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          shadows: [
-                            Shadow(color: Colors.black45, blurRadius: 10),
-                          ],
+      body: RefreshIndicator(
+        color: _accentGreen,
+        onRefresh: _initData, // pull-to-refresh
+        child: Stack(
+          children: [
+            _loading
+                ? const Center(
+                    child: CircularProgressIndicator(color: _accentGreen),
+                  )
+                : CustomScrollView(
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
+                    ),
+                    slivers: [
+                      SliverAppBar(
+                        expandedHeight: 320.0,
+                        floating: false,
+                        pinned: true,
+                        backgroundColor: _primaryDark,
+                        elevation: 0,
+                        centerTitle: true,
+                        title: Text(
+                          local.benefits,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(color: Colors.black45, blurRadius: 10),
+                            ],
+                          ),
+                        ),
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: _buildProgressHeader(
+                            currentMonthName,
+                            nextTarget,
+                          ),
                         ),
                       ),
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: _buildProgressHeader(
-                          currentMonthName,
-                          nextTarget,
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate((
+                            context,
+                            index,
+                          ) {
+                            final milestone = milestonesWithStatus[index];
+                            final isFirst = index == 0;
+                            final isLast =
+                                index == milestonesWithStatus.length - 1;
+                            return _buildTimelineItem(
+                              milestone,
+                              isFirst,
+                              isLast,
+                            );
+                          }, childCount: milestonesWithStatus.length),
                         ),
                       ),
-                    ),
-
-                    // --- LISTA TIMELINE DE BENEFICIOS ---
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          final milestone = _milestones[index];
-                          final isFirst = index == 0;
-                          final isLast = index == _milestones.length - 1;
-                          return _buildTimelineItem(milestone, isFirst, isLast);
-                        }, childCount: _milestones.length),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
+            if (!_isPremium && _isAdLoaded)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: SafeArea(
+                  child: Container(
+                    color: Colors.black,
+                    width: _bannerAd!.size.width.toDouble(),
+                    height: _bannerAd!.size.height.toDouble(),
+                    alignment: Alignment.center,
+                    child: AdWidget(ad: _bannerAd!),
+                  ),
                 ),
-
-          // --- PUBLICIDAD FLOTANTE ---
-          if (!_isPremium && _isAdLoaded)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                color: Colors.black,
-                width: _bannerAd!.size.width.toDouble(),
-                height: _bannerAd!.size.height.toDouble(),
-                alignment: Alignment.center,
-                child: AdWidget(ad: _bannerAd!),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  // ---------------- HEADER CORREGIDO ----------------
   Widget _buildProgressHeader(String month, int nextTarget) {
     double progressPercent = nextTarget > 0
         ? (_monthlyKm / nextTarget).clamp(0.0, 1.0)
         : 0.0;
-    if (_monthlyKm > nextTarget) progressPercent = 1.0;
+    if (_monthlyKm >= nextTarget) progressPercent = 1.0;
 
     return Container(
       decoration: BoxDecoration(
@@ -279,7 +312,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: kToolbarHeight + 16), // Espacio AppBar
+          const SizedBox(height: kToolbarHeight + 16),
           Stack(
             alignment: Alignment.center,
             children: [
@@ -343,57 +376,30 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          if (_isPremium)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: _gold.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: _gold.withOpacity(0.5)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.workspace_premium, color: _gold, size: 16),
-                  SizedBox(width: 4),
-                  Text(
-                    "PREMIUM MEMBER",
-                    style: TextStyle(
-                      color: _gold,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          else
-            Text(
-              "Siguiente meta: $nextTarget KM",
-              style: TextStyle(
-                color: _textPrimary.withOpacity(0.7),
-                fontSize: 12,
-              ),
+          Text(
+            "Siguiente meta: $nextTarget KM",
+            style: TextStyle(
+              color: _textPrimary.withOpacity(0.7),
+              fontSize: 12,
             ),
+          ),
         ],
       ),
     );
   }
 
-  // ---------------- TIMELINE ITEM ----------------
   Widget _buildTimelineItem(
     Map<String, dynamic> milestone,
     bool isFirst,
     bool isLast,
   ) {
-    final int target = milestone['target'];
-    final bool isUnlocked = _monthlyKm >= target;
+    final int target = (milestone['target'] as num).toInt();
+    final bool isUnlocked = milestone['isUnlocked'] as bool;
 
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Columna de línea de tiempo
           SizedBox(
             width: 50,
             child: Column(
@@ -506,7 +512,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
-                              "${milestone['target']} KM",
+                              "$target KM",
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -533,10 +539,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(4),
                           child: LinearProgressIndicator(
-                            value: (_monthlyKm / milestone['target']).clamp(
-                              0.0,
-                              1.0,
-                            ),
+                            value: (_monthlyKm / target).clamp(0.0, 1.0),
                             backgroundColor: Colors.black26,
                             color: _accentBlue,
                             minHeight: 4,
@@ -544,7 +547,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          "Faltan ${(milestone['target'] - _monthlyKm).toStringAsFixed(1)} km",
+                          "Faltan ${(_monthlyKm < target ? target - _monthlyKm : 0).toStringAsFixed(1)} km",
                           style: TextStyle(
                             fontSize: 10,
                             color: _textSecondary.withOpacity(0.5),
