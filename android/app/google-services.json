@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "14400873060",
+    "firebase_url": "https://dbnutrimap-default-rtdb.firebaseio.com",
     "project_id": "dbnutrimap",
     "storage_bucket": "dbnutrimap.firebasestorage.app"
   },

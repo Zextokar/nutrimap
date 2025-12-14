@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '14400873060',
     projectId: 'dbnutrimap',
     authDomain: 'dbnutrimap.firebaseapp.com',
+    databaseURL: 'https://dbnutrimap-default-rtdb.firebaseio.com',
     storageBucket: 'dbnutrimap.firebasestorage.app',
   );
 
@@ -54,6 +55,7 @@ class DefaultFirebaseOptions {
     appId: '1:14400873060:android:bf825650dbcfdc5cf37571',
     messagingSenderId: '14400873060',
     projectId: 'dbnutrimap',
+    databaseURL: 'https://dbnutrimap-default-rtdb.firebaseio.com',
     storageBucket: 'dbnutrimap.firebasestorage.app',
   );
 
@@ -62,6 +64,7 @@ class DefaultFirebaseOptions {
     appId: '1:14400873060:ios:bc5a45d937957c08f37571',
     messagingSenderId: '14400873060',
     projectId: 'dbnutrimap',
+    databaseURL: 'https://dbnutrimap-default-rtdb.firebaseio.com',
     storageBucket: 'dbnutrimap.firebasestorage.app',
     iosBundleId: 'com.example.nutrimap',
   );
@@ -71,6 +74,7 @@ class DefaultFirebaseOptions {
     appId: '1:14400873060:ios:bc5a45d937957c08f37571',
     messagingSenderId: '14400873060',
     projectId: 'dbnutrimap',
+    databaseURL: 'https://dbnutrimap-default-rtdb.firebaseio.com',
     storageBucket: 'dbnutrimap.firebasestorage.app',
     iosBundleId: 'com.example.nutrimap',
   );
@@ -81,6 +85,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '14400873060',
     projectId: 'dbnutrimap',
     authDomain: 'dbnutrimap.firebaseapp.com',
+    databaseURL: 'https://dbnutrimap-default-rtdb.firebaseio.com',
     storageBucket: 'dbnutrimap.firebasestorage.app',
   );
+
 }
