@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nutrimap/screens/screens/screens/commerce_detail_screen.dart';
+import 'package:nutrimap/screens/commerce/details/commerce_detail_screen.dart';
 import 'package:nutrimap/services/commerce_service.dart';
 import 'package:nutrimap/widgets/commerce_card.dart';
 

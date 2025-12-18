@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// Asegúrate de que estos archivos existen en tu proyecto o ajusta los imports
-import 'mercado_pago_checkout.dart';
-import 'mercado_pago_service.dart';
+import 'package:nutrimap/screens/settings/chekout/providers/mercado_pago_checkout.dart';
+import 'package:nutrimap/screens/settings/chekout/service/mercado_pago_service.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});

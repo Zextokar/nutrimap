@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:nutrimap/screens/screens/screens/maps_free.dart';
+import 'package:nutrimap/screens/maps/maps_free.dart';
+import 'package:nutrimap/screens/profile/profile_screen.dart';
+import 'package:nutrimap/screens/settings/terms_conditions.dart';
 import 'package:provider/provider.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
 import 'package:nutrimap/providers/locale_provider.dart';
-import 'package:nutrimap/screens/screens/profile_screen.dart';
-import 'package:nutrimap/screens/screens/screens/terms_condi.dart';
 
 class SettingsScreen extends StatefulWidget {
   final User user;
@@ -333,6 +333,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       try {
         await FirebaseAuth.instance.signOut();
+      // ignore: empty_catches
       } catch (e) {}
 
       if (mounted) Navigator.of(context, rootNavigator: true).pop();

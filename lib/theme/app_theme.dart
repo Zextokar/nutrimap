@@ -14,7 +14,7 @@ class AppTheme {
     brightness: Brightness.dark,
     scaffoldBackgroundColor: primaryDark,
     primaryColor: accentGreen,
-    
+
     colorScheme: const ColorScheme.dark(
       primary: accentGreen,
       secondary: accentGreen,
@@ -47,9 +47,7 @@ class AppTheme {
       color: secondaryDark,
       elevation: 0,
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
     ),
 
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -58,9 +56,7 @@ class AppTheme {
         foregroundColor: Colors.white,
         elevation: 0,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         textStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
@@ -102,7 +98,7 @@ class AppTheme {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       behavior: SnackBarBehavior.floating,
     ),
-    
+
     dialogTheme: DialogThemeData(
       backgroundColor: secondaryDark,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),

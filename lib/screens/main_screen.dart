@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nutrimap/screens/screens/benefits_screen.dart';
-import 'package:nutrimap/screens/screens/commerce_screen.dart';
-import 'package:nutrimap/screens/screens/home_screen.dart';
-import 'package:nutrimap/screens/screens/map_screen.dart';
-import 'package:nutrimap/screens/screens/settings_screen.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
+import 'package:nutrimap/screens/benefits/benefits_screen.dart';
+import 'package:nutrimap/screens/commerce/commerce_screen.dart';
+import 'package:nutrimap/screens/home/home_screen.dart';
+import 'package:nutrimap/screens/maps/map_screen.dart';
+import 'package:nutrimap/screens/settings/settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final User user; // ✅ Usuario autenticado, no puede ser null

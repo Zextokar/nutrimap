@@ -3,11 +3,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nutrimap/l10n/app_localizations.dart';
 import 'package:nutrimap/screens/auth/login_screen.dart';
 import 'package:nutrimap/screens/auth/register_screen.dart';
-import 'package:nutrimap/screens/info_screen.dart';
+import 'package:nutrimap/screens/info/service/info_service.dart';
 import 'package:nutrimap/screens/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nutrimap/screens/screens/screens/subscription_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, User;
+import 'package:nutrimap/screens/settings/chekout/subscription_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
