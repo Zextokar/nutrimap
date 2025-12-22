@@ -2,6 +2,8 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' show cos, sqrt, asin, min;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,10 +13,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:html_unescape/html_unescape.dart';
-import 'dart:math' show cos, sqrt, asin;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-const String googleMapsApiKey = "AIzaSyAaqSFpbIpmmrjm8tyweYhw-rayaC0O9lA";
+final String googleMapsApiKey = dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
 
 enum TravelMode { walking, bicycling }
 
@@ -36,41 +38,66 @@ class RouteStep {
 
 class MapScreen extends StatefulWidget {
   final User user;
-  const MapScreen({super.key, required this.user});
+  final LatLng? initialDestination;
+  final String? initialDestinationName;
+
+  const MapScreen({
+    super.key,
+    required this.user,
+    this.initialDestination,
+    this.initialDestinationName,
+  });
 
   @override
   State<MapScreen> createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
+  // --- UI ---
   static const Color _primaryDark = Color(0xFF0D1B2A);
   static const Color _accentGreen = Color(0xFF00C853);
   static const Color _errorRed = Color(0xFFE53935);
 
+  // --- MAP & LOCATION ---
   GoogleMapController? _mapController;
   final Location _locationService = Location();
   StreamSubscription<LocationData>? _locationSubscription;
-  final FlutterTts _flutterTts = FlutterTts();
-  final HtmlUnescape _unescape = HtmlUnescape();
-
   LocationData? _currentUserLocation;
+
   final Set<Marker> _markers = {};
   final Set<Polyline> _polylines = {};
   List<LatLng> _allRoutePoints = [];
 
+  // --- NAVIGATION ---
+  static const double _maxDeviationMeters = 50;
   bool _isCalculatingRoute = false;
-  TravelMode _selectedTravelMode = TravelMode.walking;
-  List<RouteStep> _routeSteps = [];
-  int _currentStepIndex = 0;
   bool _isNavigating = false;
   bool _routeIsPreview = false;
+
+  final TravelMode _selectedTravelMode = TravelMode.walking;
+  List<RouteStep> _routeSteps = [];
+  int _currentStepIndex = 0;
+
   LatLng? _currentDestination;
   String? _currentDestinationName;
+
+  // --- TTS ---
+  final FlutterTts _flutterTts = FlutterTts();
+  final HtmlUnescape _unescape = HtmlUnescape();
 
   @override
   void initState() {
     super.initState();
     _initServices();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.initialDestination != null) {
+        _createRoute(
+          widget.initialDestination!,
+          destinationName: widget.initialDestinationName,
+        );
+      }
+    });
   }
 
   @override
@@ -87,67 +114,127 @@ class _MapScreenState extends State<MapScreen> {
     await _fetchLocationsFromFirestore();
   }
 
-  Future<void> _setupTts() async {
-    await _flutterTts.setLanguage("es-ES");
-    await _flutterTts.setSpeechRate(0.5);
-  }
+  // ================== LOCATION ==================
 
   Future<void> _getUserLocation() async {
     bool serviceEnabled = await _locationService.serviceEnabled();
-    if (!serviceEnabled)
+    if (!serviceEnabled) {
       serviceEnabled = await _locationService.requestService();
+      if (!serviceEnabled) return;
+    }
 
-    _locationSubscription = _locationService.onLocationChanged.listen((
-      LocationData newLocation,
-    ) {
-      if (!mounted) return;
-      setState(() {
-        _currentUserLocation = newLocation;
-        _updateUserLocationMarker();
-      });
-      if (_isNavigating) {
-        _updateCameraForNavigation(newLocation);
-        _updateNavigation(newLocation);
-      }
+    PermissionStatus permission = await _locationService.hasPermission();
+    if (permission == PermissionStatus.denied) {
+      permission = await _locationService.requestPermission();
+      if (permission != PermissionStatus.granted) return;
+    }
+
+    _locationService.changeSettings(
+      accuracy: LocationAccuracy.high,
+      interval: 2000,
+      distanceFilter: 5,
+    );
+
+    _locationSubscription = _locationService.onLocationChanged.listen(
+      _onLocationUpdate,
+    );
+  }
+
+  void _onLocationUpdate(LocationData loc) {
+    if (!mounted) return;
+
+    _currentUserLocation = loc;
+    _updateUserLocationMarker();
+
+    if (_isNavigating) {
+      _updateCameraForNavigation(loc);
+      _updateNavigation(loc);
+      _checkRouteDeviation(loc);
+    }
+  }
+
+  void _updateUserLocationMarker() {
+    if (_currentUserLocation == null) return;
+
+    setState(() {
+      _markers.removeWhere((m) => m.markerId.value == 'me');
+      _markers.add(
+        Marker(
+          markerId: const MarkerId('me'),
+          position: LatLng(
+            _currentUserLocation!.latitude!,
+            _currentUserLocation!.longitude!,
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueAzure,
+          ),
+        ),
+      );
     });
   }
 
+  void _centerOnUser() {
+    if (_currentUserLocation == null || _mapController == null) return;
+
+    _mapController!.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(
+            _currentUserLocation!.latitude!,
+            _currentUserLocation!.longitude!,
+          ),
+          zoom: _isNavigating ? 19 : 16,
+          tilt: _isNavigating ? 60 : 0,
+          bearing: _currentUserLocation!.heading ?? 0,
+        ),
+      ),
+    );
+  }
+
+  // ================== FIRESTORE ==================
+
   Future<void> _fetchLocationsFromFirestore() async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance
+      final snapshot = await FirebaseFirestore.instance
           .collection('comercios')
           .get();
-      final fetchedMarkers = querySnapshot.docs.map((doc) {
+
+      final markers = snapshot.docs.map((doc) {
         final data = doc.data();
-        final Map<String, dynamic> ubicacion = data['ubicacion'];
+        final ubicacion = data['ubicacion'];
+
         final pos = LatLng(
           (ubicacion['lat'] as num).toDouble(),
           (ubicacion['lng'] as num).toDouble(),
         );
-        final nombre = data['nombre'] ?? 'Comercio';
 
         return Marker(
           markerId: MarkerId(doc.id),
           position: pos,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
           infoWindow: InfoWindow(
-            title: nombre,
+            title: data['nombre'],
             snippet: 'Toca para iniciar ruta',
-            onTap: () => _createRoute(pos, destinationName: nombre),
+            onTap: () => _createRoute(pos, destinationName: data['nombre']),
           ),
         );
       }).toSet();
-      setState(() => _markers.addAll(fetchedMarkers));
+
+      setState(() => _markers.addAll(markers));
     } catch (e) {
-      if (kDebugMode) print("Error Firestore: $e");
+      if (kDebugMode) {
+        print('Firestore error: $e');
+      }
     }
   }
+
+  // ================== ROUTING ==================
 
   Future<void> _createRoute(
     LatLng destination, {
     String? destinationName,
   }) async {
     if (_currentUserLocation == null) return;
+
     setState(() {
       _isCalculatingRoute = true;
       _currentDestination = destination;
@@ -158,78 +245,124 @@ class _MapScreenState extends State<MapScreen> {
       _currentUserLocation!.latitude!,
       _currentUserLocation!.longitude!,
     );
-    String mode = _selectedTravelMode == TravelMode.walking
-        ? "walking"
-        : "bicycling";
+
+    final mode = _selectedTravelMode == TravelMode.walking
+        ? 'walking'
+        : 'bicycling';
 
     final url =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&mode=$mode&language=es&key=$googleMapsApiKey';
+        'https://maps.googleapis.com/maps/api/directions/json'
+        '?origin=${origin.latitude},${origin.longitude}'
+        '&destination=${destination.latitude},${destination.longitude}'
+        '&mode=$mode&language=es&key=$googleMapsApiKey';
 
     try {
       final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data['status'] == 'OK') {
-          final route = data['routes'][0];
-          final leg = route['legs'][0];
+      final data = json.decode(response.body);
 
-          final points = PolylinePoints.decodePolyline(
-            route['overview_polyline']['points'],
+      if (data['status'] == 'OK') {
+        final route = data['routes'][0];
+        final leg = route['legs'][0];
+
+        _allRoutePoints = PolylinePoints.decodePolyline(
+          route['overview_polyline']['points'],
+        ).map((p) => LatLng(p.latitude, p.longitude)).toList();
+
+        _routeSteps = leg['steps'].map<RouteStep>((s) {
+          final cleanText = _unescape
+              .convert(s['html_instructions'])
+              .replaceAll(RegExp(r'<[^>]*>'), '')
+              .trim();
+
+          return RouteStep(
+            instruction: cleanText,
+            startLocation: LatLng(
+              s['start_location']['lat'],
+              s['start_location']['lng'],
+            ),
+            endLocation: LatLng(
+              s['end_location']['lat'],
+              s['end_location']['lng'],
+            ),
+            distance: s['distance']['text'],
+            duration: s['duration']['text'],
           );
-          _allRoutePoints = points
-              .map((p) => LatLng(p.latitude, p.longitude))
-              .toList();
+        }).toList();
 
-          final steps = <RouteStep>[];
-          for (var s in leg['steps']) {
-            String cleanText = _unescape
-                .convert(s['html_instructions'])
-                .replaceAll(RegExp(r'<[^>]*>'), '')
-                .replaceAll(RegExp(r'\s+'), ' ')
-                .trim();
-
-            steps.add(
-              RouteStep(
-                instruction: cleanText,
-                startLocation: LatLng(
-                  s['start_location']['lat'],
-                  s['start_location']['lng'],
-                ),
-                endLocation: LatLng(
-                  s['end_location']['lat'],
-                  s['end_location']['lng'],
-                ),
-                distance: s['distance']['text'],
-                duration: s['duration']['text'],
-              ),
-            );
-          }
-
-          setState(() {
-            _routeSteps = steps;
-            _currentStepIndex = 0;
-            _polylines.clear();
-            _polylines.add(
+        setState(() {
+          _polylines
+            ..clear()
+            ..add(
               Polyline(
-                polylineId: const PolylineId("r"),
+                polylineId: const PolylineId('route'),
                 points: _allRoutePoints,
                 color: _accentGreen,
                 width: 6,
               ),
             );
-            _routeIsPreview = true;
-            _isCalculatingRoute = false;
-          });
-          _mapController?.animateCamera(
-            CameraUpdate.newLatLngBounds(_createBounds(_allRoutePoints), 80),
-          );
-        }
+          _routeIsPreview = true;
+          _isCalculatingRoute = false;
+          _currentStepIndex = 0;
+        });
+
+        _mapController?.animateCamera(
+          CameraUpdate.newLatLngBounds(_createBounds(_allRoutePoints), 80),
+        );
       }
-    } catch (e) {
+    } catch (_) {
       setState(() => _isCalculatingRoute = false);
     }
   }
 
+  void _checkRouteDeviation(LocationData loc) {
+    if (_allRoutePoints.isEmpty) return;
+
+    final current = LatLng(loc.latitude!, loc.longitude!);
+    final minDistance = _allRoutePoints
+        .map(
+          (p) => _calculateDistance(
+            current.latitude,
+            current.longitude,
+            p.latitude,
+            p.longitude,
+          ),
+        )
+        .reduce(min);
+
+    if (minDistance > _maxDeviationMeters) {
+      _recalculateRoute();
+    }
+  }
+
+  Future<void> _recalculateRoute() async {
+    if (_currentDestination == null) return;
+    await _flutterTts.speak("Recalculando ruta");
+    await _createRoute(
+      _currentDestination!,
+      destinationName: _currentDestinationName,
+    );
+    setState(() {
+      _isNavigating = true;
+      _routeIsPreview = false;
+    });
+  }
+
+  void _updateNavigation(LocationData loc) {
+    final step = _routeSteps[_currentStepIndex];
+    final distance = _calculateDistance(
+      loc.latitude!,
+      loc.longitude!,
+      step.endLocation.latitude,
+      step.endLocation.longitude,
+    );
+
+    if (distance < 15 && _currentStepIndex < _routeSteps.length - 1) {
+      setState(() => _currentStepIndex++);
+      _flutterTts.speak(_routeSteps[_currentStepIndex].instruction);
+    }
+  }
+
+  // ignore: unused_element
   void _stopNavigation() {
     setState(() {
       _isNavigating = false;
@@ -240,21 +373,7 @@ class _MapScreenState extends State<MapScreen> {
     _flutterTts.stop();
   }
 
-  void _updateNavigation(LocationData current) {
-    if (_routeSteps.isEmpty) return;
-    final step = _routeSteps[_currentStepIndex];
-    double d = _calculateDistance(
-      current.latitude!,
-      current.longitude!,
-      step.endLocation.latitude,
-      step.endLocation.longitude,
-    );
-
-    if (d < 15 && _currentStepIndex < _routeSteps.length - 1) {
-      setState(() => _currentStepIndex++);
-      _flutterTts.speak(_routeSteps[_currentStepIndex].instruction);
-    }
-  }
+  // ================== UI ==================
 
   @override
   Widget build(BuildContext context) {
@@ -275,45 +394,16 @@ class _MapScreenState extends State<MapScreen> {
             polylines: _polylines,
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
-            compassEnabled: false,
           ),
 
-          // --- UI DE CABECERA (Modo y Cancelar) ---
-          Positioned(
-            top: 50,
-            left: 20,
-            right: 20,
-            child: Column(
-              children: [
-                if (!_isNavigating && !_routeIsPreview) _buildModeSelector(),
-                if (_isNavigating) _buildNavigationBanner(),
-              ],
-            ),
-          ),
-
-          // --- BOTONES LATERALES ---
           Positioned(
             right: 15,
-            bottom: 150,
-            child: Column(
-              children: [
-                if (_isNavigating)
-                  FloatingActionButton(
-                    mini: true,
-                    backgroundColor: _primaryDark,
-                    onPressed: () =>
-                        _updateCameraForNavigation(_currentUserLocation!),
-                    child: const Icon(Icons.my_location, color: _accentGreen),
-                  ),
-                const SizedBox(height: 10),
-                if (_isNavigating)
-                  FloatingActionButton(
-                    mini: true,
-                    backgroundColor: _errorRed,
-                    onPressed: _stopNavigation,
-                    child: const Icon(Icons.close, color: Colors.white),
-                  ),
-              ],
+            bottom: _isNavigating ? 220 : 120,
+            child: FloatingActionButton(
+              mini: true,
+              backgroundColor: _primaryDark,
+              onPressed: _centerOnUser,
+              child: const Icon(Icons.my_location, color: _accentGreen),
             ),
           ),
 
@@ -324,65 +414,18 @@ class _MapScreenState extends State<MapScreen> {
       ),
       floatingActionButton: _routeIsPreview
           ? FloatingActionButton.extended(
+              backgroundColor: _accentGreen,
+              icon: const Icon(Icons.navigation),
+              label: const Text("INICIAR"),
               onPressed: () {
                 setState(() {
                   _isNavigating = true;
                   _routeIsPreview = false;
                 });
-                _flutterTts.speak(_routeSteps[0].instruction);
+                _flutterTts.speak(_routeSteps.first.instruction);
               },
-              label: const Text("INICIAR"),
-              icon: const Icon(Icons.navigation),
-              backgroundColor: _accentGreen,
             )
           : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
-  }
-
-  Widget _buildModeSelector() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: _primaryDark,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _modeButton(TravelMode.walking, Icons.directions_walk),
-          const SizedBox(width: 10),
-          _modeButton(TravelMode.bicycling, Icons.directions_bike),
-        ],
-      ),
-    );
-  }
-
-  Widget _modeButton(TravelMode mode, IconData icon) {
-    bool isSelected = _selectedTravelMode == mode;
-    return IconButton(
-      icon: Icon(icon, color: isSelected ? _accentGreen : Colors.white54),
-      onPressed: () => setState(() => _selectedTravelMode = mode),
-    );
-  }
-
-  Widget _buildNavigationBanner() {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: _primaryDark.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: _accentGreen, width: 2),
-      ),
-      child: Text(
-        _routeSteps[_currentStepIndex].instruction,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-        textAlign: TextAlign.center,
-      ),
     );
   }
 
@@ -405,11 +448,6 @@ class _MapScreenState extends State<MapScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 10),
-              Text(
-                "Modo: ${_selectedTravelMode == TravelMode.walking ? 'Caminando' : 'Bicicleta'}",
-                style: const TextStyle(color: _accentGreen),
-              ),
               TextButton(
                 onPressed: () => setState(() => _routeIsPreview = false),
                 child: const Text(
@@ -424,45 +462,32 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  // --- MÉTODOS AUXILIARES ---
+  // ================== HELPERS ==================
+
   double _calculateDistance(
     double lat1,
     double lon1,
     double lat2,
     double lon2,
   ) {
-    var p = 0.017453292519943295;
-    var a =
+    const p = 0.017453292519943295;
+    final a =
         0.5 -
         cos((lat2 - lat1) * p) / 2 +
         cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a)) * 1000;
   }
 
-  LatLngBounds _createBounds(List<LatLng> positions) {
+  LatLngBounds _createBounds(List<LatLng> pos) {
     final sw = LatLng(
-      positions.map((p) => p.latitude).reduce((a, b) => a < b ? a : b),
-      positions.map((p) => p.longitude).reduce((a, b) => a < b ? a : b),
+      pos.map((p) => p.latitude).reduce(min),
+      pos.map((p) => p.longitude).reduce(min),
     );
     final ne = LatLng(
-      positions.map((p) => p.latitude).reduce((a, b) => a > b ? a : b),
-      positions.map((p) => p.longitude).reduce((a, b) => a > b ? a : b),
+      pos.map((p) => p.latitude).reduce((a, b) => a > b ? a : b),
+      pos.map((p) => p.longitude).reduce((a, b) => a > b ? a : b),
     );
     return LatLngBounds(southwest: sw, northeast: ne);
-  }
-
-  void _updateUserLocationMarker() {
-    _markers.removeWhere((m) => m.markerId.value == 'me');
-    _markers.add(
-      Marker(
-        markerId: const MarkerId('me'),
-        position: LatLng(
-          _currentUserLocation!.latitude!,
-          _currentUserLocation!.longitude!,
-        ),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-      ),
-    );
   }
 
   void _updateCameraForNavigation(LocationData loc) {
@@ -478,38 +503,189 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  Future<void> _setupTts() async {
+    await _flutterTts.setLanguage("es-ES");
+    await _flutterTts.setSpeechRate(0.5);
+  }
+
   final String _customMapStyle = jsonEncode([
     {
       "elementType": "geometry",
       "stylers": [
-        {"color": "#242f3e"},
+        {"color": "#1d2c4d"},
       ],
     },
     {
       "elementType": "labels.text.fill",
       "stylers": [
-        {"color": "#746855"},
+        {"color": "#8ec3b9"},
+      ],
+    },
+    {
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {"color": "#1a3646"},
+      ],
+    },
+    {
+      "featureType": "administrative.country",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {"color": "#4b6878"},
+      ],
+    },
+    {
+      "featureType": "administrative.land_parcel",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {"color": "#64779e"},
+      ],
+    },
+    {
+      "featureType": "administrative.province",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {"color": "#4b6878"},
+      ],
+    },
+    {
+      "featureType": "landscape.man_made",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {"color": "#334e87"},
+      ],
+    },
+    {
+      "featureType": "landscape.natural",
+      "elementType": "geometry",
+      "stylers": [
+        {"color": "#023e58"},
+      ],
+    },
+    {
+      "featureType": "poi",
+      "elementType": "geometry",
+      "stylers": [
+        {"color": "#28356f"},
+      ],
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {"color": "#6f9ba5"},
+      ],
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {"color": "#1d2c4d"},
+      ],
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {"color": "#023e58"},
+      ],
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {"color": "#3C7680"},
       ],
     },
     {
       "featureType": "road",
       "elementType": "geometry",
       "stylers": [
-        {"color": "#38414e"},
+        {"color": "#304a7d"},
       ],
     },
     {
       "featureType": "road",
       "elementType": "labels.text.fill",
       "stylers": [
-        {"color": "#9ca5b3"},
+        {"color": "#98a5be"},
+      ],
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {"color": "#1d2c4d"},
+      ],
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry",
+      "stylers": [
+        {"color": "#2c6675"},
+      ],
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {"color": "#255763"},
+      ],
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {"color": "#b0d5ce"},
+      ],
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {"color": "#023e58"},
+      ],
+    },
+    {
+      "featureType": "transit",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {"color": "#98a5be"},
+      ],
+    },
+    {
+      "featureType": "transit",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {"color": "#1d2c4d"},
+      ],
+    },
+    {
+      "featureType": "transit.line",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {"color": "#28356f"},
+      ],
+    },
+    {
+      "featureType": "transit.station",
+      "elementType": "geometry",
+      "stylers": [
+        {"color": "#3a4762"},
       ],
     },
     {
       "featureType": "water",
       "elementType": "geometry",
       "stylers": [
-        {"color": "#17263c"},
+        {"color": "#0e1626"},
+      ],
+    },
+    {
+      "featureType": "water",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {"color": "#4e6d70"},
       ],
     },
   ]);

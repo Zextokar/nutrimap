@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nutrimap/screens/maps/map_screen.dart';
 import 'package:nutrimap/services/commerce_service.dart';
 import 'package:nutrimap/widgets/menu_card.dart';
 import 'package:nutrimap/theme/app_theme.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CommerceDetailScreen extends StatefulWidget {
   final Map<String, dynamic> commerceData;
@@ -29,6 +31,27 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
     } else {
       _futureMenus = Future.value([]);
     }
+  }
+
+  void _goToMap(BuildContext context) {
+    final ubicacion = widget.commerceData['ubicacion'];
+    if (ubicacion == null) return;
+
+    final destination = LatLng(
+      (ubicacion['lat'] as num).toDouble(),
+      (ubicacion['lng'] as num).toDouble(),
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MapScreen(
+          user: FirebaseAuth.instance.currentUser!,
+          initialDestination: destination,
+          initialDestinationName: widget.commerceData['nombre'],
+        ),
+      ),
+    );
   }
 
   void _showRatingDialog(BuildContext context, String commerceId) {
@@ -350,6 +373,33 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.accentGreen,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      icon: const Icon(Icons.navigation, color: Colors.white),
+                      label: const Text(
+                        "Cómo llegar",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        _goToMap(context);
+                      },
                     ),
                   ),
 
