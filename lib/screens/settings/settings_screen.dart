@@ -18,11 +18,21 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentGreen = Color(0xFF2D9D78);
-  static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _textSecondary = Color(0xFF9DB2BF);
+  static const Color _primaryDark = Color.fromARGB(
+    216,
+    2,
+    67,
+    136,
+  ); //background
+  static const Color _secondaryDark = Color.fromARGB(255, 40, 59, 27);
+  static const Color _accentGreen = Color.fromARGB(
+    255,
+    2,
+    149,
+    194,
+  ); //scroll de notificaciones
+  static const Color _textPrimary = Color.fromARGB(255, 255, 255, 255);
+  static const Color _textSecondary = Color.fromARGB(255, 193, 221, 238);
   static const Color _errorRed = Color(0xFFEF476F);
 
   bool _notificationsEnabled = true;
@@ -131,7 +141,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: _secondaryDark,
+      backgroundColor: const Color.fromARGB(255, 91, 223, 2),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
@@ -333,7 +343,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       try {
         await FirebaseAuth.instance.signOut();
-      // ignore: empty_catches
+        // ignore: empty_catches
       } catch (e) {}
 
       if (mounted) Navigator.of(context, rootNavigator: true).pop();
@@ -348,10 +358,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final local = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: _primaryDark,
+      backgroundColor: const Color.fromARGB(192, 2, 57, 116),
       appBar: AppBar(
         title: Text(local.settingsTitle),
-        backgroundColor: _primaryDark,
+        backgroundColor: const Color.fromARGB(120, 2, 67, 136),
         elevation: 0,
         centerTitle: true,
         titleTextStyle: const TextStyle(
@@ -380,7 +390,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const Divider(
                   height: 1,
-                  color: Colors.black12,
+                  color: Color.fromARGB(166, 1, 92, 13),
                   indent: 60,
                   endIndent: 20,
                 ),
@@ -418,7 +428,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const Divider(
                   height: 1,
-                  color: Colors.black12,
+                  color: Color.fromARGB(166, 1, 92, 13),
                   indent: 60,
                   endIndent: 20,
                 ),
@@ -445,7 +455,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const Divider(
                   height: 1,
-                  color: Colors.black12,
+                  color: Color.fromARGB(166, 1, 92, 13),
                   indent: 60,
                   endIndent: 20,
                 ),
@@ -457,7 +467,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const Divider(
                   height: 1,
-                  color: Colors.black12,
+                  color: Color.fromARGB(166, 1, 92, 13),
                   indent: 60,
                   endIndent: 20,
                 ),
@@ -537,7 +547,7 @@ class _SettingsSection extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF1B263B),
+            color: const Color.fromARGB(255, 1, 20, 73), //Cards de Config
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
@@ -574,7 +584,7 @@ class _SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: const Color.fromARGB(33, 20, 1, 1),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(24),

@@ -7,7 +7,6 @@ class ActivityCalendar extends StatelessWidget {
   final Function(DateTime, DateTime) onDaySelected;
 
   // Definimos los colores localmente para este widget (o podrías importarlos de un archivo de constantes)
-  static const Color _accentGreen = Color(0xFF06A77D);
   static const Color _accentBlue = Color(0xFF415A77);
   static const Color _textPrimary = Color(0xFFE0E1DD);
 
@@ -49,7 +48,7 @@ class ActivityCalendar extends StatelessWidget {
 
         // Decoración del día actual (si no está seleccionado)
         todayDecoration: const BoxDecoration(
-          color: _accentGreen,
+          color: Color.fromARGB(218, 2, 143, 2),
           shape: BoxShape.circle,
         ),
 

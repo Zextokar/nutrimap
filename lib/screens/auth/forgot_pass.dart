@@ -11,11 +11,11 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   // --- PALETA DE COLORES ---
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentGreen = Color(0xFF2D9D78);
+  static const Color _primaryDark = Color.fromARGB(172, 11, 78, 201);
+  static const Color _secondaryDark = Color.fromARGB(50, 0, 0, 0);
+  static const Color _accentGreen = Color.fromARGB(255, 1, 136, 30);
   static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _textSecondary = Color(0xFF9DB2BF);
+  static const Color _textSecondary = Color.fromARGB(255, 255, 255, 255);
   static const Color _errorRed = Color(0xFFEF476F);
 
   final _formKey = GlobalKey<FormState>();

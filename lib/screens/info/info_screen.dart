@@ -38,7 +38,7 @@ class _InfoScreenState extends State<InfoScreen> {
 
   Widget _buildLanguageSelection() {
     return Scaffold(
-      backgroundColor: AppTheme.primaryDark,
+      backgroundColor: const Color.fromARGB(255, 27, 95, 168),
       body: Stack(
         children: [
           Positioned(
@@ -49,7 +49,7 @@ class _InfoScreenState extends State<InfoScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppTheme.accentGreen.withOpacity(0.15),
+                color: const Color.fromARGB(255, 6, 107, 19).withOpacity(0.15),
               ),
             ),
           ),
@@ -108,7 +108,12 @@ class _InfoScreenState extends State<InfoScreen> {
                     onTap: () => _selectLanguage(const Locale('es')),
                     textColor: AppTheme.textPrimary,
                     backgroundColor: AppTheme.secondaryDark,
-                    borderColor: AppTheme.accentGreen.withOpacity(0.3),
+                    borderColor: const Color.fromARGB(
+                      255,
+                      4,
+                      124,
+                      24,
+                    ).withOpacity(0.3),
                   ),
                   const SizedBox(height: 20),
                   LanguageOption(
@@ -117,7 +122,12 @@ class _InfoScreenState extends State<InfoScreen> {
                     onTap: () => _selectLanguage(const Locale('en')),
                     textColor: AppTheme.textPrimary,
                     backgroundColor: AppTheme.secondaryDark,
-                    borderColor: AppTheme.accentGreen.withOpacity(0.3),
+                    borderColor: const Color.fromARGB(
+                      255,
+                      4,
+                      124,
+                      24,
+                    ).withOpacity(0.3),
                   ),
                 ],
               ),

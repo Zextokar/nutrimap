@@ -126,7 +126,7 @@ class _StepCounterCardState extends State<StepCounterCard> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("¡Actividad registrada exitosamente!"),
-            backgroundColor: Color(0xFF06A77D),
+            backgroundColor: Color.fromARGB(255, 3, 184, 48),
           ),
         );
         widget.onSaveSuccess?.call();
@@ -162,9 +162,11 @@ class _StepCounterCardState extends State<StepCounterCard> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1B263B),
+        color: const Color.fromARGB(172, 11, 78, 201),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF06A77D).withOpacity(0.3)),
+        border: Border.all(
+          color: const Color.fromARGB(172, 11, 78, 201).withOpacity(0.3),
+        ),
       ),
       child: Column(
         children: [
@@ -174,12 +176,12 @@ class _StepCounterCardState extends State<StepCounterCard> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF06A77D).withOpacity(0.2),
+                  color: const Color.fromARGB(255, 1, 206, 52).withOpacity(0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   _isSimulating ? Icons.developer_mode : Icons.directions_walk,
-                  color: const Color(0xFF06A77D),
+                  color: const Color.fromARGB(255, 3, 219, 21),
                   size: 32,
                 ),
               ),
@@ -225,7 +227,7 @@ class _StepCounterCardState extends State<StepCounterCard> {
             child: ElevatedButton.icon(
               onPressed: _isSaving ? null : _saveToFirebase,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF06A77D),
+                backgroundColor: const Color.fromARGB(197, 12, 145, 41),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

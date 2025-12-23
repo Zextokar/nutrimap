@@ -15,12 +15,12 @@ class BenefitsScreen extends StatefulWidget {
 
 class _BenefitsScreenState extends State<BenefitsScreen> {
   // --- PALETA DE COLORES ---
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentGreen = Color(0xFF2D9D78);
-  static const Color _accentBlue = Color(0xFF415A77);
-  static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _textSecondary = Color(0xFF9DB2BF);
+  static const Color _primaryDark = Color.fromARGB(206, 5, 81, 221);
+  static const Color _secondaryDark = Color.fromARGB(123, 1, 180, 10);
+  static const Color _accentGreen = Color.fromARGB(206, 0, 180, 120);
+  static const Color _accentBlue = Color.fromARGB(255, 2, 129, 12); //lineas
+  static const Color _textPrimary = Color.fromARGB(255, 255, 255, 255);
+  static const Color _textSecondary = Color.fromARGB(255, 255, 255, 255);
 
   // Publicidad
   BannerAd? _bannerAd;
@@ -306,7 +306,10 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [_secondaryDark, _primaryDark],
+          colors: [
+            const Color.fromARGB(115, 2, 67, 165),
+            const Color.fromARGB(255, 38, 78, 151),
+          ],
         ),
       ),
       child: Column(
@@ -322,7 +325,12 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                 child: CircularProgressIndicator(
                   value: progressPercent,
                   strokeWidth: 12,
-                  backgroundColor: _primaryDark,
+                  backgroundColor: const Color.fromARGB(
+                    206,
+                    255,
+                    255,
+                    255,
+                  ), // ciruclo distancia
                   valueColor: const AlwaysStoppedAnimation<Color>(_accentGreen),
                   strokeCap: StrokeCap.round,
                 ),

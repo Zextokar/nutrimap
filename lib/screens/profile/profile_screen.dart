@@ -15,14 +15,14 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   // Colors (same palette as Settings)
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
+  static const Color _primaryDark = Color.fromARGB(255, 3, 27, 92);
+  static const Color _secondaryDark = Color.fromARGB(223, 1, 100, 6);
   // ignore: unused_field
-  static const Color _accentBlue = Color(0xFF415A77);
-  static const Color _accentGreen = Color(0xFF2D9D78);
+  static const Color _accentBlue = Color.fromARGB(255, 4, 97, 204);
+  static const Color _accentGreen = Color.fromARGB(49, 5, 255, 26);
   static const Color _textPrimary = Color(0xFFE0E1DD);
   static const Color _textSecondary = Color(0xFF9DB2BF);
-  static const Color _errorRed = Color(0xFFEF476F);
+  static const Color _errorRed = Color.fromARGB(255, 248, 248, 248);
 
   final rutFormatter = MaskedInputFormatter('##.###.###-#');
 
@@ -597,7 +597,7 @@ class _ProfileSection extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF1B263B),
+            color: const Color.fromARGB(255, 21, 78, 184),
             borderRadius: BorderRadius.circular(24),
           ),
           child: Column(children: children),
@@ -626,7 +626,7 @@ class _ProfileInfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: const Color.fromARGB(0, 228, 4, 4),
       child: InkWell(
         onTap: isEditable ? onTap : null,
         borderRadius: BorderRadius.circular(24),

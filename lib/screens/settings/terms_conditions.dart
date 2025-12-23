@@ -6,10 +6,10 @@ class TermsAndConditionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Colores similares a HomeScreen
-    const Color primaryDark = Color(0xFF0D1B2A);
-    const Color secondaryDark = Color(0xFF1B263B);
+    const Color primaryDark = Color.fromARGB(177, 2, 56, 114);
+    const Color secondaryDark = Color.fromARGB(255, 1, 17, 46);
     const Color textPrimary = Color(0xFFE0E1DD);
-    const Color accentGreen = Color(0xFF06A77D);
+    const Color accentGreen = Color.fromARGB(255, 17, 92, 1);
 
     return Scaffold(
       backgroundColor: primaryDark,

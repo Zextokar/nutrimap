@@ -6,7 +6,6 @@ import 'package:nutrimap/widgets/activity_calendar.dart';
 import 'package:nutrimap/widgets/daily_info_card.dart';
 import 'package:nutrimap/widgets/stats_grid.dart';
 import 'package:nutrimap/widgets/step_counter_card.dart';
-// Note: WelcomeCard removed in favor of integrated header design
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -22,11 +21,11 @@ class _HomeScreenState extends State<HomeScreen>
   late AnimationController _animationController;
 
   // Colors
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentGreen = Color(0xFF2D9D78);
+  static const Color _primaryDark = Color.fromARGB(172, 11, 78, 201);
+  static const Color _secondaryDark = Color.fromARGB(162, 14, 2, 43);
+  static const Color _accentGreen = Color.fromARGB(255, 255, 255, 255);
   static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _textSecondary = Color(0xFF9DB2BF);
+  static const Color _textSecondary = Color.fromARGB(255, 255, 255, 255);
 
   String _userName = "";
   Map<int, double> _kmPerDay = {};
@@ -71,7 +70,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Calculations
     final totalKm = _kmPerDay.values.fold<double>(0, (a, b) => a + b);
     final daysWithData = _kmPerDay.values.where((km) => km > 0).length;
     final averageKm = daysWithData == 0 ? 0.0 : totalKm / daysWithData;
@@ -82,36 +80,33 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       backgroundColor: _primaryDark,
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: _accentGreen))
+          ? const Center(
+              child: CircularProgressIndicator(color: _accentGreen),
+            ) // carga 360
           : RefreshIndicator(
               onRefresh: _loadData,
               color: _accentGreen,
-              backgroundColor: _secondaryDark,
+              backgroundColor: const Color.fromARGB(223, 3, 50, 204),
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  // 1. HEADER INTEGRADO
                   SliverToBoxAdapter(child: _buildHomeHeader()),
-
-                  // 2. CONTENIDO PRINCIPAL
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
-                        // Sección: Registro Rápido (Step Counter)
                         _HomeSection(
                           title: "REGISTRO RÁPIDO",
+                          backgroundColor: const Color.fromARGB(161, 2, 43, 2),
                           child: StepCounterCard(
                             userUid: widget.user.uid,
                             onSaveSuccess: _loadData,
                           ),
                         ),
-
                         const SizedBox(height: 24),
-
-                        // Sección: Calendario
                         _HomeSection(
                           title: "CALENDARIO",
+                          backgroundColor: _secondaryDark,
                           child: ActivityCalendar(
                             focusedDay: _focusedDay,
                             selectedDay: _selectedDay,
@@ -123,12 +118,10 @@ class _HomeScreenState extends State<HomeScreen>
                             },
                           ),
                         ),
-
                         const SizedBox(height: 24),
-
-                        // Sección: Estadísticas del Mes
                         _HomeSection(
                           title: "ESTADÍSTICAS DEL MES",
+                          backgroundColor: _secondaryDark,
                           child: StatsGrid(
                             totalKm: totalKm,
                             daysWithData: daysWithData,
@@ -136,18 +129,15 @@ class _HomeScreenState extends State<HomeScreen>
                             maxKm: maxKm,
                           ),
                         ),
-
                         const SizedBox(height: 24),
-
-                        // Sección: Info del Día Seleccionado
                         _HomeSection(
                           title: "RESUMEN DEL DÍA",
+                          backgroundColor: _secondaryDark,
                           child: DailyInfoCard(
                             day: _selectedDay,
                             km: _kmPerDay[_selectedDay.day] ?? 0.0,
                           ),
                         ),
-
                         const SizedBox(height: 40),
                       ]),
                     ),
@@ -194,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     children: [
                       TextSpan(
-                        text: _userName.split(' ')[0], // Solo el primer nombre
+                        text: _userName.split(' ')[0],
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: _accentGreen,
@@ -217,8 +207,8 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             child: const CircleAvatar(
               radius: 24,
-              backgroundColor: _secondaryDark,
-              child: Icon(Icons.person, color: _textPrimary),
+              backgroundColor: Color.fromARGB(244, 1, 131, 40),
+              child: Icon(Icons.person, color: Color.fromARGB(248, 6, 42, 201)),
             ),
           ),
         ],
@@ -232,8 +222,13 @@ class _HomeScreenState extends State<HomeScreen>
 class _HomeSection extends StatelessWidget {
   final String title;
   final Widget child;
+  final Color backgroundColor;
 
-  const _HomeSection({required this.title, required this.child});
+  const _HomeSection({
+    required this.title,
+    required this.child,
+    required this.backgroundColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -245,22 +240,20 @@ class _HomeSection extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-              color: Color(0xFF9DB2BF), // _textSecondary
+              color: Color(0xFF9DB2BF),
               fontSize: 12,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.5,
             ),
           ),
         ),
-        // Envolvemos el widget hijo en un contenedor estilizado "burbuja"
-        // Esto unifica el diseño de los widgets importados (Calendar, Stats, etc.)
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF1B263B), // _secondaryDark
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: backgroundColor.withOpacity(0.2),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

@@ -14,11 +14,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   // --- PALETA DE COLORES ---
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentGreen = Color(0xFF2D9D78);
+  static const Color _primaryDark = Color.fromARGB(172, 11, 78, 201);
+  static const Color _secondaryDark = Color.fromARGB(50, 0, 0, 0);
+  static const Color _accentGreen = Color.fromARGB(169, 12, 216, 12);
   static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _textSecondary = Color(0xFF9DB2BF);
+  static const Color _textSecondary = Color.fromARGB(255, 255, 255, 255);
   static const Color _errorRed = Color(0xFFEF476F);
 
   final _emailController = TextEditingController();
@@ -134,7 +134,12 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _accentGreen.withOpacity(0.1),
+                color: const Color.fromARGB(
+                  169,
+                  231,
+                  231,
+                  231,
+                ).withOpacity(0.1),
               ),
             ),
           ),
@@ -270,7 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             local.register,
                             style: const TextStyle(
-                              color: _accentGreen,
+                              color: Color.fromARGB(169, 236, 236, 236),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -297,17 +302,20 @@ class _LoginScreenState extends State<LoginScreen> {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: _accentGreen.withOpacity(0.3),
+            color: const Color.fromARGB(228, 162, 165, 162).withOpacity(0.3),
             blurRadius: 30,
             spreadRadius: 5,
           ),
         ],
-        border: Border.all(color: _accentGreen.withOpacity(0.5), width: 2),
+        border: Border.all(
+          color: const Color.fromARGB(234, 12, 112, 179).withOpacity(0.5),
+          width: 2,
+        ),
       ),
       child: const Icon(
         Icons.health_and_safety_rounded,
         size: 60,
-        color: _accentGreen,
+        color: Color.fromARGB(234, 2, 151, 35),
       ),
     );
   }
@@ -324,11 +332,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: _secondaryDark,
+        color: const Color.fromARGB(55, 0, 0, 0),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -361,7 +369,10 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(color: _accentGreen, width: 1.5),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(70, 251, 252, 251),
+              width: 1.5,
+            ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
@@ -383,7 +394,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: ElevatedButton(
         onPressed: _isLoading ? null : _login,
         style: ElevatedButton.styleFrom(
-          backgroundColor: _accentGreen,
+          backgroundColor: const Color.fromARGB(209, 26, 86, 196),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),

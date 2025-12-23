@@ -15,7 +15,7 @@ class CommerceScreen extends StatefulWidget {
 class _CommerceScreenState extends State<CommerceScreen> {
   final CommerceService _commerceService = CommerceService();
 
-  static const Color _primaryDark = Color(0xFF0D1B2A);
+  static const Color _primaryDark = Color.fromARGB(206, 5, 81, 221);
   static const Color _accentBlue = Color(0xFF415A77);
   static const Color _textSecondary = Color(0xFF9DB2BF);
 

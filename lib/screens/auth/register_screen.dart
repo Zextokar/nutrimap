@@ -14,11 +14,11 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   // --- PALETA DE COLORES (Global) ---
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentGreen = Color(0xFF2D9D78);
+  static const Color _primaryDark = Color.fromARGB(172, 11, 78, 201);
+  static const Color _secondaryDark = Color.fromARGB(50, 0, 0, 0);
+  static const Color _accentGreen = Color.fromARGB(255, 1, 136, 30);
   static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _textSecondary = Color(0xFF9DB2BF);
+  static const Color _textSecondary = Color.fromARGB(255, 255, 255, 255);
   static const Color _errorRed = Color(0xFFEF476F);
 
   final _formKey = GlobalKey<FormState>();
@@ -124,9 +124,9 @@ class _RegisterPageState extends State<RegisterPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.dark(
-              primary: _accentGreen, // Color selección
+              primary: Color.fromARGB(104, 218, 223, 222), // Color selección
               onPrimary: Colors.white,
-              surface: _secondaryDark, // Fondo calendario
+              surface: Color.fromARGB(235, 11, 78, 201), // Fondo calendario
               onSurface: _textPrimary,
             ),
             dialogBackgroundColor: _primaryDark,
@@ -159,7 +159,12 @@ class _RegisterPageState extends State<RegisterPage> {
               width: 300,
               height: 300,
               decoration: BoxDecoration(
-                color: _accentGreen.withOpacity(0.15),
+                color: const Color.fromARGB(
+                  195,
+                  209,
+                  223,
+                  209,
+                ).withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
             ),
@@ -383,7 +388,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             child: ElevatedButton(
                               onPressed: _isLoading ? null : _registerUser,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: _accentGreen,
+                                backgroundColor: const Color.fromARGB(
+                                  209,
+                                  26,
+                                  86,
+                                  196,
+                                ),
                                 foregroundColor: Colors.white,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
@@ -490,11 +500,17 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: _accentGreen, width: 1.5),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(255, 255, 255, 255),
+              width: 1.5,
+            ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: _errorRed, width: 1.5),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(255, 190, 2, 46),
+              width: 1.5,
+            ),
           ),
           contentPadding: const EdgeInsets.symmetric(
             vertical: 16,
@@ -570,7 +586,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           child: DropdownButtonFormField<String>(
             value: value,
-            dropdownColor: _secondaryDark,
+            dropdownColor: const Color.fromARGB(235, 11, 78, 201),
             style: const TextStyle(color: _textPrimary, fontSize: 16),
             icon: Icon(
               Icons.keyboard_arrow_down_rounded,

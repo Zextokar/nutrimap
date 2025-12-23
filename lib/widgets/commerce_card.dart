@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class CommerceCard extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentBlue = Color(0xFF415A77);
-  static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _textSecondary = Color(0xFF9DB2BF);
+  static const Color _secondaryDark = Color.fromARGB(143, 42, 88, 187);
+  static const Color _accentBlue = Color.fromARGB(255, 215, 230, 2);
+  static const Color _textPrimary = Color.fromARGB(255, 255, 255, 255);
+  static const Color _textSecondary = Color.fromARGB(255, 255, 255, 255);
 
   const CommerceCard({super.key, required this.data});
 

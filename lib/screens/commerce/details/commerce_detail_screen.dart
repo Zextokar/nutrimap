@@ -62,7 +62,7 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
         return StatefulBuilder(
           builder: (context, setStateDialog) {
             return AlertDialog(
-              backgroundColor: AppTheme.secondaryDark,
+              backgroundColor: const Color.fromARGB(239, 0, 86, 247),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(28),
               ),
@@ -77,7 +77,7 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                 children: [
                   const Text(
                     "¿Qué tal estuvo tu visita?",
-                    style: TextStyle(color: AppTheme.textSecondary),
+                    style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                   ),
                   const SizedBox(height: 24),
                   Row(
@@ -123,16 +123,29 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                 top: 10,
               ),
               actions: [
-                TextButton(
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 1, 71, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
+                  ),
                   onPressed: () => Navigator.pop(context),
                   child: const Text(
                     "Cancelar",
-                    style: TextStyle(color: AppTheme.textSecondary),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.accentGreen,
+                    backgroundColor: const Color.fromARGB(255, 1, 71, 48),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -183,7 +196,7 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
     final data = widget.commerceData;
 
     return Scaffold(
-      backgroundColor: AppTheme.primaryDark,
+      backgroundColor: const Color.fromARGB(80, 3, 96, 196),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -192,21 +205,31 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
             expandedHeight: 280,
             floating: false,
             pinned: true,
-            backgroundColor: AppTheme.primaryDark,
+            backgroundColor: const Color.fromARGB(
+              255,
+              6,
+              115,
+              204,
+            ), //fondo detail
             centerTitle: true,
             title: Text(
               data['nombre'] ?? 'Comercio',
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                shadows: [Shadow(color: Colors.black45, blurRadius: 8)],
+                shadows: [
+                  Shadow(
+                    color: Color.fromARGB(181, 7, 116, 241),
+                    blurRadius: 8,
+                  ),
+                ],
               ),
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Container(color: AppTheme.secondaryDark),
+                  Container(color: const Color.fromARGB(207, 19, 95, 236)), //
                   Center(
                     child: Icon(
                       Icons.storefront_rounded,
@@ -220,9 +243,9 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.transparent,
-                          AppTheme.primaryDark.withOpacity(0.3),
-                          AppTheme.primaryDark,
+                          const Color.fromARGB(96, 2, 48, 92), //degradados
+                          const Color.fromARGB(255, 3, 45, 90).withOpacity(0.3),
+                          const Color.fromARGB(255, 8, 37, 68),
                         ],
                         stops: const [0.5, 0.8, 1.0],
                       ),
@@ -241,7 +264,7 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppTheme.accentGreen,
+                            color: const Color.fromARGB(255, 1, 100, 31),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Text(
@@ -304,11 +327,16 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppTheme.secondaryDark,
+                      color: const Color.fromARGB(147, 2, 112, 2),
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: const Color.fromARGB(
+                            255,
+                            4,
+                            181,
+                            235,
+                          ).withOpacity(0.3),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -355,16 +383,21 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: AppTheme.primaryDark,
+                                color: const Color.fromARGB(155, 1, 60, 100),
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: AppTheme.accentGreen.withOpacity(0.3),
+                                  color: const Color.fromARGB(
+                                    136,
+                                    11,
+                                    112,
+                                    1,
+                                  ).withOpacity(0.3),
                                 ),
                               ),
                               child: const Text(
                                 "Dejar Calificación",
                                 style: TextStyle(
-                                  color: AppTheme.accentGreen,
+                                  color: Color.fromARGB(255, 255, 255, 255),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                 ),
@@ -375,14 +408,13 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 16),
 
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.accentGreen,
+                        backgroundColor: const Color.fromARGB(113, 6, 187, 82),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18),
@@ -419,7 +451,7 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: AppTheme.secondaryDark,
+                      color: const Color.fromARGB(193, 2, 134, 13),
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: Text(

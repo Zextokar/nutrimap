@@ -13,11 +13,11 @@ class SubscriptionScreen extends StatefulWidget {
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
   // --- PALETA DE COLORES ---
-  static const Color _primaryDark = Color(0xFF0D1B2A);
-  static const Color _secondaryDark = Color(0xFF1B263B);
-  static const Color _accentGreen = Color(0xFF2D9D78);
+  static const Color _primaryDark = Color.fromARGB(255, 5, 89, 179);
+  static const Color _secondaryDark = Color.fromARGB(255, 2, 49, 136);
+  static const Color _accentGreen = Color.fromARGB(255, 1, 105, 24);
   static const Color _textPrimary = Color(0xFFE0E1DD);
-  static const Color _textSecondary = Color(0xFF9DB2BF);
+  static const Color _textSecondary = Color.fromARGB(255, 212, 212, 212);
   static const Color _gold = Color(0xFFFFD700);
   static const Color _goldDark = Color(0xFFFFA000);
 

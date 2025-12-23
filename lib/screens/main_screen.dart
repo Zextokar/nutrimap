@@ -48,8 +48,8 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF10B981),
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: const Color.fromARGB(148, 23, 192, 1),
+        unselectedItemColor: const Color.fromARGB(255, 255, 255, 255),
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.home),
