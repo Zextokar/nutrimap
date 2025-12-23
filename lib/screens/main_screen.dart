@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'package:nutrimap/l10n/app_localizations.dart';
 import 'package:nutrimap/screens/benefits/benefits_screen.dart';
 import 'package:nutrimap/screens/commerce/commerce_screen.dart';
@@ -8,7 +10,7 @@ import 'package:nutrimap/screens/maps/map_screen.dart';
 import 'package:nutrimap/screens/settings/settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  final User user; // ✅ Usuario autenticado, no puede ser null
+  final User user;
   const MainScreen({super.key, required this.user});
 
   @override
@@ -17,12 +19,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-
   late final List<Widget> _screens;
+
+  bool _adsInitialized = false;
 
   @override
   void initState() {
     super.initState();
+
     _screens = [
       HomeScreen(user: widget.user),
       MapScreen(user: widget.user),
@@ -30,12 +34,22 @@ class _MainScreenState extends State<MainScreen> {
       CommerceScreen(user: widget.user),
       SettingsScreen(user: widget.user),
     ];
+
+    // Inicializa Ads después del primer frame (no bloquea UI)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initAds();
+    });
+  }
+
+  Future<void> _initAds() async {
+    if (_adsInitialized) return;
+    _adsInitialized = true;
+
+    await MobileAds.instance.initialize();
   }
 
   void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+    setState(() => _currentIndex = index);
   }
 
   @override
