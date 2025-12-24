@@ -507,7 +507,12 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                     ),
                     padding: const EdgeInsets.all(40),
                     decoration: BoxDecoration(
-                      color: AppTheme.secondaryDark.withOpacity(0.5),
+                      color: const Color.fromARGB(
+                        255,
+                        5,
+                        72,
+                        197,
+                      ).withOpacity(0.5),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(color: Colors.white.withOpacity(0.05)),
                     ),
