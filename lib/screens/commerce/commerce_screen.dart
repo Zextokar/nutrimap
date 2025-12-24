@@ -15,7 +15,7 @@ class CommerceScreen extends StatefulWidget {
 class _CommerceScreenState extends State<CommerceScreen> {
   final CommerceService _commerceService = CommerceService();
 
-  static const Color _primaryDark = Color.fromARGB(206, 5, 81, 221);
+  static const Color _primaryDark = Color.fromARGB(206, 3, 64, 177);
   static const Color _accentBlue = Color(0xFF415A77);
   static const Color _textSecondary = Color(0xFF9DB2BF);
 
@@ -61,7 +61,9 @@ class _CommerceScreenState extends State<CommerceScreen> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(color: _accentBlue),
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 5, 87, 180),
+                ),
               );
             }
 
@@ -78,7 +80,7 @@ class _CommerceScreenState extends State<CommerceScreen> {
 
             if (comercios.isEmpty) {
               return RefreshIndicator(
-                color: _accentBlue,
+                color: const Color.fromARGB(255, 255, 255, 255),
                 onRefresh: _refreshData,
                 child: ListView(
                   children: [

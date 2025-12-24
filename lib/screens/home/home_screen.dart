@@ -21,8 +21,8 @@ class _HomeScreenState extends State<HomeScreen>
   late AnimationController _animationController;
 
   // Colors
-  static const Color _primaryDark = Color.fromARGB(172, 11, 78, 201);
-  static const Color _secondaryDark = Color.fromARGB(162, 14, 2, 43);
+  static const Color _primaryDark = Color.fromARGB(235, 2, 70, 173);
+  static const Color _secondaryDark = Color.fromARGB(213, 6, 76, 206);
   static const Color _accentGreen = Color.fromARGB(255, 255, 255, 255);
   static const Color _textPrimary = Color(0xFFE0E1DD);
   static const Color _textSecondary = Color.fromARGB(255, 255, 255, 255);
@@ -80,13 +80,11 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       backgroundColor: _primaryDark,
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: _accentGreen),
-            ) // carga 360
+          ? const Center(child: CircularProgressIndicator(color: _accentGreen))
           : RefreshIndicator(
               onRefresh: _loadData,
               color: _accentGreen,
-              backgroundColor: const Color.fromARGB(223, 3, 50, 204),
+              backgroundColor: _secondaryDark,
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
@@ -97,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen>
                       delegate: SliverChildListDelegate([
                         _HomeSection(
                           title: "REGISTRO RÁPIDO",
-                          backgroundColor: const Color.fromARGB(161, 2, 43, 2),
+                          backgroundColor: _secondaryDark,
                           child: StepCounterCard(
                             userUid: widget.user.uid,
                             onSaveSuccess: _loadData,

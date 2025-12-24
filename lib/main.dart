@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
       title: 'NutriMap',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       locale: _locale,
       supportedLocales: const [Locale('es'), Locale('en')],
       localizationsDelegates: const [

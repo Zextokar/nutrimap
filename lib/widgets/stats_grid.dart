@@ -59,7 +59,7 @@ class StatsGrid extends StatelessWidget {
     required Color color,
   }) {
     // Colores base del tema oscuro
-    const secondaryDark = Color(0xFF1B263B);
+    const secondaryDark = Color.fromARGB(255, 2, 32, 88);
     const textPrimary = Color(0xFFE0E1DD);
 
     return Container(
