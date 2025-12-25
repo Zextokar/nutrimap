@@ -16,37 +16,42 @@ class StatsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Detectamos el idioma del sistema
+    final bool isSpanish = Localizations.localeOf(context).languageCode == 'es';
+
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 16, // Espaciado un poco mayor
+      crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      childAspectRatio: 1.1, // Tarjetas ligeramente más anchas
+      childAspectRatio: 1.1,
       children: [
         _buildStatCard(
           icon: Icons.route_rounded,
-          label: "Total KM",
+          label: isSpanish
+              ? "Total KM"
+              : "Total KM", // Se mantiene igual o puedes usar "Total Distance"
           value: totalKm.toStringAsFixed(1),
-          color: const Color(0xFF2D9D78), // Verde menta
+          color: const Color(0xFF2D9D78),
         ),
         _buildStatCard(
           icon: Icons.calendar_today_rounded,
-          label: "Días Activos",
+          label: isSpanish ? "Días Activos" : "Active Days",
           value: daysWithData.toString(),
-          color: const Color(0xFF415A77), // Azul grisáceo
+          color: const Color(0xFF415A77),
         ),
         _buildStatCard(
           icon: Icons.trending_up_rounded,
-          label: "Promedio",
+          label: isSpanish ? "Promedio" : "Average",
           value: averageKm.toStringAsFixed(1),
-          color: const Color(0xFF5D737E), // Gris azulado suave
+          color: const Color(0xFF5D737E),
         ),
         _buildStatCard(
           icon: Icons.flash_on_rounded,
-          label: "Récord",
+          label: isSpanish ? "Récord" : "Record",
           value: maxKm.toStringAsFixed(1),
-          color: const Color(0xFFE29578), // Naranja suave (Terra cotta)
+          color: const Color(0xFFE29578),
         ),
       ],
     );
@@ -58,14 +63,13 @@ class StatsGrid extends StatelessWidget {
     required String value,
     required Color color,
   }) {
-    // Colores base del tema oscuro
     const secondaryDark = Color.fromARGB(255, 2, 32, 88);
     const textPrimary = Color(0xFFE0E1DD);
 
     return Container(
       decoration: BoxDecoration(
         color: secondaryDark,
-        borderRadius: BorderRadius.circular(24), // Bordes más redondeados
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -76,7 +80,6 @@ class StatsGrid extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Fondo decorativo (gradiente muy sutil)
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -89,22 +92,23 @@ class StatsGrid extends StatelessWidget {
               ),
             ),
           ),
-
-          // Contenido
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end, // Texto abajo
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                    color:
-                        color, // El número toma el color del tema de la tarjeta
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.5,
+                FittedBox(
+                  // Agregado para asegurar que el número no se corte
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -0.5,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -120,8 +124,6 @@ class StatsGrid extends StatelessWidget {
               ],
             ),
           ),
-
-          // Icono flotante en la esquina
           Positioned(
             top: 16,
             right: 16,

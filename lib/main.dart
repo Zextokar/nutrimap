@@ -64,6 +64,7 @@ class _MyAppState extends State<MyApp> {
       child: Consumer<LocaleProvider>(
         builder: (context, provider, _) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'NutriMap',
             theme: ThemeData.light(),
             darkTheme: ThemeData.dark(),

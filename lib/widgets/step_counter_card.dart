@@ -1,4 +1,4 @@
-import 'dart:async'; // <--- IMPORTANTE: Necesario para el Timer
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -20,7 +20,6 @@ class _StepCounterCardState extends State<StepCounterCard> {
   Stream<StepCount>? _stepCountStream;
   Stream<PedestrianStatus>? _pedestrianStatusStream;
 
-  // Timer para la simulación
   Timer? _timer;
 
   String _steps = "0";
@@ -28,7 +27,7 @@ class _StepCounterCardState extends State<StepCounterCard> {
   double _kmCalculated = 0.0;
   bool _isSaving = false;
   bool _hasPermission = false;
-  bool _isSimulating = false; // Flag para saber si estamos simulando
+  bool _isSimulating = false;
 
   @override
   void initState() {
@@ -38,7 +37,7 @@ class _StepCounterCardState extends State<StepCounterCard> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // <--- IMPORTANTE: Cancelar timer al salir
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -57,31 +56,24 @@ class _StepCounterCardState extends State<StepCounterCard> {
             ?.listen(_onPedestrianStatus)
             .onError(_onStatusError);
       } catch (e) {
-        // Si falla la inicialización (común en emulador), arrancamos simulación
-        debugPrint("Error inicializando sensor: $e. Iniciando simulación.");
         _startEmulatorSimulation();
       }
     }
   }
 
-  // --- LÓGICA DE SIMULACIÓN ---
   void _startEmulatorSimulation() {
-    if (_isSimulating) return; // Evitar duplicar timers
-
+    if (_isSimulating) return;
     setState(() => _isSimulating = true);
 
-    // Suma 1 paso cada 2 segundos
     _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
       if (!mounted) {
         timer.cancel();
         return;
       }
-
       setState(() {
-        _stepsInt++; // Aumentamos pasos
+        _stepsInt++;
         _steps = _stepsInt.toString();
         _kmCalculated = _activityService.stepsToKm(_stepsInt);
-        // Simulamos estado caminando visualmente
       });
     });
   }
@@ -95,24 +87,20 @@ class _StepCounterCardState extends State<StepCounterCard> {
     });
   }
 
-  void _onPedestrianStatus(PedestrianStatus event) {
-    // Aquí podrías cambiar íconos si está caminando o parado
-  }
+  void _onPedestrianStatus(PedestrianStatus event) {}
 
   // ignore: strict_top_level_inference
   void _onStepError(error) {
-    debugPrint('Error pasos (Sensor no encontrado): $error');
-    // Si el stream da error, activamos la simulación
     _startEmulatorSimulation();
   }
 
   // ignore: strict_top_level_inference
-  void _onStatusError(error) {
-    debugPrint('Error estado: $error');
-  }
+  void _onStatusError(error) {}
 
   Future<void> _saveToFirebase() async {
     if (_stepsInt == 0) return;
+    final bool isSpanish = Localizations.localeOf(context).languageCode == 'es';
+
     setState(() => _isSaving = true);
 
     try {
@@ -124,9 +112,13 @@ class _StepCounterCardState extends State<StepCounterCard> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("¡Actividad registrada exitosamente!"),
-            backgroundColor: Color.fromARGB(255, 3, 184, 48),
+          SnackBar(
+            content: Text(
+              isSpanish
+                  ? "¡Actividad registrada exitosamente!"
+                  : "Activity recorded successfully!",
+            ),
+            backgroundColor: const Color.fromARGB(255, 3, 184, 48),
           ),
         );
         widget.onSaveSuccess?.call();
@@ -134,7 +126,10 @@ class _StepCounterCardState extends State<StepCounterCard> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error: $e"), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text("${isSpanish ? 'Error' : 'Error'}: $e"),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     } finally {
@@ -144,6 +139,9 @@ class _StepCounterCardState extends State<StepCounterCard> {
 
   @override
   Widget build(BuildContext context) {
+    // DETECCIÓN DE IDIOMA
+    final bool isSpanish = Localizations.localeOf(context).languageCode == 'es';
+
     if (!_hasPermission) {
       return Container(
         padding: const EdgeInsets.all(16),
@@ -152,9 +150,11 @@ class _StepCounterCardState extends State<StepCounterCard> {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.redAccent.withOpacity(0.3)),
         ),
-        child: const Text(
-          "Se requiere permiso de actividad física",
-          style: TextStyle(color: Colors.white),
+        child: Text(
+          isSpanish
+              ? "Se requiere permiso de actividad física"
+              : "Physical activity permission is required",
+          style: const TextStyle(color: Colors.white),
         ),
       );
     }
@@ -197,7 +197,9 @@ class _StepCounterCardState extends State<StepCounterCard> {
                     ),
                   ),
                   Text(
-                    _isSimulating ? "Pasos (Simulado)" : "Pasos (Sensor)",
+                    _isSimulating
+                        ? (isSpanish ? "Pasos (Simulado)" : "Steps (Simulated)")
+                        : (isSpanish ? "Pasos (Sensor)" : "Steps (Sensor)"),
                     style: const TextStyle(color: Colors.white54, fontSize: 12),
                   ),
                 ],
@@ -213,9 +215,9 @@ class _StepCounterCardState extends State<StepCounterCard> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Text(
-                    "Estimado",
-                    style: TextStyle(color: Colors.white54, fontSize: 12),
+                  Text(
+                    isSpanish ? "Estimado" : "Estimated",
+                    style: const TextStyle(color: Colors.white54, fontSize: 12),
                   ),
                 ],
               ),
@@ -244,7 +246,11 @@ class _StepCounterCardState extends State<StepCounterCard> {
                     )
                   : const Icon(Icons.cloud_upload),
               label: Text(
-                _isSaving ? "Guardando..." : "Registrar Actividad de Hoy",
+                _isSaving
+                    ? (isSpanish ? "Guardando..." : "Saving...")
+                    : (isSpanish
+                          ? "Registrar Actividad de Hoy"
+                          : "Log Today's Activity"),
               ),
             ),
           ),

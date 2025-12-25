@@ -20,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen>
   final ActivityService _activityService = ActivityService();
   late AnimationController _animationController;
 
-  // Colors
   static const Color _primaryDark = Color.fromARGB(235, 2, 70, 173);
   static const Color _secondaryDark = Color.fromARGB(213, 6, 76, 206);
   static const Color _accentGreen = Color.fromARGB(255, 255, 255, 255);
@@ -52,11 +51,9 @@ class _HomeScreenState extends State<HomeScreen>
   Future<void> _loadData() async {
     if (!mounted) return;
     setState(() => _isLoading = true);
-
     try {
       final userData = await _activityService.getUserData(widget.user.uid);
       final kms = await _activityService.getMonthKms(userData['ref']);
-
       if (!mounted) return;
       setState(() {
         _userName = userData['name'] ?? 'Usuario';
@@ -70,6 +67,9 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    // DETECCIÓN DE IDIOMA
+    final bool isSpanish = Localizations.localeOf(context).languageCode == 'es';
+
     final totalKm = _kmPerDay.values.fold<double>(0, (a, b) => a + b);
     final daysWithData = _kmPerDay.values.where((km) => km > 0).length;
     final averageKm = daysWithData == 0 ? 0.0 : totalKm / daysWithData;
@@ -88,13 +88,13 @@ class _HomeScreenState extends State<HomeScreen>
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  SliverToBoxAdapter(child: _buildHomeHeader()),
+                  SliverToBoxAdapter(child: _buildHomeHeader(isSpanish)),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
                         _HomeSection(
-                          title: "REGISTRO RÁPIDO",
+                          title: isSpanish ? "REGISTRO RÁPIDO" : "QUICK LOG",
                           backgroundColor: _secondaryDark,
                           child: StepCounterCard(
                             userUid: widget.user.uid,
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                         const SizedBox(height: 24),
                         _HomeSection(
-                          title: "CALENDARIO",
+                          title: isSpanish ? "CALENDARIO" : "CALENDAR",
                           backgroundColor: _secondaryDark,
                           child: ActivityCalendar(
                             focusedDay: _focusedDay,
@@ -118,7 +118,9 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                         const SizedBox(height: 24),
                         _HomeSection(
-                          title: "ESTADÍSTICAS DEL MES",
+                          title: isSpanish
+                              ? "ESTADÍSTICAS DEL MES"
+                              : "MONTHLY STATS",
                           backgroundColor: _secondaryDark,
                           child: StatsGrid(
                             totalKm: totalKm,
@@ -129,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                         const SizedBox(height: 24),
                         _HomeSection(
-                          title: "RESUMEN DEL DÍA",
+                          title: isSpanish ? "RESUMEN DEL DÍA" : "DAY SUMMARY",
                           backgroundColor: _secondaryDark,
                           child: DailyInfoCard(
                             day: _selectedDay,
@@ -146,10 +148,10 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _buildHomeHeader() {
+  Widget _buildHomeHeader(bool isSpanish) {
     final String dateText = DateFormat(
       'EEEE d, MMMM',
-      'es_ES',
+      isSpanish ? 'es_ES' : 'en_US',
     ).format(DateTime.now());
 
     return Padding(
@@ -173,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen>
                 const SizedBox(height: 4),
                 RichText(
                   text: TextSpan(
-                    text: 'Hola, ',
+                    text: isSpanish ? 'Hola, ' : 'Hello, ',
                     style: const TextStyle(
                       fontSize: 28,
                       color: _textPrimary,
@@ -182,7 +184,9 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     children: [
                       TextSpan(
-                        text: _userName.split(' ')[0],
+                        text: _userName.isEmpty
+                            ? (isSpanish ? 'Usuario' : 'User')
+                            : _userName.split(' ')[0],
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: _accentGreen,
@@ -214,8 +218,6 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 }
-
-// ---------------- WIDGETS DE DISEÑO INTERNOS ----------------
 
 class _HomeSection extends StatelessWidget {
   final String title;

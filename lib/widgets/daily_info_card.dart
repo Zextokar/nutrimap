@@ -14,6 +14,8 @@ class DailyInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Detectar idioma
+    final bool isSpanish = Localizations.localeOf(context).languageCode == 'es';
     final hasData = km > 0;
 
     return Container(
@@ -33,7 +35,8 @@ class DailyInfoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Día ${day.day.toString().padLeft(2, '0')}',
+            // Traducción de "Día" o "Day"
+            '${isSpanish ? 'Día' : 'Day'} ${day.day.toString().padLeft(2, '0')}',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -49,13 +52,18 @@ class DailyInfoCard extends StatelessWidget {
                 color: hasData ? _accentGreen : _textPrimary.withOpacity(0.5),
               ),
               const SizedBox(width: 8),
-              Text(
-                hasData
-                    ? 'Distancia recorrida: ${km.toStringAsFixed(1)} km'
-                    : 'Sin datos para este día',
-                style: TextStyle(
-                  color: _textPrimary.withOpacity(0.8),
-                  fontSize: 14,
+              Expanded(
+                child: Text(
+                  // Traducción de los estados de datos
+                  hasData
+                      ? '${isSpanish ? 'Distancia recorrida' : 'Distance covered'}: ${km.toStringAsFixed(1)} km'
+                      : (isSpanish
+                            ? 'Sin datos para este día'
+                            : 'No data for this day'),
+                  style: TextStyle(
+                    color: _textPrimary.withOpacity(0.8),
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],
