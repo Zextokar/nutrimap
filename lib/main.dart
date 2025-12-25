@@ -3,9 +3,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:nutrimap/l10n/app_localizations.dart';
+import 'package:nutrimap/providers/locale_provider.dart';
 import 'package:nutrimap/screens/auth/login_screen.dart';
 import 'package:nutrimap/screens/auth/register_screen.dart';
 import 'package:nutrimap/screens/main_screen.dart';
@@ -27,7 +29,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = const Locale('es');
   bool _isFirstRun = false;
   bool _loading = true;
 
@@ -47,10 +48,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void _setLocale(Locale locale) {
-    setState(() => _locale = locale);
-  }
-
   Future<void> _completeInfo(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('seenInfo', true);
@@ -62,45 +59,51 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'NutriMap',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.dark,
-      locale: _locale,
-      supportedLocales: const [Locale('es'), Locale('en')],
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      home: _loading
-          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
-          : _isFirstRun
-          ? InfoScreen(
-              onLocaleChange: _setLocale,
-              onFinished: () => _completeInfo(context),
-            )
-          : StreamBuilder<User?>(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Scaffold(
+    return ChangeNotifierProvider(
+      create: (_) => LocaleProvider(),
+      child: Consumer<LocaleProvider>(
+        builder: (context, provider, _) {
+          return MaterialApp(
+            title: 'NutriMap',
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            themeMode: ThemeMode.dark,
+            locale: provider.locale,
+            supportedLocales: const [Locale('es'), Locale('en')],
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            home: _loading
+                ? const Scaffold(
                     body: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if (snapshot.hasData) {
-                  return MainScreen(user: snapshot.data!);
-                }
-                return const LoginScreen();
-              },
-            ),
-      routes: {
-        '/login': (_) => const LoginScreen(),
-        '/register': (_) => const RegisterPage(),
-        '/subscription': (_) => const SubscriptionScreen(),
-      },
+                  )
+                : _isFirstRun
+                ? InfoScreen(onFinished: () => _completeInfo(context), onLocaleChange: (Locale p1) {  },)
+                : StreamBuilder<User?>(
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Scaffold(
+                          body: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        return MainScreen(user: snapshot.data!);
+                      }
+                      return const LoginScreen();
+                    },
+                  ),
+            routes: {
+              '/login': (_) => const LoginScreen(),
+              '/register': (_) => const RegisterPage(),
+              '/subscription': (_) => const SubscriptionScreen(),
+            },
+          );
+        },
+      ),
     );
   }
 }

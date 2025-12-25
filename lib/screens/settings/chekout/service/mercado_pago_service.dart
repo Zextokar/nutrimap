@@ -1,42 +1,40 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart'; // Importante para enviar el ID del usuario
 
 Future<String?> crearPreferenciaPago() async {
-  const String accessToken =
-      'APP_USR-2396912505270458-111218-90b423031ae788a8b1dc51cc7fd1a4f7-216182007';
+  // 1. Reemplaza con tu URL real de Vercel
+  final url = Uri.parse('https://nutrimapbackend.vercel.app/api/index');
 
-  final url = Uri.parse('https://api.mercadopago.com/checkout/preferences');
-  final response = await http.post(
-    url,
-    headers: {
-      'Authorization': 'Bearer $accessToken',
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode({
-      "items": [
-        {
-          "title": "Premium",
-          "quantity": 1,
-          "unit_price": 50,
-          "currency_id": "CLP",
-        },
-      ],
-      "back_urls": {
-        "success": "https://tuapp.com/success",
-        "failure": "https://tuapp.com/failure",
-        "pending": "https://tuapp.com/pending",
-      },
-      "auto_return": "approved",
-    }),
-  );
+  try {
+    // 2. Obtenemos el UID del usuario actual de Firebase
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
 
-  if (response.statusCode == 201) {
-    final data = jsonDecode(response.body);
-    return data['init_point'];
-  } else {
+    // 3. Hacemos la petición a NUESTRO backend, no al de Mercado Pago directamente
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        "userId": user
+            .uid, // Enviamos el UID para que el Webhook sepa a quién activar
+      }),
+    );
+
+    // 4. Tu backend de Vercel devuelve 200 si todo sale bien (Mercado Pago devuelve 201)
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['init_point']; // El link para abrir el WebView
+    } else {
+      if (kDebugMode) {
+        print('Error en el servidor: ${response.body}');
+      }
+      return null;
+    }
+  } catch (e) {
     if (kDebugMode) {
-      print('Error creando preferencia: ${response.body}');
+      print('Error de conexión con el backend: $e');
     }
     return null;
   }

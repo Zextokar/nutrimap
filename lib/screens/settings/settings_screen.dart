@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:nutrimap/screens/maps/maps_free.dart';
+import 'package:nutrimap/screens/about/about_screen.dart';
 import 'package:nutrimap/screens/profile/profile_screen.dart';
 import 'package:nutrimap/screens/settings/terms_conditions.dart';
 import 'package:provider/provider.dart';
@@ -38,9 +37,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
   String? _userRut;
 
-  int _secretTapCount = 0;
-  DateTime? _lastTapTime;
-
   @override
   void initState() {
     super.initState();
@@ -64,29 +60,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
     } catch (e) {
       debugPrint("Error cargando preferencias: $e");
-    }
-  }
-
-  void _handleSecretAccess() {
-    final now = DateTime.now();
-
-    if (_lastTapTime != null &&
-        now.difference(_lastTapTime!) > const Duration(seconds: 1)) {
-      _secretTapCount = 0;
-    }
-
-    setState(() {
-      _lastTapTime = now;
-      _secretTapCount++;
-    });
-
-    if (_secretTapCount >= 5) {
-      setState(() => _secretTapCount = 0);
-      HapticFeedback.heavyImpact();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
-      );
     }
   }
 
@@ -463,7 +436,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   icon: Icons.info_outline_rounded,
                   title: local.about,
                   color: _textSecondary,
-                  onTap: _handleSecretAccess,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AboutScreen()),
+                  ),
                 ),
                 const Divider(
                   height: 1,
