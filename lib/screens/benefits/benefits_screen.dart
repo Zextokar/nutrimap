@@ -18,7 +18,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   static const Color _primaryDark = Color.fromARGB(206, 5, 81, 221);
   static const Color _secondaryDark = Color.fromARGB(123, 1, 180, 10);
   static const Color _accentGreen = Color.fromARGB(206, 0, 180, 120);
-  static const Color _accentBlue = Color.fromARGB(255, 2, 129, 12); //lineas
+  static const Color _accentBlue = Color.fromARGB(255, 2, 129, 12); // lineas
   static const Color _textPrimary = Color.fromARGB(255, 255, 255, 255);
   static const Color _textSecondary = Color.fromARGB(255, 255, 255, 255);
 
@@ -208,7 +208,18 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
-    final currentMonthName = DateFormat('MMMM', 'es_ES').format(DateTime.now());
+
+    //  Detecta idioma : "es" o "en"
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final bool isSpanish = localeCode == 'es';
+    // Si no es español, asumimos inglés
+    final bool isEnglish = localeCode == 'en';
+
+    // Nombre del mes según idioma
+    final currentMonthName = DateFormat(
+      'MMMM',
+      isSpanish ? 'es_ES' : 'en_US',
+    ).format(DateTime.now());
 
     final milestonesWithStatus = _milestonesWithStatus();
     final nextTarget = _nextTarget();
@@ -248,8 +259,10 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                         ),
                         flexibleSpace: FlexibleSpaceBar(
                           background: _buildProgressHeader(
-                            currentMonthName,
-                            nextTarget,
+                            month: currentMonthName,
+                            nextTarget: nextTarget,
+                            isSpanish: isSpanish,
+                            isEnglish: isEnglish,
                           ),
                         ),
                       ),
@@ -268,6 +281,8 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                               milestone,
                               isFirst,
                               isLast,
+                              isSpanish: isSpanish,
+                              isEnglish: isEnglish,
                             );
                           }, childCount: milestonesWithStatus.length),
                         ),
@@ -295,7 +310,13 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
     );
   }
 
-  Widget _buildProgressHeader(String month, int nextTarget) {
+  //  recibe idioma para traducir textos hardcodeados
+  Widget _buildProgressHeader({
+    required String month,
+    required int nextTarget,
+    required bool isSpanish,
+    required bool isEnglish,
+  }) {
     double progressPercent = nextTarget > 0
         ? (_monthlyKm / nextTarget).clamp(0.0, 1.0)
         : 0.0;
@@ -330,7 +351,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                     255,
                     255,
                     255,
-                  ), // ciruclo distancia
+                  ), // circulo distancia
                   valueColor: const AlwaysStoppedAnimation<Color>(_accentGreen),
                   strokeCap: StrokeCap.round,
                 ),
@@ -374,8 +395,12 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
             ],
           ),
           const SizedBox(height: 16),
+
+          //
           Text(
-            "Progreso de ${month.toUpperCase()}",
+            isSpanish
+                ? "PROGRESO DE ${month.toUpperCase()}"
+                : "PROGRESS OF ${month.toUpperCase()}",
             style: const TextStyle(
               color: _textSecondary,
               letterSpacing: 2,
@@ -384,8 +409,12 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
             ),
           ),
           const SizedBox(height: 8),
+
+          //
           Text(
-            "Siguiente meta: $nextTarget KM",
+            isSpanish
+                ? "Siguiente meta: $nextTarget KM"
+                : "Next goal: $nextTarget KM",
             style: TextStyle(
               color: _textPrimary.withOpacity(0.7),
               fontSize: 12,
@@ -399,8 +428,10 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   Widget _buildTimelineItem(
     Map<String, dynamic> milestone,
     bool isFirst,
-    bool isLast,
-  ) {
+    bool isLast, {
+    required bool isSpanish,
+    required bool isEnglish,
+  }) {
     final int target = (milestone['target'] as num).toInt();
     final bool isUnlocked = milestone['isUnlocked'] as bool;
 
@@ -554,8 +585,12 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           ),
                         ),
                         const SizedBox(height: 4),
+
+                        //   traducido según idioma
                         Text(
-                          "Faltan ${(_monthlyKm < target ? target - _monthlyKm : 0).toStringAsFixed(1)} km",
+                          isSpanish
+                              ? "Faltan ${(_monthlyKm < target ? target - _monthlyKm : 0).toStringAsFixed(1)} km"
+                              : "${(_monthlyKm < target ? target - _monthlyKm : 0).toStringAsFixed(1)} km remaining",
                           style: TextStyle(
                             fontSize: 10,
                             color: _textSecondary.withOpacity(0.5),
@@ -564,16 +599,18 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                       ] else ...[
                         const SizedBox(height: 8),
                         Row(
-                          children: const [
-                            Icon(
+                          children: [
+                            const Icon(
                               Icons.celebration,
                               size: 14,
                               color: _accentGreen,
                             ),
-                            SizedBox(width: 4),
+                            const SizedBox(width: 4),
+
+                            //  traducido según idioma
                             Text(
-                              "¡Disponible!",
-                              style: TextStyle(
+                              isSpanish ? "¡Disponible!" : "Available!",
+                              style: const TextStyle(
                                 color: _accentGreen,
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,

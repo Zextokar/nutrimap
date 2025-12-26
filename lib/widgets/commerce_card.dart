@@ -12,6 +12,10 @@ class CommerceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Detecta idioma actual: "es" o "en"
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final bool isSpanish = localeCode == 'es';
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -35,7 +39,7 @@ class CommerceCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  data['nombre'] ?? 'Comercio',
+                  data['nombre'] ?? (isSpanish ? 'Comercio' : 'Business'),
                   style: const TextStyle(
                     color: _textPrimary,
                     fontSize: 18,
@@ -72,9 +76,13 @@ class CommerceCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
+
           // Descripción
           Text(
-            data['descripcion'] ?? 'Sin descripción disponible',
+            data['descripcion'] ??
+                (isSpanish
+                    ? 'Sin descripción disponible'
+                    : 'No description available'),
             style: const TextStyle(
               color: _textSecondary,
               fontSize: 14,
@@ -84,6 +92,7 @@ class CommerceCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 12),
+
           // Dirección
           Row(
             children: [
@@ -95,7 +104,10 @@ class CommerceCard extends StatelessWidget {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  data['direccion'] ?? 'Dirección no especificada',
+                  data['direccion'] ??
+                      (isSpanish
+                          ? 'Dirección no especificada'
+                          : 'Address not provided'),
                   style: const TextStyle(color: _textSecondary, fontSize: 13),
                   overflow: TextOverflow.ellipsis,
                 ),

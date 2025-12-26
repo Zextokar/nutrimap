@@ -56,6 +56,11 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
 
   void _showRatingDialog(BuildContext context, String commerceId) {
     int selectedStars = 5;
+
+    //Detecta idioma : "es" o "en"
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final bool isSpanish = localeCode == 'es';
+
     showDialog(
       context: context,
       builder: (ctx) {
@@ -67,17 +72,21 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                 borderRadius: BorderRadius.circular(28),
               ),
               contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 10),
-              title: const Text(
-                "Calificar Experiencia",
+              title: Text(
+                isSpanish ? "Calificar Experiencia" : "Rate your experience",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    "¿Qué tal estuvo tu visita?",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                  Text(
+                    isSpanish
+                        ? "¿Qué tal estuvo tu visita?"
+                        : "How was your visit?",
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   Row(
@@ -103,10 +112,10 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                   const SizedBox(height: 10),
                   Text(
                     selectedStars == 5
-                        ? "¡Excelente!"
+                        ? (isSpanish ? "¡Excelente!" : "Excellent!")
                         : selectedStars > 3
-                        ? "Muy bien"
-                        : "Podría mejorar",
+                        ? (isSpanish ? "Muy bien" : "Very good")
+                        : (isSpanish ? "Podría mejorar" : "Could be better"),
                     style: TextStyle(
                       color: _gold,
                       fontWeight: FontWeight.bold,
@@ -135,9 +144,9 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                     ),
                   ),
                   onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "Cancelar",
-                    style: TextStyle(
+                  child: Text(
+                    isSpanish ? "Cancelar" : "Cancel",
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -168,16 +177,20 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                         () => _currentDisplayRating = selectedStars.toDouble(),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("¡Gracias por tu opinión!"),
+                        SnackBar(
+                          content: Text(
+                            isSpanish
+                                ? "¡Gracias por tu opinión!"
+                                : "Thanks for your feedback!",
+                          ),
                           backgroundColor: AppTheme.accentGreen,
                         ),
                       );
                     }
                   },
-                  child: const Text(
-                    "Enviar",
-                    style: TextStyle(
+                  child: Text(
+                    isSpanish ? "Enviar" : "Send",
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -195,6 +208,10 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
   Widget build(BuildContext context) {
     final data = widget.commerceData;
 
+    // Detecta idioma: "es" o "en"
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final bool isSpanish = localeCode == 'es';
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(80, 3, 96, 196),
       body: CustomScrollView(
@@ -205,15 +222,10 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
             expandedHeight: 280,
             floating: false,
             pinned: true,
-            backgroundColor: const Color.fromARGB(
-              255,
-              6,
-              115,
-              204,
-            ), //fondo detail
+            backgroundColor: const Color.fromARGB(255, 6, 115, 204),
             centerTitle: true,
             title: Text(
-              data['nombre'] ?? 'Comercio',
+              data['nombre'] ?? (isSpanish ? 'Comercio' : 'Business'),
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -229,7 +241,7 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Container(color: const Color.fromARGB(207, 19, 95, 236)), //
+                  Container(color: const Color.fromARGB(207, 19, 95, 236)),
                   Center(
                     child: Icon(
                       Icons.storefront_rounded,
@@ -243,7 +255,7 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          const Color.fromARGB(96, 2, 48, 92), //degradados
+                          const Color.fromARGB(96, 2, 48, 92),
                           const Color.fromARGB(255, 3, 45, 90).withOpacity(0.3),
                           const Color.fromARGB(255, 8, 37, 68),
                         ],
@@ -267,9 +279,9 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                             color: const Color.fromARGB(255, 1, 100, 31),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
-                            "RESTAURANTE",
-                            style: TextStyle(
+                          child: Text(
+                            isSpanish ? "RESTAURANTE" : "RESTAURANT",
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -279,7 +291,8 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          data['nombre'] ?? 'Comercio',
+                          data['nombre'] ??
+                              (isSpanish ? 'Comercio' : 'Business'),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 28,
@@ -298,7 +311,10 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                             const SizedBox(width: 6),
                             Expanded(
                               child: Text(
-                                data['direccion'] ?? 'Ubicación no disponible',
+                                data['direccion'] ??
+                                    (isSpanish
+                                        ? 'Ubicación no disponible'
+                                        : 'Location not available'),
                                 style: const TextStyle(
                                   color: Colors.white70,
                                   fontSize: 14,
@@ -394,9 +410,11 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                                   ).withOpacity(0.3),
                                 ),
                               ),
-                              child: const Text(
-                                "Dejar Calificación",
-                                style: TextStyle(
+                              child: Text(
+                                isSpanish
+                                    ? "Dejar Calificación"
+                                    : "Leave rating",
+                                style: const TextStyle(
                                   color: Color.fromARGB(255, 255, 255, 255),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
@@ -421,25 +439,23 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                         ),
                       ),
                       icon: const Icon(Icons.navigation, color: Colors.white),
-                      label: const Text(
-                        "Cómo llegar",
-                        style: TextStyle(
+                      label: Text(
+                        isSpanish ? "Cómo llegar" : "Get directions",
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: () {
-                        _goToMap(context);
-                      },
+                      onPressed: () => _goToMap(context),
                     ),
                   ),
 
                   const SizedBox(height: 32),
 
-                  const Text(
-                    "Sobre el lugar",
-                    style: TextStyle(
+                  Text(
+                    isSpanish ? "Sobre el lugar" : "About this place",
+                    style: const TextStyle(
                       color: AppTheme.textSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -455,7 +471,10 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: Text(
-                      data['descripcion'] ?? 'Sin descripción disponible.',
+                      data['descripcion'] ??
+                          (isSpanish
+                              ? 'Sin descripción disponible.'
+                              : 'No description available.'),
                       style: const TextStyle(
                         color: AppTheme.textPrimary,
                         fontSize: 15,
@@ -466,9 +485,9 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
 
                   const SizedBox(height: 32),
 
-                  const Text(
-                    "MENÚ DISPONIBLE",
-                    style: TextStyle(
+                  Text(
+                    isSpanish ? "MENÚ DISPONIBLE" : "AVAILABLE MENU",
+                    style: const TextStyle(
                       color: AppTheme.textSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -525,19 +544,23 @@ class _CommerceDetailScreenState extends State<CommerceDetailScreen> {
                           color: AppTheme.textSecondary.withOpacity(0.3),
                         ),
                         const SizedBox(height: 16),
-                        const Text(
-                          "No hay menú disponible",
-                          style: TextStyle(
+                        Text(
+                          isSpanish
+                              ? "No hay menú disponible"
+                              : "No menu available",
+                          style: const TextStyle(
                             color: AppTheme.textPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          "Este comercio aún no ha cargado su carta digital.",
+                        Text(
+                          isSpanish
+                              ? "Este comercio aún no ha cargado su carta digital."
+                              : "This business hasn't uploaded its digital menu yet.",
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: AppTheme.textSecondary),
+                          style: const TextStyle(color: AppTheme.textSecondary),
                         ),
                       ],
                     ),

@@ -13,9 +13,9 @@ class SubscriptionScreen extends StatefulWidget {
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
   // --- PALETA DE COLORES ---
-  static const Color _primaryDark = Color.fromARGB(255, 5, 89, 179);
+  static const Color _primaryDark = Color.fromARGB(197, 3, 68, 165);
   static const Color _secondaryDark = Color.fromARGB(255, 2, 49, 136);
-  static const Color _accentGreen = Color.fromARGB(255, 1, 105, 24);
+  static const Color _accentGreen = Color.fromARGB(255, 3, 160, 37);
   static const Color _textPrimary = Color(0xFFE0E1DD);
   static const Color _textSecondary = Color.fromARGB(255, 212, 212, 212);
   static const Color _gold = Color(0xFFFFD700);
@@ -31,19 +31,20 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     _checkIfUserIsPremium();
   }
 
-  // --- LÓGICA (Mantenida intacta) ---
-
+  // --- LÓGICA ---
   Future<void> _checkIfUserIsPremium() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        if (mounted)
+        if (mounted) {
           setState(() {
             _checkingStatus = false;
             _isPremium = false;
           });
+        }
         return;
       }
+
       final userQuery = await FirebaseFirestore.instance
           .collection('usuarios')
           .where('uid_auth', isEqualTo: user.uid)
@@ -51,13 +52,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           .get();
 
       if (userQuery.docs.isEmpty) {
-        if (mounted)
+        if (mounted) {
           setState(() {
             _checkingStatus = false;
             _isPremium = false;
           });
+        }
         return;
       }
+
       final rutUsuario = userQuery.docs.first.id;
       final suscripcionDoc = await FirebaseFirestore.instance
           .collection('usuarios')
@@ -85,13 +88,18 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     final url = await crearPreferenciaPago(); // Tu función existente
     setState(() => _isLoading = false);
 
+    final isSpanish = Localizations.localeOf(context).languageCode == 'es';
+
     if (url != null && mounted) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => MercadoPagoCheckoutPage(url: url)),
       );
     } else {
-      _showSnackBar("Error al iniciar el pago.", isError: true);
+      _showSnackBar(
+        isSpanish ? "Error al iniciar el pago." : "Failed to start payment.",
+        isError: true,
+      );
     }
   }
 
@@ -114,18 +122,22 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 
   // ---------------- UI DISEÑADA ----------------
-
   @override
   Widget build(BuildContext context) {
+    final bool isSpanish = Localizations.localeOf(context).languageCode == 'es';
+
     return Scaffold(
       backgroundColor: _primaryDark,
       appBar: AppBar(
         backgroundColor: _primaryDark,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
-          "Membresía",
-          style: TextStyle(color: _textPrimary, fontWeight: FontWeight.bold),
+        title: Text(
+          isSpanish ? "Membresía" : "Membership",
+          style: const TextStyle(
+            color: _textPrimary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         leading: IconButton(
           icon: const Icon(
@@ -147,15 +159,19 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     child: Column(
                       children: [
                         // 1. LA TARJETA DIGITAL (Hero Widget)
-                        _buildMembershipCard(),
+                        _buildMembershipCard(isSpanish),
 
                         const SizedBox(height: 40),
 
                         // 2. TÍTULO DE BENEFICIOS
                         Text(
                           _isPremium
-                              ? "TUS BENEFICIOS ACTIVOS"
-                              : "¿POR QUÉ SER PREMIUM?",
+                              ? (isSpanish
+                                    ? "TUS BENEFICIOS ACTIVOS"
+                                    : "YOUR ACTIVE BENEFITS")
+                              : (isSpanish
+                                    ? "¿POR QUÉ SER PREMIUM?"
+                                    : "WHY GO PREMIUM?"),
                           style: TextStyle(
                             color: _textSecondary,
                             fontSize: 12,
@@ -168,23 +184,39 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         // 3. LISTA DE BENEFICIOS
                         _buildBenefitItem(
                           Icons.block_rounded,
-                          "Experiencia sin anuncios",
-                          "Navega sin interrupciones.",
+                          isSpanish
+                              ? "Experiencia sin anuncios"
+                              : "Ad-free experience",
+                          isSpanish
+                              ? "Navega sin interrupciones."
+                              : "Browse without interruptions.",
                         ),
                         _buildBenefitItem(
                           Icons.insights_rounded,
-                          "Estadísticas Avanzadas",
-                          "Histórico completo de tus actividades.",
+                          isSpanish
+                              ? "Estadísticas Avanzadas"
+                              : "Advanced statistics",
+                          isSpanish
+                              ? "Histórico completo de tus actividades."
+                              : "Full history of your activities.",
                         ),
                         _buildBenefitItem(
                           Icons.restaurant_menu_rounded,
-                          "Recetas Exclusivas",
-                          "Acceso al catálogo completo de nutrición.",
+                          isSpanish
+                              ? "Recetas Exclusivas"
+                              : "Exclusive recipes",
+                          isSpanish
+                              ? "Acceso al catálogo completo de nutrición."
+                              : "Access the full nutrition catalog.",
                         ),
                         _buildBenefitItem(
                           Icons.support_agent_rounded,
-                          "Soporte Prioritario",
-                          "Atención al cliente 24/7.",
+                          isSpanish
+                              ? "Soporte Prioritario"
+                              : "Priority support",
+                          isSpanish
+                              ? "Atención al cliente 24/7."
+                              : "24/7 customer support.",
                         ),
                       ],
                     ),
@@ -192,13 +224,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 ),
 
                 // 4. BOTÓN DE ACCIÓN (Sticky Bottom)
-                _buildBottomAction(),
+                _buildBottomAction(isSpanish),
               ],
             ),
     );
   }
 
-  Widget _buildMembershipCard() {
+  Widget _buildMembershipCard(bool isSpanish) {
     return Container(
       width: double.infinity,
       height: 220,
@@ -300,7 +332,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _isPremium ? "Miembro Premium" : "Plan Gratuito",
+                      _isPremium
+                          ? (isSpanish ? "Miembro Premium" : "Premium Member")
+                          : (isSpanish ? "Plan Gratuito" : "Free Plan"),
                       style: TextStyle(
                         color: _isPremium ? Colors.white : _textPrimary,
                         fontSize: 24,
@@ -310,8 +344,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     const SizedBox(height: 4),
                     Text(
                       _isPremium
-                          ? "Acceso total desbloqueado"
-                          : "Actualiza para más beneficios",
+                          ? (isSpanish
+                                ? "Acceso total desbloqueado"
+                                : "Full access unlocked")
+                          : (isSpanish
+                                ? "Actualiza para más beneficios"
+                                : "Upgrade for more benefits"),
                       style: TextStyle(
                         color: _isPremium
                             ? Colors.white.withOpacity(0.9)
@@ -377,7 +415,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     );
   }
 
-  Widget _buildBottomAction() {
+  Widget _buildBottomAction(bool isSpanish) {
     if (_isPremium) {
       return Container(
         width: double.infinity,
@@ -395,14 +433,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         ),
         child: Column(
           children: [
-            const Text(
-              "¡Gracias por tu apoyo!",
-              style: TextStyle(color: _textSecondary, fontSize: 14),
+            Text(
+              isSpanish ? "¡Gracias por tu apoyo!" : "Thanks for your support!",
+              style: const TextStyle(color: _textSecondary, fontSize: 14),
             ),
             const SizedBox(height: 8),
-            const Text(
-              "Suscripción Activa",
-              style: TextStyle(
+            Text(
+              isSpanish ? "Suscripción Activa" : "Active Subscription",
+              style: const TextStyle(
                 color: _accentGreen,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -431,9 +469,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                "\$50", // Precio ejemplo
+            children: [
+              const Text(
+                "\$50",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -441,8 +479,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 ),
               ),
               Text(
-                " / mes",
-                style: TextStyle(color: _textSecondary, fontSize: 14),
+                isSpanish ? " / mes" : " / month",
+                style: const TextStyle(color: _textSecondary, fontSize: 14),
               ),
             ],
           ),
@@ -468,9 +506,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         strokeWidth: 2,
                       ),
                     )
-                  : const Text(
-                      "OBTENER PREMIUM",
-                      style: TextStyle(
+                  : Text(
+                      isSpanish ? "OBTENER PREMIUM" : "GET PREMIUM",
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,

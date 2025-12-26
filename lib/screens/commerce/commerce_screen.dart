@@ -40,6 +40,10 @@ class _CommerceScreenState extends State<CommerceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ✅ Detecta idioma actual: "es" o "en"
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final bool isSpanish = localeCode == 'es';
+
     return Theme(
       data: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: _primaryDark,
@@ -51,9 +55,9 @@ class _CommerceScreenState extends State<CommerceScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "Comercios Aliados",
-            style: TextStyle(fontWeight: FontWeight.bold),
+          title: Text(
+            isSpanish ? "Comercios Aliados" : "Partner Businesses",
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -70,7 +74,7 @@ class _CommerceScreenState extends State<CommerceScreen> {
             if (snapshot.hasError) {
               return Center(
                 child: Text(
-                  'Error al cargar datos',
+                  isSpanish ? 'Error al cargar datos' : 'Error loading data',
                   style: const TextStyle(color: _textSecondary),
                 ),
               );
@@ -85,18 +89,23 @@ class _CommerceScreenState extends State<CommerceScreen> {
                 child: ListView(
                   children: [
                     SizedBox(height: MediaQuery.of(context).size.height * 0.3),
-                    const Center(
+                    Center(
                       child: Column(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.storefront_rounded,
                             size: 60,
                             color: _textSecondary,
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Text(
-                            'No encontramos comercios para tu dieta.',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            isSpanish
+                                ? 'No encontramos comercios para tu dieta.'
+                                : "We couldn't find businesses for your diet.",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ],

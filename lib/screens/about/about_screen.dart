@@ -10,7 +10,16 @@ class AboutScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(localizations.about), centerTitle: true),
+      // fondo
+      backgroundColor: Color.fromARGB(115, 2, 67, 165),
+
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(115, 2, 67, 165),
+        foregroundColor: Color.fromARGB(255, 255, 255, 255),
+        centerTitle: true,
+        title: Text(localizations.about),
+      ),
+
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -21,10 +30,9 @@ class AboutScreen extends StatelessWidget {
               "NutriMap",
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w700,
-                color: theme.colorScheme.primary,
+                color: const Color(0xFF2E7D32),
               ),
             ),
-            const SizedBox(height: 8.0),
 
             // Descripción
             Text(
@@ -36,7 +44,7 @@ class AboutScreen extends StatelessWidget {
             // Información
             _buildInfoRow(
               icon: Icons.info_outline,
-              text: "Versión 1.0.0",
+              text: "Versión 0.0.3",
               theme: theme,
             ),
             const SizedBox(height: 8.0),

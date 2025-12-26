@@ -18,10 +18,10 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   static const Color _primaryDark = Color.fromARGB(
-    216,
-    2,
-    67,
-    136,
+    213,
+    3,
+    53,
+    105,
   ); //background
   static const Color _secondaryDark = Color.fromARGB(255, 40, 59, 27);
   static const Color _accentGreen = Color.fromARGB(
