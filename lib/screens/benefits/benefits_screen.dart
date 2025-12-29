@@ -62,21 +62,33 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
           .orderBy('target', descending: false)
           .get();
 
-      if (mounted) {
-        setState(() {
-          _milestones = query.docs.map((doc) {
-            final data = doc.data();
-            final rawTarget = data['target'] ?? 0;
-            final target = (rawTarget is num) ? rawTarget.toDouble() : 0.0;
-            return {
-              'target': target,
-              'title': data['title'] ?? 'Nivel',
-              'reward': data['reward'] ?? 'Recompensa sorpresa',
-              'icon': _getIconFromName(data['icon_name'] ?? 'star'),
-            };
-          }).toList();
-        });
-      }
+      if (!mounted) return;
+
+      setState(() {
+        _milestones = query.docs.map((doc) {
+          final data = doc.data();
+          final rawTarget = data['target'] ?? 0;
+          final target = (rawTarget is num) ? rawTarget.toDouble() : 0.0;
+
+          // ✅ viene desde tu seed: premium_only: ...
+          final bool premiumOnly = data['premium_only'] == true;
+
+          return {
+            'target': target,
+
+            // textos base ES (los que ya tienes)
+            'title': data['title'] ?? 'Nivel',
+            'reward': data['reward'] ?? 'Recompensa sorpresa',
+
+            // ✅ textos EN (si los agregas en Firestore)
+            'title_en': data['title_en'],
+            'reward_en': data['reward_en'],
+
+            'icon': _getIconFromName(data['icon_name'] ?? 'star'),
+            'premiumOnly': premiumOnly,
+          };
+        }).toList();
+      });
     } catch (e) {
       debugPrint("❌ Error cargando beneficios: $e");
     }
@@ -111,7 +123,6 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
         final userDoc = query.docs.first;
         final rutUsuario = userDoc.id;
 
-        // Verificar suscripción Premium
         final suscripcionDoc = await FirebaseFirestore.instance
             .collection('usuarios')
             .doc(rutUsuario)
@@ -119,12 +130,11 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
             .doc('detalle')
             .get();
 
-        bool premiumStatus =
+        final bool premiumStatus =
             suscripcionDoc.exists &&
             suscripcionDoc.data()?['suscripcion'] == true;
 
-        // Calcular kms del mes
-        double totalKm = await _calculateMonthlyKm(userDoc.reference);
+        final double totalKm = await _calculateMonthlyKm(userDoc.reference);
 
         if (mounted) {
           setState(() {
@@ -134,6 +144,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
           });
         }
 
+        // ✅ Mantener anuncios para FREE
         if (!premiumStatus) _loadBannerAd();
       } else {
         if (mounted) setState(() => _loading = false);
@@ -183,20 +194,69 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
     )..load();
   }
 
+  // ---------------- PREMIUM UI ----------------
+  BoxDecoration _lockedPremiumDecoration() {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      border: Border.all(color: Colors.white.withOpacity(0.10), width: 1),
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          const Color.fromARGB(255, 1, 109, 19).withOpacity(0.85),
+          const Color.fromARGB(255, 12, 12, 12).withOpacity(0.90),
+          const Color.fromARGB(255, 0, 0, 0).withOpacity(0.92),
+        ],
+        stops: const [0.0, 0.55, 1.0],
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.25),
+          blurRadius: 10,
+          offset: const Offset(0, 6),
+        ),
+      ],
+    );
+  }
+
+  String _pickText({
+    required bool isEnglish,
+    required dynamic es,
+    required dynamic en,
+    required String fallback,
+  }) {
+    final esText = (es is String && es.trim().isNotEmpty) ? es : fallback;
+    final enText = (en is String && en.trim().isNotEmpty) ? en : null;
+    return isEnglish ? (enText ?? esText) : esText;
+  }
+
   // ---------------- UTILIDADES ----------------
   List<Map<String, dynamic>> _milestonesWithStatus() {
     return _milestones.map((m) {
       final target = (m['target'] is num)
           ? (m['target'] as num).toDouble()
           : 0.0;
-      final isUnlocked = (_monthlyKm + 0.0001) >= target; // margen de seguridad
-      return {...m, 'target': target, 'isUnlocked': isUnlocked};
+
+      final bool premiumOnly = (m['premiumOnly'] == true);
+      final bool unlockedByKm = (_monthlyKm + 0.0001) >= target;
+      final bool lockedByPremium = premiumOnly && !_isPremium;
+      final bool isUnlocked = unlockedByKm && !lockedByPremium;
+
+      return {
+        ...m,
+        'target': target,
+        'isUnlocked': isUnlocked,
+        'lockedByPremium': lockedByPremium,
+      };
     }).toList();
   }
 
   int _nextTarget() {
-    for (var m in _milestones) {
+    // no considerar premium_only si NO es premium
+    for (final m in _milestonesWithStatus()) {
       final target = (m['target'] as num).toDouble();
+      final lockedByPremium = m['lockedByPremium'] == true;
+      if (lockedByPremium) continue;
       if (_monthlyKm < target) return target.toInt();
     }
     return _milestones.isNotEmpty
@@ -209,13 +269,10 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
 
-    //  Detecta idioma : "es" o "en"
     final localeCode = Localizations.localeOf(context).languageCode;
     final bool isSpanish = localeCode == 'es';
-    // Si no es español, asumimos inglés
     final bool isEnglish = localeCode == 'en';
 
-    // Nombre del mes según idioma
     final currentMonthName = DateFormat(
       'MMMM',
       isSpanish ? 'es_ES' : 'en_US',
@@ -228,7 +285,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
       backgroundColor: _primaryDark,
       body: RefreshIndicator(
         color: _accentGreen,
-        onRefresh: _initData, // pull-to-refresh
+        onRefresh: _initData,
         child: Stack(
           children: [
             _loading
@@ -262,7 +319,6 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                             month: currentMonthName,
                             nextTarget: nextTarget,
                             isSpanish: isSpanish,
-                            isEnglish: isEnglish,
                           ),
                         ),
                       ),
@@ -277,6 +333,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                             final isFirst = index == 0;
                             final isLast =
                                 index == milestonesWithStatus.length - 1;
+
                             return _buildTimelineItem(
                               milestone,
                               isFirst,
@@ -289,6 +346,8 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                       ),
                     ],
                   ),
+
+            // ✅ ADS (se mantienen)
             if (!_isPremium && _isAdLoaded)
               Positioned(
                 bottom: 0,
@@ -310,12 +369,10 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
     );
   }
 
-  //  recibe idioma para traducir textos hardcodeados
   Widget _buildProgressHeader({
     required String month,
     required int nextTarget,
     required bool isSpanish,
-    required bool isEnglish,
   }) {
     double progressPercent = nextTarget > 0
         ? (_monthlyKm / nextTarget).clamp(0.0, 1.0)
@@ -323,13 +380,13 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
     if (_monthlyKm >= nextTarget) progressPercent = 1.0;
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            const Color.fromARGB(115, 2, 67, 165),
-            const Color.fromARGB(255, 38, 78, 151),
+            Color.fromARGB(115, 2, 67, 165),
+            Color.fromARGB(255, 38, 78, 151),
           ],
         ),
       ),
@@ -346,12 +403,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                 child: CircularProgressIndicator(
                   value: progressPercent,
                   strokeWidth: 12,
-                  backgroundColor: const Color.fromARGB(
-                    206,
-                    255,
-                    255,
-                    255,
-                  ), // circulo distancia
+                  backgroundColor: const Color.fromARGB(206, 255, 255, 255),
                   valueColor: const AlwaysStoppedAnimation<Color>(_accentGreen),
                   strokeCap: StrokeCap.round,
                 ),
@@ -395,8 +447,6 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
             ],
           ),
           const SizedBox(height: 16),
-
-          //
           Text(
             isSpanish
                 ? "PROGRESO DE ${month.toUpperCase()}"
@@ -409,8 +459,6 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
             ),
           ),
           const SizedBox(height: 8),
-
-          //
           Text(
             isSpanish
                 ? "Siguiente meta: $nextTarget KM"
@@ -434,6 +482,21 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   }) {
     final int target = (milestone['target'] as num).toInt();
     final bool isUnlocked = milestone['isUnlocked'] as bool;
+    final bool lockedByPremium = milestone['lockedByPremium'] == true;
+
+    // ✅ Textos según idioma (si tienes title_en/reward_en, los usará)
+    final title = _pickText(
+      isEnglish: isEnglish,
+      es: milestone['title'],
+      en: milestone['title_en'],
+      fallback: 'Nivel',
+    );
+    final reward = _pickText(
+      isEnglish: isEnglish,
+      es: milestone['reward'],
+      en: milestone['reward_en'],
+      fallback: 'Recompensa',
+    );
 
     return IntrinsicHeight(
       child: Row(
@@ -475,7 +538,11 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                         : null,
                   ),
                   child: Icon(
-                    isUnlocked ? Icons.check : Icons.lock_outline_rounded,
+                    isUnlocked
+                        ? Icons.check
+                        : (lockedByPremium
+                              ? Icons.lock_rounded
+                              : Icons.lock_outline_rounded),
                     size: 20,
                     color: isUnlocked ? Colors.white : _textSecondary,
                   ),
@@ -498,24 +565,26 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Container(
-                decoration: BoxDecoration(
-                  color: isUnlocked
-                      ? _accentGreen.withOpacity(0.05)
-                      : _secondaryDark,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: isUnlocked
-                        ? _accentGreen.withOpacity(0.5)
-                        : Colors.transparent,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
+                decoration: lockedByPremium
+                    ? _lockedPremiumDecoration()
+                    : BoxDecoration(
+                        color: isUnlocked
+                            ? _accentGreen.withOpacity(0.05)
+                            : _secondaryDark,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: isUnlocked
+                              ? _accentGreen.withOpacity(0.5)
+                              : Colors.transparent,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -525,19 +594,25 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                         children: [
                           Icon(
                             milestone['icon'],
-                            color: isUnlocked ? _accentGreen : _textSecondary,
+                            color: isUnlocked
+                                ? _accentGreen
+                                : (lockedByPremium
+                                      ? Colors.white.withOpacity(0.65)
+                                      : _textSecondary),
                             size: 24,
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              milestone['title'],
+                              title,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: isUnlocked
                                     ? Colors.white
-                                    : _textSecondary,
+                                    : Colors.white.withOpacity(
+                                        lockedByPremium ? 0.85 : 1.0,
+                                      ),
                               ),
                             ),
                           ),
@@ -565,15 +640,42 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        milestone['reward'],
+                        reward,
                         style: TextStyle(
                           fontSize: 13,
                           color: isUnlocked
                               ? _textPrimary
-                              : _textSecondary.withOpacity(0.6),
+                              : _textSecondary.withOpacity(
+                                  lockedByPremium ? 0.70 : 0.6,
+                                ),
                         ),
                       ),
-                      if (!isUnlocked) ...[
+                      if (lockedByPremium) ...[
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.workspace_premium_rounded,
+                              size: 16,
+                              color: Colors.white.withOpacity(0.85),
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                isSpanish
+                                    ? "Se necesita suscripción para acceder a beneficios"
+                                    : "Subscription required to access benefits",
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white.withOpacity(0.85),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      if (!isUnlocked && !lockedByPremium) ...[
                         const SizedBox(height: 12),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(4),
@@ -585,8 +687,6 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           ),
                         ),
                         const SizedBox(height: 4),
-
-                        //   traducido según idioma
                         Text(
                           isSpanish
                               ? "Faltan ${(_monthlyKm < target ? target - _monthlyKm : 0).toStringAsFixed(1)} km"
@@ -596,7 +696,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                             color: _textSecondary.withOpacity(0.5),
                           ),
                         ),
-                      ] else ...[
+                      ] else if (isUnlocked) ...[
                         const SizedBox(height: 8),
                         Row(
                           children: [
@@ -606,8 +706,6 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                               color: _accentGreen,
                             ),
                             const SizedBox(width: 4),
-
-                            //  traducido según idioma
                             Text(
                               isSpanish ? "¡Disponible!" : "Available!",
                               style: const TextStyle(
