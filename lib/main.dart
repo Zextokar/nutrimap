@@ -4,7 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:nutrimap/l10n/app_localizations.dart';
 import 'package:nutrimap/providers/locale_provider.dart';
@@ -21,41 +20,8 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  bool _isFirstRun = false;
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkFirstRun();
-  }
-
-  Future<void> _checkFirstRun() async {
-    final prefs = await SharedPreferences.getInstance();
-    final seenInfo = prefs.getBool('seenInfo') ?? false;
-
-    setState(() {
-      _isFirstRun = !seenInfo;
-      _loading = false;
-    });
-  }
-
-  Future<void> _completeInfo(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('seenInfo', true);
-
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +32,16 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'NutriMap',
-            theme: ThemeData.light(),
-            darkTheme: ThemeData.dark(),
+            theme: ThemeData(
+              useMaterial3: true,
+              fontFamily: 'Ubuntu',
+              brightness: Brightness.light,
+            ),
+            darkTheme: ThemeData(
+              useMaterial3: true,
+              fontFamily: 'Ubuntu',
+              brightness: Brightness.dark,
+            ),
             themeMode: ThemeMode.dark,
             locale: provider.locale,
             supportedLocales: const [Locale('es'), Locale('en')],
@@ -77,26 +51,29 @@ class _MyAppState extends State<MyApp> {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: _loading
-                ? const Scaffold(
+            home: StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Scaffold(
                     body: Center(child: CircularProgressIndicator()),
-                  )
-                : _isFirstRun
-                ? InfoScreen(onFinished: () => _completeInfo(context), onLocaleChange: (Locale p1) {  },)
-                : StreamBuilder<User?>(
-                    stream: FirebaseAuth.instance.authStateChanges(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Scaffold(
-                          body: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-                      if (snapshot.hasData) {
-                        return MainScreen(user: snapshot.data!);
-                      }
-                      return const LoginScreen();
-                    },
-                  ),
+                  );
+                }
+
+                if (snapshot.hasData) {
+                  return MainScreen(user: snapshot.data!);
+                }
+
+                return InfoScreen(
+                  onFinished: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => const LoginScreen()),
+                    );
+                  },
+                  onLocaleChange: (Locale p1) {},
+                );
+              },
+            ),
             routes: {
               '/login': (_) => const LoginScreen(),
               '/register': (_) => const RegisterPage(),

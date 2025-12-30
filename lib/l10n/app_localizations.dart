@@ -1064,13 +1064,13 @@ abstract class AppLocalizations {
   /// Message when an error occurs while sending the recovery email
   ///
   /// In en, this message translates to:
-  /// **'Could not send recovery email'**
+  /// **'Send recovery email'**
   String get resetPasswordEmailSent;
 
   /// Message when an error occurs while sending the recovery email
   ///
   /// In en, this message translates to:
-  /// **'Could not send recovery email'**
+  /// **'Send recovery email'**
   String get passwordResetSent;
 
   /// Mensaje cuando ocurre un error al enviar el correo de recuperación
@@ -1102,8 +1102,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm'**
   String get confirm;
-
-  get aboutSubtitle => null;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

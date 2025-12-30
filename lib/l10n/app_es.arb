@@ -671,15 +671,15 @@
     "@emailNotFound": {
         "description": "Mensaje cuando ocurre un error al encontrar el correo"
     },
-    "resetPasswordEmailSent": "No se pudo enviar el correo de recuperación",
+    "resetPasswordEmailSent": "Se envió el correo de recuperación",
     "@resetPasswordEmailSent": {
         "description": "Mensaje cuando ocurre un error al enviar el correo de recuperación"
     },
-    "passwordResetSent": "No se pudo enviar el correo de recuperación",
+    "passwordResetSent": "Se envió el correo de recuperación",
     "@passwordResetSent": {
         "description": "Mensaje cuando ocurre un error al enviar el correo de recuperación"
     },
-    "error": "No se pudo enviar el correo de recuperación",
+    "error": "Se envió el correo de recuperación",
     "@error": {
         "description": "Mensaje cuando ocurre un error al enviar el correo de recuperación"
     },

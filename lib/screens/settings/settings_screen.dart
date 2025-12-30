@@ -219,8 +219,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final local = AppLocalizations.of(context)!;
     if (_userRut == null) return;
 
+    bool loadingShown = false;
+
     try {
       if (mounted) {
+        loadingShown = true;
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -234,24 +237,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
           .get();
 
       if (!query.exists) {
-        if (mounted) Navigator.pop(context);
-        _showError(local.userNotFound);
-        return;
+        throw FirebaseAuthException(code: 'user-not-found');
       }
 
       final email = query.data()?['email'];
       if (email == null || email.isEmpty) {
-        if (mounted) Navigator.pop(context);
-        _showError(local.emailNotFound);
-        return;
+        throw FirebaseAuthException(code: 'invalid-email');
       }
 
       await FirebaseAuth.instance.setLanguageCode(
         Localizations.localeOf(context).languageCode,
       );
+
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 
-      if (mounted) Navigator.pop(context);
+      // ÉXITO
+      if (mounted && loadingShown)
+        Navigator.of(context, rootNavigator: true).pop();
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -261,11 +264,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         );
       }
+    } on FirebaseAuthException catch (e) {
+      if (mounted && loadingShown)
+        Navigator.of(context, rootNavigator: true).pop();
+      _showError(_getErrorMessage(e, local));
     } catch (e) {
-      if (mounted) Navigator.pop(context);
-      if (mounted) {
-        _showError('${local.error}: ${_getErrorMessage(e, local)}');
-      }
+      if (mounted && loadingShown)
+        Navigator.of(context, rootNavigator: true).pop();
+      _showError(local.unknownError);
     }
   }
 

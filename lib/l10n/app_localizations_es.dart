@@ -510,13 +510,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get emailNotFound => 'No se encontró el Email';
 
   @override
-  String get resetPasswordEmailSent => 'No se pudo enviar el correo de recuperación';
+  String get resetPasswordEmailSent => 'Se envió el correo de recuperación';
 
   @override
-  String get passwordResetSent => 'No se pudo enviar el correo de recuperación';
+  String get passwordResetSent => 'Se envió el correo de recuperación';
 
   @override
-  String get error => 'No se pudo enviar el correo de recuperación';
+  String get error => 'Se envió el correo de recuperación';
 
   @override
   String get unknownError => 'Ocurrió un error desconocido';
